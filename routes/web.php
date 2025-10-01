@@ -10,9 +10,6 @@ Route::get('/calendar', function () {
     return view('calendar');
 });
 
-Route::get('/events', function () {
-    return view('events');
-});
 
 Route::get('/contact', function () {
     return view('contact');
