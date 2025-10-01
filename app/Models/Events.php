@@ -36,10 +36,6 @@ class Events extends Model
     'publshed_at' => 'datetime',
    ];
 
-   public function community()
-   {
-      return $this->belongsTo(Community::class);
-   }
 
    public function creator()
    {
