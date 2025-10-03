@@ -1,4 +1,7 @@
 <x-app-layout>
+  <x-header>
+
+  </x-header>
 <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.19/index.global.min.js'></script>
     <script>
 
