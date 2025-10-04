@@ -15,18 +15,7 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body>
-        <div>
-            
-
-            <!-- Page Heading -->
-            @isset($header)
-                <header>
-                    <div>
-                        {{ $header }}
-                    </div>
-                </header>
-            @endisset
-
+        <div class="pageWrapper">
             <main>
               {{-- Page Content Goes Here--}}
                 {{ $slot }}

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\eventsController;
 
 Route::get('/', function () {
     return view('home');
@@ -11,9 +12,8 @@ Route::get('/calendar', function () {
     return view('calendar');
 });
 
-Route::get('/events', function () {
-    return view('events');
-});
+Route::get('/events', [eventsController::class, 'index'])->name('events.index');
+Route::post('/events', [eventsController::class, 'submit'])->name('events.submit');
 
 Route::get('/contact', function () {
     return view('contact');

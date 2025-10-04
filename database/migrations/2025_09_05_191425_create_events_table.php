@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('events', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('community_id')->nullable()->constrained()->cascadeOnDelete();
             $table->timestamps();
             $table->string('title', 160);
             $table->string('slug')->unique();
@@ -29,9 +28,7 @@ return new class extends Migration
             $table->foreignId('updated_by')->nullable()->costrained('users')->nullOnDelete();
             $table->softDeletes();
 
-            $table->unique(['community_id', 'slug']);
-            $table->index(['community_id','start_at']);
-            $table->index(['status','published_at']);
+            
         });
       }
 

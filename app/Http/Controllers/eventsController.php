@@ -22,22 +22,24 @@ class eventsController extends Controller
     public function submit(Request $request) {
 
       $validatedData = $request->validate([
-        'title' => 'required|string|',
-        'description' => 'required|string',
-        'challenges' => 'nullable|string',
-        'livelink' => 'nullable|url',
-        'github' => 'nullable|url',
-        'image' => 'nullable|url',
+        'eventName' => 'required|string|',
+        'requestedBy' => 'required|string|email',
+        'eventDate' => 'required|date',
+        'eventTime' => 'required',
+        'eventDescription' => 'required|string',
+        'eventType' => 'required|string',
       ]);
 
       Events::create([
-        'title' => $validatedData['title'],
-        'description' => $validatedData['description'],
-        'challenges' => $validatedData['challenges'],
-        'livelink' => $validatedData['livelink'],
-        'github' => $validatedData['github'],
-        'image' => $validatedData['image'] ?? null,
+        'title' => $validatedData['eventName'],
+        'created_by' => $validatedData['requestedBy'],
+        'eventDate' => $validatedData['eventDate'],
+        'eventTime' => $validatedData['eventTime'],
+        'eventDescription' => $validatedData['eventDescription'],
+        'eventType' => $validatedData['eventType'],
       ]);
+
+      dd($request->all());
       return back()->with('success',"Data was submitted.");
     }
 }

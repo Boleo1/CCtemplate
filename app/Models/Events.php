@@ -18,6 +18,7 @@ class Events extends Model
        'description',
        'slug',
        'community_id',
+       'event_type',
        'start_at',
        'end_at',
        'all_day',
@@ -33,7 +34,7 @@ class Events extends Model
     'all_day' => 'boolean',
     'start_at' => 'datetime',
     'end_at' => 'datetime',
-    'publshed_at' => 'datetime',
+    'published_at' => 'datetime',
    ];
 
 
