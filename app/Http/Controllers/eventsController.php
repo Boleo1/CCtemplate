@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\Events;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+
 
 class eventsController extends Controller
 {
@@ -14,10 +16,10 @@ class eventsController extends Controller
     }
 
 
-    public function show($id) {
-      $event = Events::findOrFail($id);
-      return view('event', ['event' => $event ]);
-    }
+    // public function show($id) {
+    //   $event = Events::findOrFail($id);
+    //   return view('event', ['event' => $event ]);
+    // }
 
     public function submit(Request $request) {
 
@@ -32,14 +34,13 @@ class eventsController extends Controller
 
       Events::create([
         'title' => $validatedData['eventName'],
-        'created_by' => $validatedData['requestedBy'],
-        'eventDate' => $validatedData['eventDate'],
-        'eventTime' => $validatedData['eventTime'],
-        'eventDescription' => $validatedData['eventDescription'],
-        'eventType' => $validatedData['eventType'],
+        'requested_by' => $validatedData['requestedBy'],
+        'start_at' => $validatedData['eventDate'] . ' ' . $validatedData['eventTime'],
+        'event_type' => $validatedData['eventType'],
+        'description' => $validatedData['eventDescription'],
+        'slug' => Str::slug($validatedData['eventName'], '-'),
       ]);
 
-      dd($request->all());
       return back()->with('success',"Data was submitted.");
     }
 }

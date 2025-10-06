@@ -7,10 +7,9 @@
 
     <div>
         <div >
+          <h2 class="eventsHeading">You are logged in!</h2>
             <div>
-                <div >
-                    {{ __("You're logged in!") }}
-                </div>
+              <x-event-form />
             </div>
         </div>
     </div>

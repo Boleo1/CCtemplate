@@ -19,6 +19,7 @@ class Events extends Model
        'slug',
        'community_id',
        'event_type',
+       'requested_by',
        'start_at',
        'end_at',
        'all_day',

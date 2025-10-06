@@ -16,6 +16,8 @@ return new class extends Migration
             $table->timestamps();
             $table->string('title', 160);
             $table->string('slug')->unique();
+            $table->string('requested_by', 160);
+            $table->string('event_type', 100);
             $table->longText('description')->nullable();
             $table->dateTimeTz('start_at');
             $table->dateTimeTz('end_at')->nullable();
@@ -24,8 +26,6 @@ return new class extends Migration
             $table->dateTimeTz('published_at')->nullable();
             $table->string('cover_image_path')->nullable();
             $table->enum('visibility', ['public', 'private'])->default('public');
-            $table->foreignId('created_by')->costrained('users')->nullOnDelete();
-            $table->foreignId('updated_by')->nullable()->costrained('users')->nullOnDelete();
             $table->softDeletes();
 
             
