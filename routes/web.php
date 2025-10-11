@@ -5,19 +5,19 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\eventsController;
 
 Route::get('/', function () {
+    $pageTitle = 'Home';
     return view('home');
 });
 
 Route::get('/calendar', function () {
+    $pageTitle = 'Calendar';
     return view('calendar');
 });
 
 Route::get('/events', [eventsController::class, 'index'])->name('events.index');
-Route::post('/events', [eventsController::class, 'submit'])->name('events.submit');
+Route::post('/events', action: [eventsController::class, 'submit'])->name('events.submit');
 
-Route::get('/contact', function () {
-    return view('contact');
-});
+Route::get('/contact', function () { return view('contact'); });
 
 Route::get('/dashboard', function () {
     return view('dashboard');

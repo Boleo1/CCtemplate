@@ -1,5 +1,3 @@
-import './bootstrap';
-
 document.addEventListener('DOMContentLoaded', () => {
   const toggleBtn = document.getElementById('nav-form-toggle-btn');
   const formContainer = document.getElementById('nav-form-container');
@@ -23,3 +21,4 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 });
+

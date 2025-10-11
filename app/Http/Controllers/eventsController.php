@@ -12,14 +12,9 @@ class eventsController extends Controller
 {
     public function index() {
       $events = Events::latest()->paginate(10);
-      return view('events', ['events' => $events ]);
+      $pageTitle = 'Events';
+      return view('events', ['events' => $events , 'pageTitle' => $pageTitle]);
     }
-
-
-    // public function show($id) {
-    //   $event = Events::findOrFail($id);
-    //   return view('event', ['event' => $event ]);
-    // }
 
     public function submit(Request $request) {
 
