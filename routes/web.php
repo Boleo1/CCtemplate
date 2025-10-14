@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\eventsController;
+use App\Http\Controllers\eventsRequestController;
 
 Route::get('/', function () {
     $pageTitle = 'Home';
@@ -15,7 +16,9 @@ Route::get('/calendar', function () {
 });
 
 Route::get('/events', [eventsController::class, 'index'])->name('events.index');
-Route::post('/events', action: [eventsController::class, 'submit'])->name('events.submit');
+Route::post('/events',[eventsController::class, 'submit'])->name('events.submit');
+
+Route::post('/events/request',[eventsRequestController::class, 'submit'])->name('events.request.submit');
 
 Route::get('/contact', function () { return view('contact'); });
 
