@@ -19,6 +19,12 @@ return new class extends Migration
           $table->date('event_date');
           $table->time('event_time');
           $table->longText('event_description');
+          $table->enum('status', ['pending','approved','rejected'])->default('pending')->index();
+          $table->foreignId('reviewed_by')->nullable()->constrained('users')->nullOnDelete();
+          $table->timestamp('reviewed_at')->nullable();
+          $table->text('review_notes')->nullable();
+          $table->softDeletes();
+          $table->unsignedInteger('sort_order')->default(999999)->index(); 
         });
     }
 

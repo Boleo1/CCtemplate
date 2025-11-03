@@ -27,7 +27,9 @@ return new class extends Migration
             $table->string('cover_image_path')->nullable();
             $table->enum('visibility', ['public', 'private'])->default('public');
             $table->softDeletes();
-
+            $table->unsignedInteger('sort_order')->default(999999)->index(); 
+            $table->unsignedBigInteger('created_by')->nullable()->index();
+            $table->unsignedBigInteger('updated_by')->nullable()->index();
             
         });
       }

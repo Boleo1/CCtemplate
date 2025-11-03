@@ -18,7 +18,7 @@
           </form>
       </li>
         @endif
-      <button id="nav-form-toggle-btn" type="button" class="btn-primary">Create Event</button>
+      <button id="nav-form-toggle-btn" type="button" class="btn-primary">Request Center</button>
   
   </ul>
 </nav>
@@ -40,7 +40,7 @@
     <input type="date" id="date" name="date" required>
 
     <label for="eventTime">Event Time:</label>
-    <input type="time" id="eventTime" name="eventTime" required>
+    <input step="1800" type="time" id="eventTime" name="eventTime" required>
 
     <label for="requesterEmail">Your E-Mail:</label>
     <input type="email" id="requesterEmail" name="requesterEmail" required>
