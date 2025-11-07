@@ -29,6 +29,7 @@ class Events extends Model
        'cover_image_path',
        'created_by',
        'updated_by',
+       'thumbnail_image_path',
    ];
 
    protected $casts = [
@@ -47,5 +48,10 @@ class Events extends Model
    public function updater()
    {
       return $this->belongsTo(User::class, 'updated_by');
+   }
+
+   public function galleryImages()
+   {
+      return $this->hasMany(EventGalleryImage::class, 'event_id');
    }
 }

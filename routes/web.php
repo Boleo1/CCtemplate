@@ -23,7 +23,7 @@ Route::get('/calendar', function () {
 });
 
 Route::get('/events', [eventsController::class, 'index'])->name('events.index');
-Route::post('/events',[eventsController::class, 'submit'])->name('events.submit');
+// Route::post('/events',[eventsController::class, 'submit'])->name('events.submit');
 
 Route::post('/events/request',[eventsRequestController::class, 'submit'])->name('events.request.submit');
 
@@ -43,6 +43,7 @@ Route::prefix('dashboard')
         Route::get('/', [dashboardController::class, 'index'])->name('index');
 
         Route::get('/events', [adminEventController::class, 'index'])->name('events.index');
+        Route::post('/events', [adminEventController::class, 'store'])->name('events.store');
         Route::patch('/events/{event}', [adminEventController::class, 'update'])->name('events.update');
         Route::delete('/events/{event}', [adminEventController::class, 'destroy'])->name('events.destroy');
 

@@ -9,6 +9,11 @@
         @foreach($events as $event)
           @if(is_array($events) || is_object($event))
           <li>
+             @if ($event->thumbnail_image_path)
+          <img src="{{ asset('storage/' . $event->thumbnail_image_path) }}" alt="{{ $event->title }}" class="event-thumbnail" >
+            @else
+              <img src="{{ asset('images/placeholder-thumb.jpg') }}" alt="No thumbnail" class="event-thumbnail">
+            @endif
             <h3>{{ $event->title ?? 'No Title' }}</h3>
             <p>{{ $event->description }}</p>
             <p>{{ $event->start_at }} to {{ $event->end_at }}</p>

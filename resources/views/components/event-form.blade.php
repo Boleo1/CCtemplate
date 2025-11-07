@@ -1,11 +1,12 @@
 <div class="eventForm">
-  <form action="{{ route('events.submit')}}" method="POST" >
+  {{-- DEBUG --}}
+<p>POST target should be: {{ route('admin.events.store') }}</p>
+
+
+  <form action="{{ route('admin.events.store')}}" method="POST" enctype="multipart/form-data" >
     @csrf
     <label for="eventName">Event Name:</label>
     <input type="text" id="eventName" name="eventName" required>
-
-    <label for="requestedBy">Enter your E-Mail:</label>
-    <input type="text" id="requestedBy" name="requestedBy" required>
 
     <label for="eventDate">Event Date:</label>
     <input type="date" id="eventDate" name="eventDate" required>
@@ -23,6 +24,12 @@
 
     <label for="eventDescription">Event Description:</label>
     <textarea id="eventDescription" name="eventDescription" rows="4" required></textarea>
+
+    <label>Thumbnail Image:</label>
+    <input type="file" name="thumbnail_image_path" accept="image/*" >
+
+    <label>Gallery Images (optional):</label>
+    <input type="file" name="gallery[]" accept="image/*" multiple>
 
     <button type="submit">Create Event</button>
   </form>

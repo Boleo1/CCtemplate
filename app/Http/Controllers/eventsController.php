@@ -16,26 +16,26 @@ class eventsController extends Controller
       return view('events', ['events' => $events , 'pageTitle' => $pageTitle]);
     }
 
-    public function submit(Request $request) {
+    // public function submit(Request $request) {
 
-      $validatedData = $request->validate([
-        'eventName' => 'required|string|',
-        'requestedBy' => 'required|string|email',
-        'eventDate' => 'required|date',
-        'eventTime' => 'required',
-        'eventDescription' => 'required|string',
-        'eventType' => 'required|string',
-      ]);
+    //   $validatedData = $request->validate([
+    //     'eventName' => 'required|string|',
+    //     'requestedBy' => 'required|string|email',
+    //     'eventDate' => 'required|date',
+    //     'eventTime' => 'required',
+    //     'eventDescription' => 'required|string',
+    //     'eventType' => 'required|string',
+    //   ]);
 
-      Events::create([
-        'title' => $validatedData['eventName'],
-        'requested_by' => $validatedData['requestedBy'],
-        'start_at' => $validatedData['eventDate'] . ' ' . $validatedData['eventTime'],
-        'event_type' => $validatedData['eventType'],
-        'description' => $validatedData['eventDescription'],
-        'slug' => Str::slug($validatedData['eventName'], '-'),
-      ]);
+    //   Events::create([
+    //     'title' => $validatedData['eventName'],
+    //     'requested_by' => $validatedData['requestedBy'],
+    //     'start_at' => $validatedData['eventDate'] . ' ' . $validatedData['eventTime'],
+    //     'event_type' => $validatedData['eventType'],
+    //     'description' => $validatedData['eventDescription'],
+    //     'slug' => Str::slug($validatedData['eventName'], '-'),
+    //   ]);
 
-      return back()->with('success',"Data was submitted.");
-    }
+    //   return back()->with('success',"Data was submitted.");
+    // }
 }

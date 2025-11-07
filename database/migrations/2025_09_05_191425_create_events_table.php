@@ -30,6 +30,7 @@ return new class extends Migration
             $table->unsignedInteger('sort_order')->default(999999)->index(); 
             $table->unsignedBigInteger('created_by')->nullable()->index();
             $table->unsignedBigInteger('updated_by')->nullable()->index();
+            $table->string('thumbnail_image_path')->nullable();
             
         });
       }
