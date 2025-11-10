@@ -9,25 +9,27 @@ use App\Http\Controllers\Admin\adminEventController;
 
 Route::get('/', function () {
     $pageTitle = 'Home';
-    return view('home');
+    return view('pages.home');
 })->name('home');
 
 Route::get('/about', function () {
     $pageTitle = 'About Us';
-    return view('about');
+    return view('pages.about');
 });
 
 Route::get('/calendar', function () {
     $pageTitle = 'Calendar';
-    return view('calendar');
+    return view('pages.calendar');
 });
 
 Route::get('/events', [eventsController::class, 'index'])->name('events.index');
-// Route::post('/events',[eventsController::class, 'submit'])->name('events.submit');
+
+Route::get('/events/{slug}', [eventsController::class, 'show'])->name('events.show');
+
 
 Route::post('/events/request',[eventsRequestController::class, 'submit'])->name('events.request.submit');
 
-Route::get('/contact', function () { return view('contact'); });
+Route::get('/contact', function () { return view('pages.contact'); });
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -46,8 +48,8 @@ Route::prefix('dashboard')
         Route::post('/events', [adminEventController::class, 'store'])->name('events.store');
         Route::patch('/events/{event}', [adminEventController::class, 'update'])->name('events.update');
         Route::delete('/events/{event}', [adminEventController::class, 'destroy'])->name('events.destroy');
-
         Route::post('/events/reorder', [adminEventController::class, 'reorder'])->name('events.reorder');
+        Route::get('/events/{event}/edit', [adminEventController::class, 'edit'])->name('events.edit');
 
         Route::get('/requests', [eventsRequestController::class, 'index'])->name('requests.index');
         Route::patch('/requests/{request}/moderate', [eventsRequestController::class, 'moderate'])->name('requests.moderate');

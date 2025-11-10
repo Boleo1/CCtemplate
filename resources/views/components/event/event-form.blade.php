@@ -1,8 +1,4 @@
 <div class="eventForm">
-  {{-- DEBUG --}}
-<p>POST target should be: {{ route('admin.events.store') }}</p>
-
-
   <form action="{{ route('admin.events.store')}}" method="POST" enctype="multipart/form-data" >
     @csrf
     <label for="eventName">Event Name:</label>

@@ -16,7 +16,7 @@ return new class extends Migration
             $table->timestamps();
             $table->string('title', 160);
             $table->string('slug')->unique();
-            $table->string('requested_by', 160);
+            $table->string('requested_by', 160)->nullable();
             $table->string('event_type', 100);
             $table->longText('description')->nullable();
             $table->dateTimeTz('start_at');
