@@ -56,4 +56,14 @@ class Events extends Model
    {
       return $this->hasMany(EventGalleryImage::class, 'event_id');
    }
+
+   public function getStartDateAttribute()
+  {
+      return $this->start_at?->format('Y-m-d');   // for <input type="date">
+  }
+
+  public function getStartTimeAttribute()
+  {
+      return $this->start_at?->format('H:i');     // for <input type="time">
+  }
 }

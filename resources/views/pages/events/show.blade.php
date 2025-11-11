@@ -1,9 +1,9 @@
 <x-app-layout>
-  @if(Auth::check())
-    <a href={{ route('events.edit') . '(' . $event->id . ')' }} class="btn btn-secondary admin-edit-btn">Edit Event</a>
-  @endif
   <x-header><h1>{{ $event->title }}</h1></x-header>
-
+  
+  @if(Auth::check())
+    <a href={{ route('admin.events.edit', $event->id) }} class="btn btn-secondary admin-edit-btn">Edit Event</a>
+  @endif
   @if ($event->thumbnail_image_path)
     <img src="{{ asset('storage/'.$event->thumbnail_image_path) }}" alt="{{ $event->title }}" class="event-hero">
   @endif

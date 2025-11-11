@@ -27,18 +27,18 @@ class adminEventController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'eventName'         => 'required|string|max:255',
-            'eventDate'         => 'required|date',
-            'eventTime'         => 'required',
-            'eventType'         => 'required|string|max:100',
-            'eventDescription'  => 'required|string',
+            'title'         => 'required|string|max:255',
+            'start_date'         => 'required|date',
+            'start_time'         => 'required',
+            'event_type'         => 'required|string|max:100',
+            'description'  => 'required|string',
             // images
             'thumbnail_image_path'   => 'nullable|image|mimes:jpg,jpeg,png,webp|max:4096',
             'gallery.*'    => 'nullable|image|mimes:jpg,jpeg,png,webp|max:8192',
         ]);
 
         // slug (unique-ish)
-        $base = Str::slug($data['eventName'], '-');
+        $base = Str::slug($data['title'], '-');
         $slug = $base;
         $i = 2;
         while (Events::where('slug', $slug)->exists()) {
@@ -53,6 +53,7 @@ class adminEventController extends Controller
             'title'        => $data['eventName'],
             'start_at'     => $data['eventDate'] . ' ' . $data['eventTime'],
             'event_type'   => $data['eventType'],
+            'description'  => $data['description'],
             'slug'         => $slug,
             'thumbnail_image_path'    => $thumbPath,
         ]);
