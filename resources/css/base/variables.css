@@ -1,23 +1,10 @@
 /* resources/css/base/_variables.css */
 :root {
-  /* === Brand palette === */
-  --color-primary: #004aad;
-  --color-primary-light: #357aff;
-  --color-secondary: #f9b234;
-  --color-accent: #00bfa6;
-
-  /* === Greys === */
-  --color-bg: #f9f9f9;
-  --color-surface: #ffffff;
-  --color-border: #e0e0e0;
-  --color-text: #222222;
-  --color-text-muted: #666666;
-
-  /* === Typography === */
-  --font-sans: 'Segoe UI', Tahoma, sans-serif;
-  --font-heading: 'Montserrat', sans-serif;
-
-  /* === Layout === */
-  --radius: 8px;
-  --shadow: 0 2px 10px rgba(0,0,0,0.1);
+  --primary-color: #0b66d4;
+  --text-color: #1a1a1a;
+  --muted-text: #6b7280;
+  --bg: #ffffff;
+  --bg-soft: #f6f7fb;
+  --radius: 12px;
+  --shadow: 0 3px 10px rgba(0,0,0,0.08);
 }

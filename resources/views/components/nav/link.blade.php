@@ -1,9 +1,11 @@
-@props(['href' => '#', 'active' => false])
+@props(['href' => '#'])
 
 @php
-  $classes = 'side-link'.($active ? ' is-active' : '');
+  $isActive = request()->is(trim($href, '/')) || request()->is(trim($href, '/').'/*');
+  $classes = 'nav-link'.($isActive ? ' is-active' : '');
 @endphp
 
 <a href="{{ $href }}" {{ $attributes->merge(['class' => $classes]) }}>
   {{ $slot }}
 </a>
+

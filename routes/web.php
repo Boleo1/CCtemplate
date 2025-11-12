@@ -6,10 +6,16 @@ use App\Http\Controllers\eventsController;
 use App\Http\Controllers\eventsRequestController;
 use App\Http\Controllers\Admin\dashboardController;
 use App\Http\Controllers\Admin\adminEventController;
+use App\Http\Controllers\contactController;
+use App\Models\Events;
 
 Route::get('/', function () {
     $pageTitle = 'Home';
-    return view('pages.home');
+    $upcomingEvents = Events::where('start_at', '>=', now())
+        ->orderBy('start_at')
+        ->take(10)
+        ->get();
+    return view('pages.home', compact('upcomingEvents'));
 })->name('home');
 
 Route::get('/about', function () {
@@ -29,7 +35,11 @@ Route::get('/events/{slug}', [eventsController::class, 'show'])->name('events.sh
 
 Route::post('/events/request',[eventsRequestController::class, 'submit'])->name('events.request.submit');
 
-Route::get('/contact', function () { return view('pages.contact'); });
+Route::get('/contact', [contactController::class, 'show'])->name('contact.show');
+
+Route::post('/contact', [ContactController::class, 'submit'])
+    ->middleware('throttle:10,1')
+    ->name('contact.submit');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

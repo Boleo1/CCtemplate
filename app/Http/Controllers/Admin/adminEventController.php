@@ -27,11 +27,11 @@ class adminEventController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'title'         => 'required|string|max:255',
+            'title'              => 'required|string|max:255',
             'start_date'         => 'required|date',
             'start_time'         => 'required',
             'event_type'         => 'required|string|max:100',
-            'description'  => 'required|string',
+            'description'        => 'required|string',
             // images
             'thumbnail_image_path'   => 'nullable|image|mimes:jpg,jpeg,png,webp|max:4096',
             'gallery.*'    => 'nullable|image|mimes:jpg,jpeg,png,webp|max:8192',
@@ -50,9 +50,9 @@ class adminEventController extends Controller
         : null;
 
         $event = Events::create([
-            'title'        => $data['eventName'],
-            'start_at'     => $data['eventDate'] . ' ' . $data['eventTime'],
-            'event_type'   => $data['eventType'],
+            'title'        => $data['title'],
+            'start_at'     => $data['start_date'] . ' ' . $data['start_time'],
+            'event_type'   => $data['event_type'],
             'description'  => $data['description'],
             'slug'         => $slug,
             'thumbnail_image_path'    => $thumbPath,
@@ -78,15 +78,24 @@ class adminEventController extends Controller
     public function update(Request $request, Events $event)
     {
         $data = $request->validate([
-            'eventName'        => ['required','string','max:255'],
-            'eventDate'     => ['required','date'],
-            'eventTime'     => ['required','date'],
-            'event_type'   => ['required','string','max:100'],
-            'eventDescription'  => ['required','string'],
+            'title'          => ['required','string','max:255'],
+            'start_date'     => ['required','date'],
+            'start_time' => ['required','date_format:H:i'],
+            'event_type'     => ['required','string','max:100'],
+            'description'    => ['string'],
             'thumbnail_image_path'    => ['nullable','image','mimes:jpg,jpeg,png,webp','max:4096'],
         ]);
+
+        $data['start_at'] = $data['start_date'].' '.$data['start_time'];
+        unset($data['start_date'], $data['start_time']);
+
         if ($request->hasFile('thumbnail_image_path')) {
-            $data['thumbnail_image_path'] = $request->file('thumbnail_image_path')->store('events/thumbnails', 'public');
+          if ($event->thumbnail_image_path) {
+          Storage::disk('public')->delete($event->thumbnail_image_path);
+          }
+          $data['thumbnail_image_path'] = $request
+          ->file('thumbnail_image_path')
+          ->store('events/thumbnails','public');
         }
 
         $event->update($data);

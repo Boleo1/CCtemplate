@@ -1,0 +1,102 @@
+/* === Global Form Styling === */
+.contact-form {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  background: #fff;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+}
+
+.contact-form .row {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+}
+
+.contact-form label.inputLabel {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 0.4rem;
+  font-size: 0.95rem;
+}
+
+.contact-form input,
+.contact-form textarea,
+.contact-form select {
+  width: 100%;
+  padding: 0.7rem 0.9rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font: inherit;
+  transition: border-color 0.25s, box-shadow 0.25s;
+  background-color: #fafafa;
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus,
+.contact-form select:focus {
+  border-color: var(--primary-color, #0b66d4);
+  box-shadow: 0 0 0 3px rgba(11, 102, 212, 0.1);
+  background-color: #fff;
+  outline: none;
+}
+
+.contact-form textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+/* === Button === */
+.contact-form .btn,
+.contact-form button[type="submit"] {
+  display: inline-block;
+  background-color: var(--primary-color, #0b66d4);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.25s, transform 0.15s;
+}
+
+.contact-form .btn:hover,
+.contact-form button[type="submit"]:hover {
+  background-color: #094fa3;
+  transform: translateY(-2px);
+}
+
+.contact-form .btn:active,
+.contact-form button[type="submit"]:active {
+  transform: translateY(0);
+}
+
+/* === Validation + Alerts === */
+.text-sm.text-red-600 {
+  color: #c0392b;
+  font-size: 0.85rem;
+  margin-top: 0.25rem;
+}
+
+.alert.success {
+  background: #e8f6ee;
+  border: 1px solid #bfe5cd;
+  color: #245a38;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  text-align: center;
+  font-weight: 500;
+}
+
+/* === Layout tweaks if you use two-column grid === */
+@media (min-width: 768px) {
+  .contact-page {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    align-items: start;
+  }
+}

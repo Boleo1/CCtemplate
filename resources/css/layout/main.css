@@ -2,4 +2,5 @@ main{
   font-family: var(--font-sans);
   color: var(--color-text);
   background-color: var(--color-bg);
+  min-height: 100vh;
 }

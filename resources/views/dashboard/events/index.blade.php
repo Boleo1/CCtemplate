@@ -18,6 +18,9 @@
             <p>{{ $event->description }}</p>
             <p>{{ $event->start_at }} to {{ $event->end_at }}</p>
             <p>Type: {{ $event->type }}</p>
+            @if(Auth::check())
+              <a href={{ route('admin.events.edit', $event->id) }} class="btn btn-secondary admin-edit-btn">Edit Event</a>
+            @endif
           </li>
           @endif
         @endforeach 

@@ -1,0 +1,237 @@
+.homeHeroContainer,
+.homeInformationalContainer,
+.homeEventCarousel,
+.homeContactFormContainer {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1.25rem;
+}
+
+@media (min-width: 768px){
+  .homeHeroContainer,
+  .homeInformationalContainer,
+  .homeEventCarousel,
+  .homeContactFormContainer {
+    padding: 2rem;
+  }
+}
+
+/* ============
+   HERO SECTION
+   ============ */
+.homeHeroContainer {
+  position: relative;
+  border-radius: var(--radius);
+  overflow: hidden;
+  min-height: clamp(280px, 45vh, 520px);
+  isolation: isolate;
+  box-shadow: var(--shadow);
+}
+
+/* image fills container */
+.homeHeroImage {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -2;
+}
+
+/* gradient overlay for text legibility */
+.homeHeroContainer::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,0.35), rgba(0,0,0,0.25) 40%, rgba(0,0,0,0.15) 100%);
+  z-index: -1;
+}
+
+/* text overlay */
+.homeHeroTextOverlay {
+  position: relative;
+  color: #fff;
+  display: grid;
+  align-content: end;
+  height: 100%;
+  padding: clamp(1rem, 4vw, 2.25rem);
+}
+
+.homeHeroTitle {
+  font-size: clamp(1.8rem, 4vw, 3rem);
+  line-height: 1.1;
+  margin: 0 0 .4rem 0;
+  font-weight: 800;
+  letter-spacing: 0.2px;
+}
+
+.homeHeroSubtitle {
+  font-size: clamp(1rem, 2.2vw, 1.25rem);
+  opacity: 0.95;
+  margin: 0;
+}
+
+/* ============================
+   THREE-CARD INFO SECTION
+   ============================ */
+.homeInformationalContainer {
+  display: grid;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+@media (min-width: 700px){
+  .homeInformationalContainer {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+  }
+}
+
+.infoSection {
+  background: var(--bg);
+  border: 1px solid #eceef3;
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  box-shadow: var(--shadow);
+  display: grid;
+  align-content: start;
+  gap: .6rem;
+  transition: transform .18s ease, box-shadow .18s ease;
+}
+
+.infoSection h2 {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.infoSection p {
+  margin: 0 0 .25rem 0;
+  color: var(--muted-text);
+}
+
+.infoSection .btn {
+  margin-top: .25rem;
+}
+
+.infoSection:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 18px rgba(0,0,0,0.10);
+}
+
+/* Basic buttons (if you don’t already have them) */
+.btn {
+  display: inline-block;
+  padding: .6rem 1rem;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: background-color .2s ease, transform .12s ease;
+}
+
+.btn-primary {
+  background: var(--primary-color);
+  color: #fff;
+}
+.btn-primary:hover { background: #094fa3; transform: translateY(-1px); }
+
+.btn-secondary {
+  background: #e8eefc;
+  color: #0b3d91;
+}
+.btn-secondary:hover { background: #d7e4ff; transform: translateY(-1px); }
+
+/* ============================
+   UPCOMING EVENTS CAROUSEL
+   (scroll-snap, no JS)
+   ============================ */
+.homeEventCarousel {
+  margin-top: 2.25rem;
+}
+
+.carouselHeading {
+  font-size: 1.5rem;
+  margin: 0 0 .75rem 0;
+}
+
+.carouselContainer {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  padding-bottom: .75rem;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+.carouselContainer::-webkit-scrollbar {
+  height: 10px;
+}
+.carouselContainer::-webkit-scrollbar-thumb {
+  background: #d9deea;
+  border-radius: 999px;
+}
+
+.carouselCard {
+  flex: 0 0 290px; /* card width */
+  scroll-snap-align: start;
+  background: var(--bg);
+  border: 1px solid #eceef3;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: .9rem;
+  display: grid;
+  gap: .5rem;
+  text-align: left;
+  transition: transform .18s ease, box-shadow .18s ease;
+}
+.carouselCard:hover { transform: translateY(-3px); box-shadow: 0 8px 18px rgba(0,0,0,0.1); }
+
+.carouselEventThumbnail {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.carouselEventTitle {
+  font-size: 1.05rem;
+  margin: .2rem 0 0 0;
+}
+
+.carouselEventMeta {
+  color: var(--muted-text);
+  font-size: .95rem;
+  margin: 0 0 .25rem 0;
+}
+
+.carouselDetailsButton {
+  justify-self: start;
+}
+
+/* ============================
+   CONTACT STRIP ON HOME
+   ============================ */
+.homeContactFormContainer {
+  margin-top: 2.25rem;
+  background: var(--bg-soft);
+  border: 1px solid #eceef3;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1.25rem;
+}
+
+@media (min-width: 900px){
+  .homeContactFormContainer { padding: 2rem; }
+}
+
+/* ============================
+   Accessibility & Motion
+   ============================ */
+:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+}
