@@ -1,5 +1,4 @@
-<x-dashboard-layout>
-
+<x-dashboard-layout title="Dashboard">
     <div>
         <div >
           <h2 class="eventsHeading">You are logged in!</h2>

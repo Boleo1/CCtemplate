@@ -29,14 +29,10 @@ Route::get('/calendar', function () {
 });
 
 Route::get('/events', [eventsController::class, 'index'])->name('events.index');
-
 Route::get('/events/{slug}', [eventsController::class, 'show'])->name('events.show');
-
-
 Route::post('/events/request',[eventsRequestController::class, 'submit'])->name('events.request.submit');
 
 Route::get('/contact', [contactController::class, 'show'])->name('contact.show');
-
 Route::post('/contact', [ContactController::class, 'submit'])
     ->middleware('throttle:10,1')
     ->name('contact.submit');
@@ -53,17 +49,21 @@ Route::prefix('dashboard')
     ->name('admin.')
     ->group(function () {
         Route::get('/', [dashboardController::class, 'index'])->name('index');
-
+        
         Route::get('/events', [adminEventController::class, 'index'])->name('events.index');
         Route::post('/events', [adminEventController::class, 'store'])->name('events.store');
         Route::patch('/events/{event}', [adminEventController::class, 'update'])->name('events.update');
         Route::delete('/events/{event}', [adminEventController::class, 'destroy'])->name('events.destroy');
         Route::post('/events/reorder', [adminEventController::class, 'reorder'])->name('events.reorder');
         Route::get('/events/{event}/edit', [adminEventController::class, 'edit'])->name('events.edit');
-
+        
         Route::get('/requests', [eventsRequestController::class, 'index'])->name('requests.index');
         Route::patch('/requests/{request}/moderate', [eventsRequestController::class, 'moderate'])->name('requests.moderate');
-
+        
+        Route::get('/support', function () {
+            $pageTitle = 'Support';
+            return view('dashboard.support', compact('pageTitle'));
+        })->name('support');
     });
 
 require __DIR__.'/auth.php';

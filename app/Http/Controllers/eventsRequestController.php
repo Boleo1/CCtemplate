@@ -23,7 +23,7 @@ class eventsRequestController extends Controller
       // dd($request->all());
         $validated = $request->validate([
             'eventType' => 'required|string',
-            'date' => 'required|date',
+            'date' => 'required|date|after_or_equal:today',
             'eventTime' => 'required',
             'requesterEmail' => 'required|email',
             'eventDescription' => 'required|string|max:1000',

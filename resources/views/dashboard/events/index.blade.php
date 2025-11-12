@@ -11,12 +11,12 @@
   <div class="events-list-container">
     <h3>Existing Events</h3>
       <ul>
-        @foreach($events as $event)
+        @foreach($events as $event) 
           @if(is_array($events) || is_object($event))
           <li>
             <h3>{{ $event->title ?? 'No Title' }}</h3>
             <p>{{ $event->description }}</p>
-            <p>{{ $event->start_at }} to {{ $event->end_at }}</p>
+            <p>{{ $event->start_at }} to {{ $event->end_at }}</p> 
             <p>Type: {{ $event->type }}</p>
             @if(Auth::check())
               <a href={{ route('admin.events.edit', $event->id) }} class="btn btn-secondary admin-edit-btn">Edit Event</a>

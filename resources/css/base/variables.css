@@ -1,10 +1,49 @@
 /* resources/css/base/_variables.css */
 :root {
+  /* === Brand Colors === */
   --primary-color: #0b66d4;
+  --primary-color-light: #4f8ef1;
+  --primary-color-dark: #094fa3;
+
+  --accent-color: #ffb400;
+  --accent-color-light: #ffd666;
+
   --text-color: #1a1a1a;
   --muted-text: #6b7280;
+
+  /* === Backgrounds === */
   --bg: #ffffff;
   --bg-soft: #f6f7fb;
+  --bg-muted: #f0f2f6;
+
+  /* === Borders & Shadows === */
+  --border-color: #eceef3;
   --radius: 12px;
+  --radius-large: 16px;
   --shadow: 0 3px 10px rgba(0,0,0,0.08);
+  --shadow-hover: 0 8px 18px rgba(0,0,0,0.12);
+
+  /* === Typography === */
+  --font-sans: "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-heading: "Poppins", "Inter", sans-serif;
+  --font-size-base: 1rem;
+  --font-size-sm: 0.875rem;
+  --font-size-lg: 1.125rem;
+  --line-height-base: 1.6;
+
+  /* === Spacing (for consistent padding/margins) === */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 2rem;
+  --space-xl: 3rem;
+
+  /* === Transitions === */
+  --transition-fast: 0.15s ease-in-out;
+  --transition: 0.25s ease;
+  --transition-slow: 0.4s ease;
+
+  /* === Container Widths === */
+  --max-width: 1200px;
+  --content-width: 900px;
 }

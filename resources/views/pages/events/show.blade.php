@@ -8,9 +8,9 @@
     <img src="{{ asset('storage/'.$event->thumbnail_image_path) }}" alt="{{ $event->title }}" class="event-hero">
   @endif
 
-  <p><strong>Date:</strong> {{ \Carbon\Carbon::parse($event->start_at)->format('F j, Y') }}</p>
-  <p><strong>Time:</strong> {{ \Carbon\Carbon::parse($event->start_at)->format('g:i A') }}</p>
-  <p><strong>Type:</strong> {{ $event->event_type }}</p>
+  <p><strong> 📅Date:</strong> {{ \Carbon\Carbon::parse($event->start_at)->format('F j, Y') }}</p>
+  <p><strong>⌚Time:</strong> {{ \Carbon\Carbon::parse($event->start_at)->format('g:i A') }}</p>
+  <p><strong>🏷️Type:</strong> {{ $event->event_type }}</p>
 
   <div class="event-body">
     {!! nl2br(e($event->description)) !!}

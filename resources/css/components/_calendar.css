@@ -1,0 +1,32 @@
+:root {
+  --fc-border-color: #eceef3;
+  --fc-button-bg-color: var(--primary-color);
+  --fc-button-hover-bg-color: var(--primary-color-dark);
+  --fc-button-active-bg-color: var(--primary-color-dark);
+  --fc-today-bg-color: rgba(11,102,212,0.07);
+  --fc-event-bg-color: #e8eefc;
+  --fc-event-text-color: #0b3d91;
+}
+
+.fc {
+  border: 1px solid var(--fc-border-color);
+  border-radius: var(--radius-large);
+  box-shadow: var(--shadow);
+  background: #fff;
+}
+
+.fc .fc-toolbar-title {
+  font-size: 1.5rem;
+  font-weight: 800;
+}
+
+.fc .fc-daygrid-event {
+  border-radius: 8px;
+  padding: 0.2rem 0.35rem;
+  margin-top: 0.25rem;
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+.fc .fc-daygrid-event:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+}

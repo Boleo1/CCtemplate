@@ -1,7 +1,7 @@
 @props(['links' => [], 'showAuthLinks' => true])
 
 <nav {{ $attributes->class(['nav-bar']) }}>
-  <ul class="nav-list nav-left">
+  <ul class="nav-list">
     @foreach ($links as $link)
       <li class="nav-item">
         <x-nav.link
@@ -17,11 +17,11 @@
   </ul>
 
   @if (Auth::check() && $showAuthLinks)
-    <ul class="nav-list nav-right">
+    <ul class="nav-list nav-auth">
       <li class="nav-item">
         <x-nav.link
-          href="{{ route('admin.index') ?? '/dashboard' }}"
-          :active="request()->is('dashboard*')"
+          href="{{ route('admin.index', absolute: false) ?? url('/dashboard') }}"
+          :active="request()->routeIs('admin.*','dashboard.*') || request()->is('dashboard','dashboard/*')"
         >
           Dashboard
         </x-nav.link>
@@ -33,5 +33,15 @@
         </form>
       </li>
     </ul>
+    @else
+    <ul class="nav-list nav-auth">
+      <li class="nav-item">
+        <x-nav.link
+          href="{{ route('login') }}"
+          :active="request()->routeIs('login')"
+        >
+          Login
+        </x-nav.link>
+      </li>
   @endif
 </nav>

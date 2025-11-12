@@ -1,0 +1,40 @@
+:root {
+  --nav-h: 56px;        /* height of your top nav */
+  --side-w: 220px;      /* sidebar width */
+  --admin-pad: 1.5rem;  /* main padding */
+}
+
+/* Two-column layout under the global header */
+.admin-shell {
+  display: grid;
+  grid-template-columns: var(--side-w) 1fr;
+  min-height: calc(100vh - var(--nav-h));
+  background: var(--bg, #fff);
+}
+
+/* Main content area */
+.admin-main {
+  padding: 1.5rem 2rem;
+  width: 100%;
+  background: var(--bg, #fff);
+}
+
+/* Optional page header block */
+.admin-pagehead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+.admin-pagehead h1 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 800;
+}
+
+/* Responsive collapse */
+@media (max-width: 900px) {
+  .admin-shell { grid-template-columns: 1fr; }
+  .admin-main  { padding: 1rem; }
+}

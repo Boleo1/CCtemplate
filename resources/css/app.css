@@ -4,8 +4,16 @@
 @import "./layout/header.css";
 @import "./layout/footer.css";
 
+@import "./components/_calendar.css";
 @import "./components/buttons.css";
 @import "./components/contact-form.css";
 @import "./components/navigation.css";
+@import "./components/sidebar.css";
+@import "./components/admin-shell.css";
+
 
 @import "./pages/home.css";
+@import "./pages/about.css";
+@import "./pages/events.css";
+@import "./pages/show-events.css";
+@import "./pages/calendar.css";

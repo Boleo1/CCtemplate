@@ -1,7 +1,5 @@
 <x-app-layout>
-<x-header>
-
-</x-header>
+<x-header />
   <div class="homeHeroContainer">
     <img src="{{ asset('storage/media/makwa.jpg') }}" alt="Community Center Hero Image" class="homeHeroImage" loading="lazy">
     <div class="homeHeroTextOverlay">
@@ -71,6 +69,7 @@
   </div>
 
   <div class="homeContactFormContainer">
+    <h2>Contact Us</h2>
     <x-ui.contact-form />
   </div>
 </x-app-layout>
