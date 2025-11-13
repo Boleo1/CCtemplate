@@ -10,23 +10,47 @@ return new class extends Migration
      * Run the migrations.
      */
     public function up(): void
-    {
-        Schema::create('requests', function (Blueprint $table) {
-          $table->id();
-          $table->timestamps();
-          $table->string('event_type');
-          $table->string('requested_by');
-          $table->date('event_date');
-          $table->time('event_time');
-          $table->longText('event_description');
-          $table->enum('status', ['pending','approved','rejected'])->default('pending')->index();
-          $table->foreignId('reviewed_by')->nullable()->constrained('users')->nullOnDelete();
-          $table->timestamp('reviewed_at')->nullable();
-          $table->text('review_notes')->nullable();
-          $table->softDeletes();
-          $table->unsignedInteger('sort_order')->default(999999)->index(); 
-        });
-    }
+{
+    Schema::create('requests', function (Blueprint $table) {
+        $table->id();
+        $table->timestamps();
+
+        $table->string('event_type');
+        $table->string('requested_by');
+
+        // Date / time fields
+        $table->date('event_date');
+        $table->date('end_date')->nullable();   // no ->after()
+
+        $table->time('event_time');
+        $table->time('end_time')->nullable();   // no ->after()
+        $table->boolean('all_day')->default(false);
+
+        // Description
+        $table->longText('event_description');
+
+        // Moderation / workflow
+        $table->enum('status', ['pending', 'approved', 'rejected'])
+              ->default('pending')
+              ->index();
+
+        $table->foreignId('reviewed_by')
+              ->nullable()
+              ->constrained('users')
+              ->nullOnDelete();
+
+        $table->timestamp('reviewed_at')->nullable();
+        $table->text('review_notes')->nullable();
+
+        $table->softDeletes();
+
+        // Sorting
+        $table->unsignedInteger('sort_order')
+              ->default(999999)
+              ->index();
+    });
+}
+
 
     /**
      * Reverse the migrations.

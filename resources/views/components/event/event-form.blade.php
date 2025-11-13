@@ -5,12 +5,14 @@
     action="{{ isset($event) ? route('admin.events.update', $event->id) : route('admin.events.store') }}" 
     method="POST" 
     enctype="multipart/form-data"
+    id="admin-event-form"
   >
     @csrf
     @if(isset($event))
       @method('PATCH')
     @endif
 
+    {{-- Title --}}
     <label for="eventName">Event Name:</label>
     <input 
       type="text" 
@@ -20,7 +22,8 @@
       required
     >
 
-    <label for="eventDate">Event Date:</label>
+    {{-- Start / End dates --}}
+    <label for="eventDate">Start Date:</label>
     <input 
       type="date" 
       id="eventDate" 
@@ -29,17 +32,52 @@
       required
     >
 
-    <label for="eventTime">Event Time:</label>
+    <label for="endDate">End Date (optional):</label>
     <input 
-      type="time" 
-      id="eventTime" 
-      name="start_time" 
-      value="{{ old('start_time', $event->start_time ?? '') }}" 
-      required
+      type="date" 
+      id="endDate" 
+      name="end_date" 
+      value="{{ old('end_date', $event->end_date ?? '') }}"
     >
 
-    <label>Type</label>
-    <select name="event_type">
+    {{-- All-day --}}
+    <div class="checkbox-inline">
+      <input
+        type="checkbox"
+        id="all_day"
+        name="all_day"
+        value="1"
+        {{ old('all_day', $event->all_day ?? false) ? 'checked' : '' }}
+      >
+      <label for="all_day">All-day event</label>
+    </div>
+
+    {{-- Time fields --}}
+    <div class="timeRow">
+      <div class="timeField">
+        <label for="eventTime">Start Time:</label>
+        <input 
+          type="time" 
+          id="eventTime" 
+          name="start_time" 
+          value="{{ old('start_time', $event->start_time ?? '') }}"
+        >
+      </div>
+
+      <div class="timeField">
+        <label for="endTime">End Time (optional):</label>
+        <input 
+          type="time" 
+          id="endTime" 
+          name="end_time" 
+          value="{{ old('end_time', $event->end_time ?? '') }}"
+        >
+      </div>
+    </div>
+
+    {{-- Type --}}
+    <label for="event_type">Type</label>
+    <select name="event_type" id="event_type">
       @foreach(['Community', 'Sports', 'Cultural', 'Class'] as $type)
         <option value="{{ $type }}" 
           {{ old('event_type', $event->event_type ?? '') === $type ? 'selected' : '' }}>
@@ -48,6 +86,7 @@
       @endforeach
     </select>
 
+    {{-- Description --}}
     <label for="eventDescription">Event Description:</label>
     <textarea 
       id="eventDescription" 
@@ -58,6 +97,7 @@
 
     <hr>
     
+    {{-- Thumbnail --}}
     <label>Thumbnail Image:</label>
     <input type="file" name="thumbnail_image_path" accept="image/*">
 
@@ -65,6 +105,7 @@
       <img src="{{ asset('storage/'.$event->thumbnail_image_path) }}" alt="Current Thumbnail" class="current-thumb">
     @endif
 
+    {{-- Gallery --}}
     <label>Gallery Images (optional):</label>
     <input type="file" name="gallery[]" accept="image/*" multiple>
 

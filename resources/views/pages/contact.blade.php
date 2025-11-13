@@ -59,17 +59,4 @@
 
   </section>
 
-  {{-- Quick Links --}}
-  <section class="contact-quicklinks">
-    <h2>Quick Assistance</h2>
-    <p>You may find what you're looking for here:</p>
-
-    <div class="quicklinks-grid">
-      <a href="/events" class="quicklink-card">Upcoming Events</a>
-      <a href="/calendar" class="quicklink-card">Event Calendar</a>
-      <a href="/request" class="quicklink-card">Request an Event</a>
-      <a href="/about" class="quicklink-card">About the Center</a>
-    </div>
-  </section>
-
 </x-app-layout>

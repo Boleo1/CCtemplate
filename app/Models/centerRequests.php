@@ -29,11 +29,15 @@ class centerRequests extends Model
         'sort_order',
         'created_by',
         'updated_by',
+        'end_date',
+        'end_time',
+        'all_day',
     ];
 
     protected $casts = [
     'event_date'  => 'date',
-    'event_time'  => 'datetime:H:i',
+    'end_date'    => 'date',
+    'all_day'     => 'boolean',
     'reviewed_at' => 'datetime',
     ];
     

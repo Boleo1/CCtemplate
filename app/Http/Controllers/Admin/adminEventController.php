@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Events;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Str;
@@ -25,50 +26,89 @@ class adminEventController extends Controller
     }
 
     public function store(Request $request)
-    {
-        $data = $request->validate([
-            'title'              => 'required|string|max:255',
-            'start_date'         => 'required|date',
-            'start_time'         => 'required',
-            'event_type'         => 'required|string|max:100',
-            'description'        => 'required|string',
-            // images
-            'thumbnail_image_path'   => 'nullable|image|mimes:jpg,jpeg,png,webp|max:4096',
-            'gallery.*'    => 'nullable|image|mimes:jpg,jpeg,png,webp|max:8192',
-        ]);
+{
+    $data = $request->validate([
+        'title'              => 'required|string|max:255',
+        'start_date'         => 'required|date',
+        'end_date'           => 'nullable|date|after_or_equal:start_date',
+        'start_time'         => 'nullable|date_format:H:i',
+        'end_time'           => 'nullable|date_format:H:i',
+        'all_day'            => 'nullable|boolean',
+        'event_type'         => 'required|string|max:100',
+        'description'        => 'required|string',
+        'thumbnail_image_path' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:4096',
+        'gallery.*'          => 'nullable|image|mimes:jpg,jpeg,png,webp|max:8192',
+    ]);
 
-        // slug (unique-ish)
-        $base = Str::slug($data['title'], '-');
-        $slug = $base;
-        $i = 2;
-        while (Events::where('slug', $slug)->exists()) {
-            $slug = "{$base}-{$i}";
-            $i++;
+    // slug (unique-ish)
+    $base = Str::slug($data['title'], '-');
+    $slug = $base;
+    $i = 2;
+    while (Events::where('slug', $slug)->exists()) {
+        $slug = "{$base}-{$i}";
+        $i++;
+    }
+
+    $allDay    = $request->boolean('all_day');
+    $startDate = Carbon::parse($data['start_date']);
+    $endDate   = isset($data['end_date'])
+               ? Carbon::parse($data['end_date'])
+               : null;
+
+    $startTime = $data['start_time'] ?? null;
+    $endTime   = $data['end_time']   ?? null;
+
+    if (!$endDate) {
+        $endDate = $startDate->copy();
+    }
+
+    if ($allDay) {
+        $startAt = $startDate->copy()->startOfDay();
+        $endAt   = $endDate->copy()->endOfDay();
+    } else {
+        $timeStartStr = $startTime ?: '00:00';
+        $startAt = Carbon::parse(
+            $startDate->format('Y-m-d') . ' ' . $timeStartStr
+        );
+
+        if ($endTime) {
+            $endAt = Carbon::parse(
+                $endDate->format('Y-m-d') . ' ' . $endTime
+            );
+        } else {
+            // default length: 4 hours
+            $endAt = $startAt->copy()->addHours(4);
         }
-        $thumbPath = $request->hasFile('thumbnail_image_path')
+    }
+
+    $thumbPath = $request->hasFile('thumbnail_image_path')
         ? $request->file('thumbnail_image_path')->store('events/thumbnails', 'public')
         : null;
 
-        $event = Events::create([
-            'title'        => $data['title'],
-            'start_at'     => $data['start_date'] . ' ' . $data['start_time'],
-            'event_type'   => $data['event_type'],
-            'description'  => $data['description'],
-            'slug'         => $slug,
-            'thumbnail_image_path'    => $thumbPath,
-        ]);
+    $event = Events::create([
+        'title'        => $data['title'],
+        'slug'         => $slug,
+        'event_type'   => $data['event_type'],
+        'description'  => $data['description'],
+        'start_at'     => $startAt,
+        'end_at'       => $endAt,
+        'all_day'      => $allDay,
+        'thumbnail_image_path' => $thumbPath,
+    ]);
 
-        if ($request->hasFile('gallery')) {
-            foreach ($request->file('gallery') as $img) {
-                $path = $img->store('events/gallery', 'public');
-                EventGalleryImage::create([
-                    'event_id'   => $event->id,
-                    'image_path' => $path,
-                ]);
-            }
+    if ($request->hasFile('gallery')) {
+        foreach ($request->file('gallery') as $img) {
+            $path = $img->store('events/gallery', 'public');
+            EventGalleryImage::create([
+                'event_id'   => $event->id,
+                'image_path' => $path,
+            ]);
         }
-        return redirect()->route('admin.events.index')->with('success', 'Event created.');
     }
+
+    return redirect()->route('admin.events.index')->with('success', 'Event created.');
+}
+
 
     public function edit(Events $event)
     {
@@ -76,31 +116,74 @@ class adminEventController extends Controller
     }
 
     public function update(Request $request, Events $event)
-    {
-        $data = $request->validate([
-            'title'          => ['required','string','max:255'],
-            'start_date'     => ['required','date'],
-            'start_time' => ['required','date_format:H:i'],
-            'event_type'     => ['required','string','max:100'],
-            'description'    => ['string'],
-            'thumbnail_image_path'    => ['nullable','image','mimes:jpg,jpeg,png,webp','max:4096'],
-        ]);
+{
+    $data = $request->validate([
+        'title'              => ['required','string','max:255'],
+        'start_date'         => ['required','date'],
+        'end_date'           => ['nullable','date','after_or_equal:start_date'],
+        'start_time'         => ['nullable','date_format:H:i'],
+        'end_time'           => ['nullable','date_format:H:i'],
+        'all_day'            => ['nullable','boolean'],
+        'event_type'         => ['required','string','max:100'],
+        'description'        => ['string'],
+        'thumbnail_image_path' => ['nullable','image','mimes:jpg,jpeg,png,webp','max:4096'],
+    ]);
 
-        $data['start_at'] = $data['start_date'].' '.$data['start_time'];
-        unset($data['start_date'], $data['start_time']);
+    $allDay    = $request->boolean('all_day');
+    $startDate = Carbon::parse($data['start_date']);
+    $endDate   = isset($data['end_date'])
+               ? Carbon::parse($data['end_date'])
+               : null;
 
-        if ($request->hasFile('thumbnail_image_path')) {
-          if ($event->thumbnail_image_path) {
-          Storage::disk('public')->delete($event->thumbnail_image_path);
-          }
-          $data['thumbnail_image_path'] = $request
-          ->file('thumbnail_image_path')
-          ->store('events/thumbnails','public');
-        }
+    $startTime = $data['start_time'] ?? null;
+    $endTime   = $data['end_time']   ?? null;
 
-        $event->update($data);
-        return back()->with('success', 'Event updated.');
+    if (!$endDate) {
+        $endDate = $startDate->copy();
     }
+
+    if ($allDay) {
+        $startAt = $startDate->copy()->startOfDay();
+        $endAt   = $endDate->copy()->endOfDay();
+    } else {
+        $timeStartStr = $startTime ?: '00:00';
+        $startAt = Carbon::parse(
+            $startDate->format('Y-m-d') . ' ' . $timeStartStr
+        );
+
+        if ($endTime) {
+            $endAt = Carbon::parse(
+                $endDate->format('Y-m-d') . ' ' . $endTime
+            );
+        } else {
+            $endAt = $startAt->copy()->addHours(4);
+        }
+    }
+
+    // Build update payload
+    $updateData = [
+        'title'       => $data['title'],
+        'event_type'  => $data['event_type'],
+        'description' => $data['description'],
+        'start_at'    => $startAt,
+        'end_at'      => $endAt,
+        'all_day'     => $allDay,
+    ];
+
+    if ($request->hasFile('thumbnail_image_path')) {
+        if ($event->thumbnail_image_path) {
+            Storage::disk('public')->delete($event->thumbnail_image_path);
+        }
+        $updateData['thumbnail_image_path'] = $request
+            ->file('thumbnail_image_path')
+            ->store('events/thumbnails','public');
+    }
+
+    $event->update($updateData);
+
+    return back()->with('success', 'Event updated.');
+}
+
 
     public function destroy(Events $event)
     {

@@ -13,6 +13,7 @@
   border-radius: var(--radius-large);
   box-shadow: var(--shadow);
   background: #fff;
+  font-size: 0.95rem;
 }
 
 .fc .fc-toolbar-title {
@@ -29,4 +30,29 @@
 .fc .fc-daygrid-event:hover {
   transform: translateY(-1px);
   box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+}
+
+
+@media (max-width: 768px) {
+  /* Stack header a bit tighter */
+  .fc .fc-toolbar.fc-header-toolbar {
+    flex-wrap: wrap;
+    row-gap: 0.5rem;
+  }
+
+  /* Make title not huge on mobile */
+  .fc .fc-toolbar-title {
+    font-size: 1.1rem;
+  }
+
+  /* Buttons a bit smaller */
+  .fc .fc-button {
+    padding: 0.2rem 0.5rem;
+    font-size: 0.8rem;
+  }
+
+  /* Reduce column header height in month view (for when user switches to it) */
+  .fc-daygrid-day-top {
+    padding: 2px 4px;
+  }
 }

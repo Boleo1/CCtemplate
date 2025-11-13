@@ -91,6 +91,91 @@
   font-weight: 500;
 }
 
+/* ---- ALL-DAY CHECKBOX ROW ---- */
+.checkbox-inline {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 1rem 0 0.5rem;
+  padding: 0.75rem 1rem;
+  background: var(--bg-soft);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.checkbox-inline input[type="checkbox"] {
+  width: 1.1rem;
+  height: 1.1rem;
+  cursor: pointer;
+  accent-color: var(--primary-color);
+}
+
+.checkbox-inline label {
+  font-size: 0.95rem;
+  color: var(--text-color);
+  font-weight: 500;
+  cursor: pointer;
+}
+
+/* ---- TIME ROW ---- */
+.timeRow,
+.time-row {
+  display: flex;
+  gap: 1rem;
+  margin: 1rem 0;
+}
+
+.timeField,
+.time-field {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.timeField label,
+.time-field label {
+  margin-bottom: 0.35rem;
+  font-weight: 500;
+  color: var(--text-color);
+}
+
+.timeField input,
+.time-field input,
+.timeField select,
+.time-field select {
+  padding: 0.65rem;
+  border: 1px solid #d1d5db;
+  border-radius: var(--radius);
+  background: var(--bg);
+  color: var(--text-color);
+  font-size: 0.95rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.timeField input:focus,
+.time-field input:focus,
+.timeField select:focus,
+.time-field select:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(11, 102, 212, 0.2);
+  outline: none;
+}
+
+/* ---- HIDE TIME ROW (JS toggles display) ---- */
+.timeRow.hidden,
+.time-row.hidden {
+  display: none !important;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ---- OPTIONAL: Smooth fade-out when toggling all-day ---- */
+.timeRow,
+.time-row {
+  transition: opacity 0.25s ease;
+}
+
+
 /* === Layout tweaks if you use two-column grid === */
 @media (min-width: 768px) {
   .contact-page {

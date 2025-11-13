@@ -20,21 +20,64 @@ class eventsRequestController extends Controller
     }
   public function submit(Request $request)
     {
-      // dd($request->all());
+
         $validated = $request->validate([
             'eventType' => 'required|string',
             'date' => 'required|date|after_or_equal:today',
+            'endDate' => 'nullable|date|after_or_equal:date',
             'eventTime' => 'required',
+            'endTime' => 'nullable|string',
+            'allDay' => 'nullable|boolean',
             'requesterEmail' => 'required|email',
             'eventDescription' => 'required|string|max:1000',
         ]);
 
+        $type        = $validated['eventType'];
+        $startDate   = Carbon::parse($validated['date']);
+        $endDate     = isset($validated['endDate'])
+                         ? Carbon::parse($validated['endDate'])
+                         : null;
+        $allDay      = $request->boolean('allDay');
+        $startTime   = $validated['eventTime'] ?: null;
+        $endTime     = $validated['endTime']   ?: null;
+
+        // --- Special rules for Wakes ---
+        if ($type === 'Wake') {
+            $allDay = true;
+
+            // default to 2-day slot if no end date
+            if (!$endDate) {
+                $endDate = $startDate->copy()->addDays(2);
+            }
+
+            // times not needed for wakes
+            $startTime = null;
+            $endTime   = null;
+        } else {
+            // Non-wake defaults
+
+            // If no end date, same day
+            if (!$endDate) {
+                $endDate = $startDate->copy();
+            }
+
+            // If not all-day, we have a start time, and no end time → +4h
+            if (!$allDay && $startTime && !$endTime) {
+                $tStart = Carbon::createFromFormat('H:i', $startTime);
+                $tEnd   = $tStart->copy()->addHours(4);
+                $endTime = $tEnd->format('H:i');
+            }
+        }
+
         centerRequests::create([
-            'event_type' => $validated['eventType'],
-            'event_date' => $validated['date'],
-            'event_time' => $validated['eventTime'],
-            'requested_by' => $validated['requesterEmail'],
-            'event_description' => $validated['eventDescription'],
+            'event_type'       => $type,
+            'event_date'       => $startDate->toDateString(),
+            'end_date'         => $endDate?->toDateString(),
+            'event_time'       => $startTime,
+            'end_time'         => $endTime,
+            'all_day'          => $allDay,
+            'requested_by'     => $validated['requesterEmail'],
+            'event_description'=> $validated['eventDescription'],
         ]);
 
         return redirect()->back()->with('success', 'Your event request has been submitted!');
@@ -48,43 +91,52 @@ public function moderate(centerRequests $request, Request $http)
     ]);
 
     DB::transaction(function () use ($request, $data) {
-        // 1) Update moderation fields
+        // 1) Moderation fields
         $request->status       = $data['decision'];
         $request->review_notes = $data['review_notes'] ?? null;
         $request->reviewed_by  = Auth::id();
         $request->reviewed_at  = now();
 
-        // 2) On approve -> create calendar event
+        // 2) On approve → create calendar event
         if ($data['decision'] === 'approved') {
-            $title = $request->event_type . ' — ' . $request->requested_by;
+            $title = $request->event_type . ' — ' . $request->title;
 
             // Unique slug
-            $slug  = Str::slug($title);
-            $base  = $slug; $i = 2;
+            $slug = Str::slug($title);
+            $base = $slug; $i = 2;
             while (Events::where('slug', $slug)->exists()) {
                 $slug = "{$base}-{$i}";
                 $i++;
             }
 
-            // ---- Robust date/time normalization ----
-            // event_date can be string or Carbon
-            $eventDate = $request->event_date instanceof \DateTimeInterface
-                ? Carbon::instance($request->event_date)
-                : Carbon::parse($request->event_date);
+            $startDate = Carbon::parse($request->event_date);
+            $endDate   = $request->end_date
+                        ? Carbon::parse($request->end_date)
+                        : $startDate->copy();
+            $allDay    = (bool) $request->all_day;
 
-            // event_time can be TIME string ("19:55" or "19:55:00") or Carbon or null
-            if (empty($request->event_time)) {
-                $timeStr = '00:00:00';
-            } elseif ($request->event_time instanceof \DateTimeInterface) {
-                $timeStr = Carbon::instance($request->event_time)->format('H:i:s');
+            if ($allDay) {
+                // All-day: span whole days
+                $startAt = $startDate->copy()->startOfDay();
+                $endAt   = $endDate->copy()->endOfDay();
             } else {
-                // normalize any incoming time string to H:i:s
-                $timeStr = Carbon::parse($request->event_time)->format('H:i:s');
-            }
+                // Timed event
+                $timeStart = $request->event_time ?: '00:00';
+                $timeEnd   = $request->end_time;
 
-            // Build start/end datetimes
-            $startAt = Carbon::parse($eventDate->format('Y-m-d') . ' ' . $timeStr);
-            $endAt   = (clone $startAt)->addHour(); // adjust duration if needed
+                $startAt = Carbon::parse(
+                    $startDate->format('Y-m-d') . ' ' . $timeStart
+                );
+
+                if ($timeEnd) {
+                    $endAt = Carbon::parse(
+                        $endDate->format('Y-m-d') . ' ' . $timeEnd
+                    );
+                } else {
+                    // Fallback: +4h
+                    $endAt = $startAt->copy()->addHours(4);
+                }
+            }
 
             Events::create([
                 'title'        => $title,
@@ -94,10 +146,10 @@ public function moderate(centerRequests $request, Request $http)
                 'requested_by' => $request->requested_by,
                 'start_at'     => $startAt,
                 'end_at'       => $endAt,
-                'all_day'      => false,
+                'all_day'      => $allDay,
                 'status'       => 'published',
                 'visibility'   => 'public',
-                // 'created_by' => Auth::id(), // only if the column exists
+                // 'created_by' => Auth::id(), // if you add this column
             ]);
         }
 
@@ -106,5 +158,6 @@ public function moderate(centerRequests $request, Request $http)
 
     return back()->with('success', "Request {$data['decision']} successfully.");
 }
+
 
 }

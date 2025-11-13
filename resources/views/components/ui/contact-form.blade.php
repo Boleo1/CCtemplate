@@ -10,31 +10,31 @@
 
   <div class="row">
     <x-ui.input-label for="name" :value="'Name'" />
-    <input id="name" name="name" type="text" value="{{ old('name') }}" required>
+    <input id="name" name="name" type="text" placeholder="Enter your name" value="{{ old('name') }}" required>
     <x-ui.input-error :messages="$errors->get('name')" />
   </div>
 
   <div class="row">
     <x-ui.input-label for="email" :value="'Email'" />
-    <input id="email" name="email" type="email" value="{{ old('email') }}" required>
+    <input id="email" name="email" type="email" placeholder="Enter a valid email address" value="{{ old('email') }}" required>
     <x-ui.input-error :messages="$errors->get('email')" />
   </div>
 
   <div class="row">
     <x-ui.input-label for="phone" :value="'Phone (optional)'" />
-    <input id="phone" name="phone" type="text" value="{{ old('phone') }}">
+    <input id="phone" name="phone" type="text" placeholder="Enter your phone # (optional)" value="{{ old('phone') }}">
     <x-ui.input-error :messages="$errors->get('phone')" />
   </div>
 
   <div class="row">
-    <x-ui.input-label for="subject" :value="'Subject (optional)'" />
-    <input id="subject" name="subject" type="text" value="{{ old('subject') }}">
+    <x-ui.input-label for="subject" :value="'Subject'" />
+    <input id="subject" name="subject" type="text" placeholder="Enter your subject" value="{{ old('subject') }}">
     <x-ui.input-error :messages="$errors->get('subject')" />
   </div>
 
   <div class="row">
     <x-ui.input-label for="message" :value="'Message'" />
-    <textarea id="message" name="message" rows="6" required>{{ old('message') }}</textarea>
+    <textarea id="message" name="message" rows="6" placeholder="Enter your message" required>{{ old('message') }}</textarea>
     <x-ui.input-error :messages="$errors->get('message')" />
   </div>
 
