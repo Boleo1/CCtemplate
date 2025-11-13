@@ -1,7 +1,7 @@
 <x-app-layout>
 <x-header />
   <div class="homeHeroContainer">
-    <img src="{{ asset('storage/media/makwa.jpg') }}" alt="Community Center Hero Image" class="homeHeroImage" loading="lazy">
+    <img src="{{ asset('storage/media/lrcc.jpg') }}" alt="Community Center Hero Image" class="homeHeroImage" loading="lazy">
     <div class="homeHeroTextOverlay">
       <h1 class="homeHeroTitle">Welcome to Our Community Center</h1>
       <p class="homeHeroSubtitle">Bringing People Together</p>  

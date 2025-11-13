@@ -18,7 +18,7 @@
               >
             @else
               <img
-                src="{{ asset('images/placeholder-thumb.jpg') }}"
+                src="{{ asset('storage/media/nothumbnail.png') }}"
                 alt="No thumbnail"
                 class="event-thumbnail"
                 loading="lazy"

@@ -1,6 +1,7 @@
 <x-app-layout>
   <x-header />
   <section class="aboutHero">
+    <img src="{{ asset('storage/media/lrcc2.jpg') }}" alt="About Us Hero Image" class="aboutHeroImage" loading="lazy">
     <div class="aboutHeroContent">
       <h1>About Our Community Center</h1>
       <p>Connecting People, Enriching Lives</p>
@@ -30,12 +31,57 @@
     </div>
   </section>
 
-  <section class="aboutTeam">
-    <div class="aboutTeamContent">
-      <h2>Meet Our Team</h2>
-      <p>Our dedicated team of staff and volunteers work tirelessly to create a vibrant and inclusive community space. We are passionate about making a positive impact and are here to support you in your journey.</p>
+<section class="aboutTeam">
+  <div class="aboutTeamContent">
+    <h2>Meet Our Team</h2>
+    <p>Our dedicated staff and volunteers help create a welcoming, supportive, and active community environment.</p>
+  </div>
+
+  <div class="teamGrid">
+
+    {{-- Demo Team Member --}}
+    <div class="teamCard">
+      <img 
+        src="{{ asset('storage/media/team1.jpg') }}" 
+        onerror="this.onerror=null;this.src='{{ asset('storage/media/portraitplaceholder.png') }}';"
+        alt="Team Member"
+        class="teamImage"
+      >
+      <h3>Jane Doe</h3>
+      <p class="role">Director</p>
+      <p class="bio">Oversees operations and works closely with staff to develop programs that serve the community.</p>
     </div>
-  </section>
+
+    {{-- Demo Team Member --}}
+    <div class="teamCard">
+      <img 
+        src="{{ asset('storage/media/team2.jpg') }}" 
+        onerror="this.onerror=null;this.src='{{ asset('storage/media/portraitplaceholder.png') }}';"
+        alt="Team Member"
+        class="teamImage"
+      >
+      <h3>Michael Running</h3>
+      <p class="role">Youth Coordinator</p>
+      <p class="bio">Leads youth activities, after-school programs, and community engagement projects.</p>
+    </div>
+
+    {{-- Demo Team Member --}}
+    <div class="teamCard">
+      <img 
+        src="{{ asset('storage/media/team3.jpg') }}" 
+        onerror="this.onerror=null;this.src='{{ asset('storage/media/portraitplaceholder.png') }}';"
+        alt="Team Member"
+        class="teamImage"
+      >
+      <h3>Sarah O’Malley</h3>
+      <p class="role">Event Manager</p>
+      <p class="bio">Organizes facility rentals, community events, and assists residents looking to host gatherings.</p>
+    </div>
+
+  </div>
+
+</section>
+
 
   <section class="aboutCTA">
     <h2>Get Involved</h2>

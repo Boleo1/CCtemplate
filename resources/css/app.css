@@ -10,6 +10,7 @@
 @import "./components/navigation.css";
 @import "./components/sidebar.css";
 @import "./components/admin-shell.css";
+@import "./components/event-form.css";
 
 
 @import "./pages/home.css";
@@ -17,3 +18,6 @@
 @import "./pages/events.css";
 @import "./pages/show-events.css";
 @import "./pages/calendar.css";
+@import "./pages/dashboardevents.css";
+@import "./pages/dashboardrequests.css";
+@import "./pages/contact.css";

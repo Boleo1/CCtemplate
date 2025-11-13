@@ -42,6 +42,12 @@
   background: linear-gradient(180deg, rgba(0,0,0,.45), rgba(0,0,0,.2) 60%, rgba(0,0,0,.35));
   z-index:-1;
 }
+.aboutHeroImage {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  object-fit: cover;
+  z-index: -2;
+}
 .aboutHeroContent {
   color: #fff;
   height: 100%;
@@ -120,43 +126,84 @@
 }
 .servicesList li:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,.08); }
 
-/* ============
-   TEAM (copy block or grid-ready)
-   ============ */
-.aboutTeam { margin-top: 1.25rem; }
-.aboutTeamContent {
-  background: var(--bg);
-  border: 1px solid #eceef3;
-  border-radius: var(--radius);
-  padding: 1.5rem;
-  box-shadow: var(--shadow);
+/* === TEAM SECTION WRAPPER === */
+.aboutTeam {
+  padding: 60px 20px;
+  background: #f8f9fc;
 }
-.aboutTeamContent h2 { margin: 0 0 .5rem; font-size: 1.5rem; }
-.aboutTeamContent p { margin: 0; color: var(--muted-text); line-height: 1.7; }
 
-/* If later you add staff cards: */
-.teamGrid {
-  margin-top: 1rem;
-  display: grid;
-  gap: 1rem;
-  grid-template-columns: repeat(1, minmax(0,1fr));
-}
-@media (min-width: 720px){
-  .teamGrid { grid-template-columns: repeat(3, minmax(220px,1fr)); }
-}
-.teamMember {
-  background: var(--bg-soft);
-  border: 1px solid #eceef3;
-  border-radius: 14px;
-  padding: 1rem;
+.aboutTeamContent {
+  max-width: 900px;
+  margin: 0 auto 40px auto;
   text-align: center;
-  box-shadow: 0 3px 10px rgba(0,0,0,.05);
 }
-.teamMember img {
-  width: 100%; height: 180px; object-fit: cover; border-radius: 10px; margin-bottom: .6rem;
+
+.aboutTeamContent h2 {
+  font-size: 2rem;
+  margin-bottom: 10px;
 }
-.teamMember h3 { margin: .3rem 0 0; font-size: 1.05rem; }
-.teamMember p { margin: .15rem 0 0; color: var(--muted-text); }
+
+.aboutTeamContent p {
+  font-size: 1.1rem;
+  color: #555;
+}
+
+
+/* === TEAM GRID === */
+.teamGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 30px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+
+/* === TEAM CARD === */
+.teamCard {
+  background: white;
+  padding: 25px;
+  border-radius: 14px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+  text-align: center;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.teamCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+}
+
+
+/* === TEAM IMAGE === */
+.teamImage {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 50%;
+  margin-bottom: 15px;
+  border: 3px solid #e6ecf5;
+}
+
+
+/* === TEAM TEXT === */
+.teamCard h3 {
+  font-size: 1.3rem;
+  margin-bottom: 5px;
+  color: #1a1a1a;
+}
+
+.teamCard .role {
+  font-weight: 600;
+  color: #0066cc;
+  margin-bottom: 10px;
+}
+
+.teamCard .bio {
+  font-size: 0.95rem;
+  color: #555;
+  line-height: 1.4;
+}
 
 /* ============
    CTA

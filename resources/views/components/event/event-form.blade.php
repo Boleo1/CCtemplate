@@ -56,6 +56,8 @@
       required
     >{{ old('description', $event->description ?? '') }}</textarea>
 
+    <hr>
+    
     <label>Thumbnail Image:</label>
     <input type="file" name="thumbnail_image_path" accept="image/*">
 

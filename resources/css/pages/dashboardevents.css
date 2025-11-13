@@ -1,0 +1,119 @@
+/* ===== Events page header ===== */
+.events-page-header h1 {
+  margin: 0 0 1rem;
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--text-color, #111);
+}
+
+/* ===== Layout: form + list ===== */
+.events-layout {
+  display: grid;
+  gap: 1.5rem;
+}
+
+/* On wider screens put form + list side by side */
+@media (min-width: 1100px) {
+  .events-layout {
+    grid-template-columns: 1.1fr 1.2fr;
+    align-items: flex-start;
+  }
+}
+
+/* ===== Events list container ===== */
+.events-list-container {
+  background: var(--bg, #fff);
+  border-radius: var(--radius-large, 16px);
+  border: 1px solid var(--border-color, #e3e6ec);
+  box-shadow: var(--shadow, 0 3px 12px rgba(0,0,0,.08));
+  padding: 1.25rem 1.5rem;
+}
+
+.events-list-container h3 {
+  margin: 0 0 0.75rem;
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+/* ===== Events list styling ===== */
+.events-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.events-list-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.75rem 0;
+  border-top: 1px solid var(--border-color, #eceef3);
+}
+
+.events-list-item:first-child {
+  border-top: none;
+}
+
+/* Left/main content */
+.events-list-main h4 {
+  margin: 0 0 0.25rem;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.events-list-meta {
+  margin: 0 0 0.35rem;
+  font-size: 0.9rem;
+  color: var(--muted-text, #6b7280);
+}
+
+.events-list-desc {
+  margin: 0;
+  font-size: 0.95rem;
+  color: var(--text-color, #111);
+  line-height: 1.5;
+}
+
+/* Badge for event type */
+.badge {
+  display: inline-block;
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 0.1rem 0.5rem;
+  border-radius: 999px;
+  background: #e8eefc;
+  color: #0b3d91;
+  border: 1px solid #dbe6ff;
+  margin-left: 0.35rem;
+}
+
+/* Right/actions column */
+.events-list-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Small button variant for list actions */
+.btn-sm {
+  padding: 0.35rem 0.7rem;
+  font-size: 0.85rem;
+}
+
+/* Muted text (empty states, etc.) */
+.muted {
+  color: var(--muted-text, #6b7280);
+  margin-top: 0.5rem;
+}
+
+/* Mobile tweaks */
+@media (max-width: 700px) {
+  .events-list-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .events-list-actions {
+    justify-content: flex-start;
+  }
+}

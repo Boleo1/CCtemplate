@@ -1,0 +1,113 @@
+/* ========== Event Form ========== */
+.eventForm {
+  background: var(--bg, #fff);
+  border: 1px solid var(--border-color, #e3e6ec);
+  border-radius: var(--radius-large, 16px);
+  box-shadow: var(--shadow, 0 3px 12px rgba(0,0,0,.08));
+  padding: 2rem 2.5rem;
+  max-width: 750px;
+  width: 100%;
+  margin: 1.5rem auto;
+}
+
+/* Headings if you want them later */
+.eventForm h2 {
+  margin-bottom: 1.5rem;
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--text-color, #111);
+}
+
+/* Label styling */
+.eventForm label {
+  display: block;
+  font-weight: 600;
+  color: var(--text-color, #111);
+  margin-bottom: 0.35rem;
+  margin-top: 1.1rem;
+}
+
+/* Inputs, selects, and textareas share same look */
+.eventForm input[type="text"],
+.eventForm input[type="date"],
+.eventForm input[type="time"],
+.eventForm input[type="file"],
+.eventForm select,
+.eventForm textarea {
+  width: 100%;
+  padding: 0.65rem 0.8rem;
+  font-size: 0.95rem;
+  border: 1px solid var(--border-color, #dcdfe4);
+  border-radius: var(--radius, 10px);
+  background-color: var(--bg-soft, #f9fafb);
+  color: var(--text-color, #111);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Focus state */
+.eventForm input:focus,
+.eventForm select:focus,
+.eventForm textarea:focus {
+  outline: none;
+  border-color: var(--primary-color, #0b66d4);
+  box-shadow: 0 0 0 2px rgba(11,102,212,0.18);
+  background: #fff;
+}
+
+/* File input tweaks */
+.eventForm input[type="file"] {
+  padding: 0.4rem 0.3rem;
+  background: transparent;
+  border: none;
+  font-size: 0.9rem;
+  color: var(--muted-text, #6b7280);
+}
+
+/* Current thumbnail preview */
+.eventForm .current-thumb {
+  display: block;
+  max-width: 180px;
+  border-radius: var(--radius, 10px);
+  margin-top: 0.75rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+}
+
+/* Submit button */
+.eventForm button[type="submit"] {
+  margin-top: 1.5rem;
+  background-color: var(--primary-color, #0b66d4);
+  color: #fff;
+  border: none;
+  padding: 0.7rem 1.4rem;
+  font-size: 1rem;
+  font-weight: 700;
+  border-radius: var(--radius, 10px);
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+.eventForm button[type="submit"]:hover {
+  background-color: #094fa3;
+}
+.eventForm button[type="submit"]:active {
+  transform: scale(0.98);
+}
+.eventForm hr {
+  border: none;
+  border-top: 1px solid var(--border-color, #eceef3);
+  margin: 1.5rem 0;
+}
+
+
+/* Add subtle spacing between elements */
+.eventForm form > *:not(:last-child) {
+  margin-bottom: 0.25rem;
+}
+
+/* Mobile-friendly layout */
+@media (max-width: 600px) {
+  .eventForm {
+    padding: 1.25rem;
+    box-shadow: none;
+    border-radius: 10px;
+  }
+}

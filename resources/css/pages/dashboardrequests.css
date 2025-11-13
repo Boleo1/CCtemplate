@@ -1,0 +1,119 @@
+/* Header */
+.requestsHeader h2 {
+  margin: 0 0 1rem;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--text-color, #111);
+}
+
+/* Card-style table */
+.table.requests-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid var(--border-color, #e3e6ec);
+  box-shadow: var(--shadow, 0 3px 12px rgba(0,0,0,.08));
+  font-size: 0.95rem;
+}
+
+.table.requests-table thead {
+  background: var(--bg-soft, #f6f7fb);
+}
+
+.table.requests-table th,
+.table.requests-table td {
+  padding: 0.7rem 0.9rem;
+  text-align: left;
+}
+
+.table.requests-table th {
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--muted-text, #6b7280);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.table.requests-table tbody tr:nth-child(even) {
+  background: #fbfcff;
+}
+
+.table.requests-table tbody tr:hover {
+  background: #f3f6ff;
+}
+
+/* Make description wrap nicely but not too tall */
+.table.requests-table td:nth-child(4) {
+  max-width: 320px;
+  white-space: normal;
+}
+
+/* Status badges */
+.badge {
+  display: inline-block;
+  padding: 0.2rem 0.6rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  border-radius: 999px;
+}
+
+.badge-pending {
+  background: #e3ecff;
+  color: #0b3d91;
+  border: 1px solid #c3d4ff;
+}
+
+.badge-approved {
+  background: #dcfce7;
+  color: #166534;
+  border: 1px solid #bbf7d0;
+}
+
+.badge-rejected {
+  background: #fee2e2;
+  color: #b91c1c;
+  border: 1px solid #fecaca;
+}
+
+/* Action buttons aligned and separated clearly */
+.request-actions {
+  display: flex;
+  gap: 0.4rem;
+  align-items: center;
+}
+
+/* Small button styling (Approve / Deny) */
+.btn-sm {
+  padding: 0.3rem 0.7rem;
+  font-size: 0.85rem;
+}
+
+/* If you don't already have success/danger styles: */
+.btn-success {
+  background: #16a34a;
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+}
+.btn-success:hover {
+  background: #15803d;
+}
+
+.btn-danger {
+  background: #ef4444;
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+}
+.btn-danger:hover {
+  background: #dc2626;
+}
+
+/* Little muted text for "Approved by X" */
+.muted {
+  color: var(--muted-text, #6b7280);
+}
