@@ -1,18 +1,16 @@
 <x-app-layout>
-  <x-header />
- {{-- FullCalendar (CDN) --}}
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.19/index.global.min.css">
   <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.19/index.global.min.js"></script>
 
   <div id="calendar" style="min-height:700px"></div>
 
-  {{-- your page JS (optional extra behaviors) --}}
+
   @vite(['resources/js/calendar.js'])
 
   @php
     $today = \Carbon\Carbon::today()->format('Y-m-d');
     $max = \Carbon\Carbon::today()->addYear()->format('Y-m-d');
-    @endphp
+  @endphp
 
 <section class="calendarRequestCenter">
   <h2>Request an Event</h2>
@@ -24,7 +22,6 @@
       <x-ui.input-label for="requesterEmail">Your E-Mail:</x-ui.input-label>
       <input type="email" id="requesterEmail" name="requesterEmail" placeholder="Enter a valid email address" required>
       
-      {{-- Event Type --}}
       <x-ui.input-label for="eventType">Event Type:</x-ui.input-label>
       <select name="eventType" id="eventType" required>
         <option value="Activity">Activity</option>
@@ -35,20 +32,17 @@
         <option value="Wake">Wake</option>
       </select>
 
-      {{-- Dates --}}
       <x-ui.input-label for="date">Start Date:</x-ui.input-label>
       <input type="date" id="date" name="date" min="{{ $today }}" max="{{ $max }}" required>
 
       <x-ui.input-label for="endDate">End Date (optional):</x-ui.input-label>
       <input type="date" id="endDate" name="endDate" min="{{ $today }}" max="{{ $max }}">
 
-      {{-- All-day --}}
       <label class="checkbox-inline">
         <input type="checkbox" id="allDay" name="allDay" value="1">
         All-day event
       </label>
 
-      {{-- Times --}}
       <div class="time-row">
         <div class="time-field">
           <x-ui.input-label for="eventTime">Start Time:</x-ui.input-label>

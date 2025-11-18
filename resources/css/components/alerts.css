@@ -1,0 +1,42 @@
+/* --- Flash alert --- */
+.flash {
+  position: fixed;
+  top: 1.25rem;
+  left: 50%;
+  transform: translateX(-50%);
+  min-width: 260px;
+  max-width: 540px;
+  padding: 0.75rem 1.25rem;
+  border-radius: 999px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.18);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  opacity: 1;
+  pointer-events: none; /* so it never blocks clicks */
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+/* Success style */
+.flash-success {
+  background: #ecfdf3;
+  color: #166534;
+  border: 1px solid #bbf7d0;
+}
+
+/* Error style */
+.flash-error {
+  background: #fef2f2;
+  color: #b91c1c;
+  border: 1px solid #fecaca;
+}
+
+/* Hidden state (fade + slight move up) */
+.flash.is-hidden {
+  opacity: 0;
+  transform: translate(-50%, -10px);
+}

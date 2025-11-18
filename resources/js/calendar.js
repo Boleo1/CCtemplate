@@ -5,7 +5,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const isMobile = window.matchMedia('(max-width: 768px)').matches;
 
   const cal = new FullCalendar.Calendar(el, {
-    // 👇 Different default view depending on screen size
     initialView: isMobile ? 'listWeek' : 'dayGridMonth',
 
     height: 'auto',
@@ -13,16 +12,15 @@ document.addEventListener('DOMContentLoaded', () => {
     fixedWeekCount: false,
     timeZone: 'local',
 
-    // 👇 Toolbar adapts to mobile / desktop
     headerToolbar: isMobile
       ? {
           left: 'title',
           right: 'today prev,next',
         }
       : {
-          left: 'prev,next today',
+          left: 'dayGridMonth,timeGridWeek,listWeek',
           center: 'title',
-          right: 'dayGridMonth,timeGridWeek,listWeek',
+          right: 'prev,next today',
         },
 
     titleFormat: { year: 'numeric', month: 'long' },
@@ -34,8 +32,8 @@ document.addEventListener('DOMContentLoaded', () => {
       minute: '2-digit',
       meridiem: 'short',
     },
+    displayEventEnd: true,
 
-    // 👇 When you resize, swap views appropriately
     windowResize() {
       const mobileNow = window.innerWidth <= 768;
       const current = cal.view.type;

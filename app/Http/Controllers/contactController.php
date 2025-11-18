@@ -14,6 +14,13 @@ class contactController extends Controller
         return view('pages.contact', compact('pageTitle'));
     }
 
+    public function adminShow()
+    {
+        $messages = contactMessage::orderBy('created_at', 'desc')->paginate(20);
+        $pageTitle = 'Contact Messages';
+        return view('dashboard.contact.index', compact('pageTitle', 'messages'));
+    }
+
     public function submit(Request $request)
     {
       if ($request->filled('website')){
@@ -35,6 +42,14 @@ class contactController extends Controller
 
       contactMessage::create($data);
 
-      return redirect()->back()->with('status', 'Your message has been sent successfully!');
+      return redirect()->back()->with('success', 'Your message has been sent successfully!');
     }
+
+    public function destroy(ContactMessage $message)
+    {
+      $message->delete();
+
+      return redirect()->back()->with('status', 'Message deleted.');
+    }
+
 }

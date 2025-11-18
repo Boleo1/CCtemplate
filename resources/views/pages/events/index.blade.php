@@ -1,5 +1,4 @@
 <x-app-layout>
-  <x-header />
   <div class="eventList">
     <h2 class="eventsHeading">Upcoming Events</h2>
 

@@ -27,10 +27,12 @@ class eventsRequestController extends Controller
             'endDate' => 'nullable|date|after_or_equal:date',
             'eventTime' => 'required',
             'endTime' => 'nullable|string',
-            'allDay' => 'nullable|boolean',
+            'allDay' => 'sometimes|nullable|boolean',
             'requesterEmail' => 'required|email',
             'eventDescription' => 'required|string|max:1000',
         ]);
+        dd($validated);
+        dd('here2');
 
         $type        = $validated['eventType'];
         $startDate   = Carbon::parse($validated['date']);
@@ -56,7 +58,6 @@ class eventsRequestController extends Controller
         } else {
             // Non-wake defaults
 
-            // If no end date, same day
             if (!$endDate) {
                 $endDate = $startDate->copy();
             }
@@ -68,6 +69,8 @@ class eventsRequestController extends Controller
                 $endTime = $tEnd->format('H:i');
             }
         }
+
+        dd($validated, $type, $startDate, $endDate, $allDay, $startTime, $endTime);
 
         centerRequests::create([
             'event_type'       => $type,

@@ -1,5 +1,4 @@
 <x-app-layout>
-  <x-header />
 
   <section class="contact-hero">
     <h1>Contact Us</h1>

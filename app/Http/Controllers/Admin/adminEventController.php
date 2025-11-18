@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
 use App\Models\EventGalleryImage;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -26,7 +27,7 @@ class adminEventController extends Controller
     }
 
     public function store(Request $request)
-{
+    {
     $data = $request->validate([
         'title'              => 'required|string|max:255',
         'start_date'         => 'required|date',
@@ -86,15 +87,26 @@ class adminEventController extends Controller
         : null;
 
     $event = Events::create([
-        'title'        => $data['title'],
-        'slug'         => $slug,
-        'event_type'   => $data['event_type'],
-        'description'  => $data['description'],
-        'start_at'     => $startAt,
-        'end_at'       => $endAt,
-        'all_day'      => $allDay,
-        'thumbnail_image_path' => $thumbPath,
-    ]);
+    'title'                => $data['title'],
+    'slug'                 => $slug,
+    'event_type'           => $data['event_type'],
+    'description'          => $data['description'],
+    'start_at'             => $startAt,
+    'end_at'               => $endAt,
+    'all_day'              => $allDay,
+    'thumbnail_image_path' => $thumbPath,
+
+    // REQUIRED by DB:
+    'created_by'           => Auth::id(),
+    'status'               => 'published',
+    'visibility'           => 'public',
+    'sort_order'           => 999999,
+
+    // Optional fields
+    'requested_by'         => null,
+    'cover_image_path'     => null,
+    'published_at'         => now(),
+]);
 
     if ($request->hasFile('gallery')) {
         foreach ($request->file('gallery') as $img) {
@@ -188,7 +200,7 @@ class adminEventController extends Controller
     public function destroy(Events $event)
     {
         $event->delete();
-        return back()->with('success', 'Event deleted.');
+        return redirect()->route('admin.events.index')->with('success', 'Event deleted successfully.');
     }
 
     public function reorder(Request $request)

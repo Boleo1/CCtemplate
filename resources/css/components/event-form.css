@@ -75,7 +75,6 @@
 /* Submit button */
 .eventForm button[type="submit"] {
   margin-top: 1.5rem;
-  background-color: var(--primary-color, #0b66d4);
   color: #fff;
   border: none;
   padding: 0.7rem 1.4rem;
@@ -84,9 +83,6 @@
   border-radius: var(--radius, 10px);
   cursor: pointer;
   transition: background-color 0.2s ease, transform 0.1s ease;
-}
-.eventForm button[type="submit"]:hover {
-  background-color: #094fa3;
 }
 .eventForm button[type="submit"]:active {
   transform: scale(0.98);
@@ -186,6 +182,38 @@
 .time-row {
   transition: opacity 0.25s ease;
 }
+
+/* --- Form action row (Update + Delete) --- */
+.eventForm .form-actions {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  
+}
+
+/* Reset margin inside the row so buttons line up nicely */
+.eventForm .form-actions button[type="submit"] {
+  margin-top: 0;
+}
+
+/* Primary (Update) button – uses your existing look */
+.eventForm .btn-primary {
+  background-color: var(--primary-color, #0b66d4);
+  color: #fff;
+}
+
+/* Danger (Delete) button */
+.eventForm .btn-danger {
+  background-color: #cf0000;
+  font-weight: 600;
+}
+
+.eventForm .btn-danger:hover {
+  background-color: #ad0000;
+}
+
 
 
 /* Mobile-friendly layout */

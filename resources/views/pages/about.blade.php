@@ -1,5 +1,4 @@
 <x-app-layout>
-  <x-header />
   <section class="aboutHero">
     <img src="{{ asset('storage/media/lrcc2.jpg') }}" alt="About Us Hero Image" class="aboutHeroImage" loading="lazy">
     <div class="aboutHeroContent">

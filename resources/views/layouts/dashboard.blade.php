@@ -3,8 +3,6 @@
 ])
 
 <x-app-layout>
-  <x-header />
-  
   <div class="admin-shell">
     <x-dashboard.sidebar />
     <main class="admin-main">

@@ -1,7 +1,3 @@
-@if (session('status'))
-  <div class="alert success">{{ session('status') }}</div>
-@endif
-
 <form method="POST" action="{{ route('contact.submit') }}" class="contact-form" novalidate>
   @csrf
 

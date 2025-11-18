@@ -1,5 +1,10 @@
 @props(['event' => null])
 
+  @php
+    $today = \Carbon\Carbon::today()->format('Y-m-d');
+    $max = \Carbon\Carbon::today()->addYear()->format('Y-m-d');
+  @endphp
+
 <div class="eventForm">
   <form 
     action="{{ isset($event) ? route('admin.events.update', $event->id) : route('admin.events.store') }}" 
@@ -12,7 +17,7 @@
       @method('PATCH')
     @endif
 
-    {{-- Title --}}
+
     <label for="eventName">Event Name:</label>
     <input 
       type="text" 
@@ -22,13 +27,13 @@
       required
     >
 
-    {{-- Start / End dates --}}
     <label for="eventDate">Start Date:</label>
     <input 
       type="date" 
       id="eventDate" 
       name="start_date" 
       value="{{ old('start_date', $event->start_date ?? '') }}" 
+      min="{{ $today }}" max="{{ $max }}"
       required
     >
 
@@ -38,9 +43,9 @@
       id="endDate" 
       name="end_date" 
       value="{{ old('end_date', $event->end_date ?? '') }}"
+      min="{{ $today }}" max="{{ $max }}"
     >
 
-    {{-- All-day --}}
     <div class="checkbox-inline">
       <input
         type="checkbox"
@@ -53,27 +58,29 @@
     </div>
 
     {{-- Time fields --}}
-    <div class="timeRow">
-      <div class="timeField">
-        <label for="eventTime">Start Time:</label>
-        <input 
-          type="time" 
-          id="eventTime" 
-          name="start_time" 
-          value="{{ old('start_time', $event->start_time ?? '') }}"
-        >
-      </div>
+      <div class="time-row">
+        <div class="time-field">
+          <x-ui.input-label for="eventTime">Start Time:</x-ui.input-label>
+          <select id="eventTime" name="eventTime">
+            <option value="">Select a time...</option>
+            @for ($h = 6; $h <= 22; $h++)
+              <option value="{{ sprintf('%02d:00', $h) }}">{{ date('g:i A', mktime($h, 0)) }}</option>
+              <option value="{{ sprintf('%02d:30', $h) }}">{{ date('g:i A', mktime($h, 30)) }}</option>
+            @endfor
+          </select>
+        </div>
 
-      <div class="timeField">
-        <label for="endTime">End Time (optional):</label>
-        <input 
-          type="time" 
-          id="endTime" 
-          name="end_time" 
-          value="{{ old('end_time', $event->end_time ?? '') }}"
-        >
+        <div class="time-field">
+          <x-ui.input-label for="endTime">End Time (optional):</x-ui.input-label>
+          <select id="endTime" name="endTime">
+            <option value="">Select a time...</option>
+            @for ($h = 6; $h <= 22; $h++)
+              <option value="{{ sprintf('%02d:00', $h) }}">{{ date('g:i A', mktime($h, 0)) }}</option>
+              <option value="{{ sprintf('%02d:30', $h) }}">{{ date('g:i A', mktime($h, 30)) }}</option>
+            @endfor
+          </select>
+        </div>
       </div>
-    </div>
 
     {{-- Type --}}
     <label for="event_type">Type</label>
@@ -109,8 +116,26 @@
     <label>Gallery Images (optional):</label>
     <input type="file" name="gallery[]" accept="image/*" multiple>
 
-    <button type="submit">
-      {{ isset($event) ? 'Update Event' : 'Create Event' }}
-    </button>
+    <div class="form-actions">
+      <button type="submit" class="btn-primary">
+        {{ isset($event) ? 'Update Event' : 'Create Event' }}
+      </button>
+
+      @if (isset($event))
+        <form 
+          action="{{ route('admin.events.destroy', $event->id) }}" 
+          method="POST" 
+          onsubmit="return confirm('Are you sure you want to delete this event? This cannot be undone.');"
+        >
+          @csrf
+          @method('DELETE')
+          <button type="submit" class="btn-danger">
+            Delete Event
+          </button>
+        </form>
+      @endif
+    </div>
+  </form>
+</div>
   </form>
 </div>

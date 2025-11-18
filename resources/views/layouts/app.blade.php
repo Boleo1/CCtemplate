@@ -12,7 +12,17 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body>
+      <x-header />
         <div class="pageWrapper">
+          @if (session('success') || session('error'))
+            <div 
+              class="flash {{ session('success') ? 'flash-success' : 'flash-error' }}" 
+              id="flash-message"
+            >
+              {{ session('success') ?? session('error') }}
+            </div>
+          @endif
+
             <main>
               {{-- Page Content Goes Here--}}
                 {{ $slot }}

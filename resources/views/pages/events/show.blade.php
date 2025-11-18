@@ -1,6 +1,4 @@
-<x-app-layout>
-  <x-header><h1>{{ $event->title }}</h1></x-header>
-  
+<x-app-layout>  
   @if(Auth::check())
     <a href={{ route('admin.events.edit', $event->id) }} class="btn btn-secondary admin-edit-btn">Edit Event</a>
   @endif

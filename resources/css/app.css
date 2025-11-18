@@ -12,6 +12,7 @@
 @import "./components/admin-shell.css";
 @import "./components/event-form.css";
 @import "./components/footer.css";
+@import "./components/alerts.css";
 
 
 @import "./pages/home.css";
@@ -22,3 +23,4 @@
 @import "./pages/dashboardevents.css";
 @import "./pages/dashboardrequests.css";
 @import "./pages/contact.css";
+@import "./pages/dashboardmessages.css";

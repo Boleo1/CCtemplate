@@ -1,0 +1,52 @@
+/* === Contact Messages Page === */
+
+.contactSection {
+  padding: 2rem;
+}
+
+.contactContainer {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.contactContainer h2 {
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+  color: #111;
+}
+
+/* Each message card */
+.contactMessage {
+  padding: 1.25rem 1.5rem;
+  background: #fafafa;
+  border: 1px solid #e5e7eb; /* subtle border */
+  border-radius: 10px;
+  margin-bottom: 1.25rem;
+  transition: box-shadow .15s ease, transform .12s ease;
+}
+
+/* Hover effect */
+.contactMessage:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 3px 8px rgba(0,0,0,0.05);
+}
+
+.contactMessage h3 {
+  margin-bottom: .5rem;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #0b3d91; /* matches your dashboard blue */
+}
+
+/* Improve spacing + readability */
+.contactMessage p {
+  margin: .25rem 0;
+  line-height: 1.45;
+}
+
+/* Soft separator */
+.contactMessage hr {
+  margin-top: 1rem;
+  border: none;
+  border-bottom: 1px solid #e2e2e2;
+}

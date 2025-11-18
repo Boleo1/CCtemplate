@@ -64,6 +64,11 @@ Route::prefix('dashboard')
             $pageTitle = 'Support';
             return view('dashboard.support', compact('pageTitle'));
         })->name('support');
+
+        Route::get('/messages', [contactController::class, 'adminShow'])->name('messages.index');
+        Route::delete('/messages/{message}', [contactController::class, 'destroy'])->name('messages.destroy');
+
+        
     });
 
 require __DIR__.'/auth.php';
