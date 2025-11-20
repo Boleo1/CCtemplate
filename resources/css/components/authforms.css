@@ -1,0 +1,109 @@
+/* ===== Auth Layout Wrapper ===== */
+.auth-container {
+  max-width: 420px;
+  margin: 3rem auto;
+  padding: 2rem;
+  background: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.08);
+}
+
+/* Make <x-guest-layout> wrap children */
+.x-guest-layout > * {
+  display: block;
+}
+
+/* ===== Labels ===== */
+.auth-container label,
+.auth-container .input-label {
+  font-size: .9rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: .3rem;
+  display: block;
+}
+
+/* ===== Text Inputs ===== */
+.auth-container input[type="email"],
+.auth-container input[type="text"],
+.auth-container input[type="password"],
+.auth-container input[type="date"],
+.auth-container input[type="time"],
+.auth-container select {
+  width: 100%;
+  padding: .60rem .75rem;
+  border: 1px solid #d0d0d0;
+  border-radius: 8px;
+  background: #fafafa;
+  font-size: .95rem;
+  transition: border-color .2s, background .2s, box-shadow .2s;
+}
+
+.auth-container input:focus,
+.auth-container select:focus {
+  outline: none;
+  border-color: #6b8cff;
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(107, 140, 255, 0.25);
+}
+
+/* ===== Error Messages ===== */
+.auth-container .input-error {
+  margin-top: .3rem;
+  color: #b30000;
+  font-size: .8rem;
+}
+
+/* ===== Remember Me Row ===== */
+.auth-remember {
+  margin-top: 1rem;
+  display: flex;
+  align-items: center;
+  gap: .4rem;
+}
+
+.auth-remember span {
+  font-size: .85rem;
+  color: #555;
+}
+
+/* ===== Buttons ===== */
+.auth-button {
+  padding: .65rem 1rem;
+  background: #0b3d91;
+  border-radius: 8px;
+  border: none;
+  color: white;
+  font-size: .95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .2s, transform .12s;
+}
+
+.auth-button:hover {
+  background: #0a357f;
+  transform: translateY(-1px);
+}
+
+/* ===== Links ===== */
+.auth-link {
+  font-size: .85rem;
+  color: #333;
+  text-decoration: underline;
+  transition: color .2s;
+}
+
+.auth-link:hover {
+  color: #0b3d91;
+}
+
+/* ===== Footer Row (Forgot / Register / Already Registered) ===== */
+.auth-actions {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* ===== Spacing Helpers ===== */
+.auth-field { margin-top: 1rem; }

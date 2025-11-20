@@ -122,7 +122,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const form       = document.getElementById('calendar-form');
   if (!form) return;
 
-  const typeSelect = form.querySelector('#eventType');
+  const typeSelect = form.querySelector('#event_type');
   const startDate  = form.querySelector('#date');
   const endDate    = form.querySelector('#endDate');
   const allDay     = form.querySelector('#allDay');
@@ -168,19 +168,21 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function updateWakeLogic() {
+    if (!typeSelect || !allDay) return;
+
     if (typeSelect.value === 'Wake') {
       allDay.checked  = true;
-      allDay.disabled = true;
+      // allDay.disabled = true;  <-- REMOVE this line
       setDefaultEndDateFromStart(true);
     } else {
-      allDay.disabled = false;
-      if (!endDate.value && startDate.value) {
-        // For normal events, default end date = start date
+      allDay.disabled = false;  // you can also drop this if you’re not disabling
+      if (endDate && startDate && !endDate.value && startDate.value) {
         endDate.value = startDate.value;
       }
     }
     updateTimeRowVisibility();
   }
+
 
   // Auto +4h when end time is empty
   if (startTime) {
@@ -214,6 +216,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // Init on load
   updateWakeLogic();
 });
+
+
 
 // Flash message auto-hide
 window.addEventListener('DOMContentLoaded', () => {

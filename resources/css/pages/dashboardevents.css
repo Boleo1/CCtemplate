@@ -12,13 +12,6 @@
   gap: 1.5rem;
 }
 
-/* On wider screens put form + list side by side */
-@media (min-width: 1100px) {
-  .events-layout {
-    grid-template-columns: 1.1fr 1.2fr;
-    align-items: flex-start;
-  }
-}
 
 /* ===== Events list container ===== */
 .events-list-container {
@@ -27,6 +20,7 @@
   border: 1px solid var(--border-color, #e3e6ec);
   box-shadow: var(--shadow, 0 3px 12px rgba(0,0,0,.08));
   padding: 1.25rem 1.5rem;
+  margin-bottom: 40px;
 }
 
 .events-list-container h3 {
@@ -112,8 +106,15 @@
     flex-direction: column;
     align-items: flex-start;
   }
-
+  
   .events-list-actions {
     justify-content: flex-start;
+  }
+  /* On wider screens put form + list side by side */
+  @media (min-width: 1100px) {
+    .events-layout {
+      grid-template-columns: 1.1fr 1.2fr;
+      align-items: flex-start;
+    }
   }
 }

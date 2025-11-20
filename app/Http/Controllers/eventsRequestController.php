@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Events;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Validator;
 
 class eventsRequestController extends Controller
 {
@@ -20,21 +21,19 @@ class eventsRequestController extends Controller
     }
   public function submit(Request $request)
     {
-
         $validated = $request->validate([
-            'eventType' => 'required|string',
-            'date' => 'required|date|after_or_equal:today',
-            'endDate' => 'nullable|date|after_or_equal:date',
-            'eventTime' => 'required',
-            'endTime' => 'nullable|string',
-            'allDay' => 'sometimes|nullable|boolean',
-            'requesterEmail' => 'required|email',
-            'eventDescription' => 'required|string|max:1000',
+          'eventName'        => 'required|string|max:255',
+          'requesterEmail'   => 'required|email',
+          'event_type'       => 'required|string',
+          'date'             => 'required|date|after_or_equal:today',
+          'endDate'          => 'nullable|date|after_or_equal:date',
+          'allDay'           => 'sometimes|boolean',
+          'eventTime'        => 'required_without:allDay', // <—
+          'endTime'          => 'nullable|string',
+          'eventDescription' => 'required|string|max:1000',
         ]);
-        dd($validated);
-        dd('here2');
 
-        $type        = $validated['eventType'];
+        $type        = $validated['event_type'];
         $startDate   = Carbon::parse($validated['date']);
         $endDate     = isset($validated['endDate'])
                          ? Carbon::parse($validated['endDate'])
@@ -70,16 +69,15 @@ class eventsRequestController extends Controller
             }
         }
 
-        dd($validated, $type, $startDate, $endDate, $allDay, $startTime, $endTime);
-
         centerRequests::create([
+            'event_name'       => $validated['eventName'],
+            'requested_by'     => $validated['requesterEmail'],
             'event_type'       => $type,
             'event_date'       => $startDate->toDateString(),
             'end_date'         => $endDate?->toDateString(),
             'event_time'       => $startTime,
             'end_time'         => $endTime,
             'all_day'          => $allDay,
-            'requested_by'     => $validated['requesterEmail'],
             'event_description'=> $validated['eventDescription'],
         ]);
 
@@ -102,7 +100,7 @@ public function moderate(centerRequests $request, Request $http)
 
         // 2) On approve → create calendar event
         if ($data['decision'] === 'approved') {
-            $title = $request->event_type . ' — ' . $request->title;
+            $title = $request->event_type . ' — ' . $request->event_name;
 
             // Unique slug
             $slug = Str::slug($title);

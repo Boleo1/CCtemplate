@@ -12,7 +12,7 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body>
-      <x-header />
+      <x-ui.header />
         <div class="pageWrapper">
           @if (session('success') || session('error'))
             <div 

@@ -14,16 +14,17 @@ return new class extends Migration
     Schema::create('requests', function (Blueprint $table) {
         $table->id();
         $table->timestamps();
+        $table->string('event_name');
 
         $table->string('event_type');
         $table->string('requested_by');
 
         // Date / time fields
         $table->date('event_date');
-        $table->date('end_date')->nullable();   // no ->after()
+        $table->date('end_date')->nullable();
 
-        $table->time('event_time');
-        $table->time('end_time')->nullable();   // no ->after()
+        $table->time('event_time')->nullable();
+        $table->time('end_time')->nullable();
         $table->boolean('all_day')->default(false);
 
         // Description

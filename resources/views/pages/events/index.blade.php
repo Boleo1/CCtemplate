@@ -1,13 +1,30 @@
 <x-app-layout>
   <div class="eventList">
     <h2 class="eventsHeading">Upcoming Events</h2>
+    {{-- Filters --}}
+    <div class="event-filters">
+      @foreach ($types as $key => $label)
+        @php $isActive = $activeType === $key; @endphp
+
+        <a href="{{ route('events.index', $key === 'all' ? [] : ['type' => $key]) }}"
+          class="filter-pill {{ $isActive ? 'is-active' : '' }}">
+          {{ $label }}
+        </a>
+      @endforeach
+    </div>
+    @if ($events->hasPages())
+      <div class="events-pagination top">
+        {{ $events->onEachSide(1)->links() }}
+      </div>
+    @endif
+
 
     @if($events->isEmpty())
       <p>No upcoming events yet.</p>
     @else
       <ul class="events-grid">
         @foreach ($events as $event)
-          <li class="event-card">
+          <li class="event-card" data-type="{{ $event->event_type }}">
             @if ($event->thumbnail_image_path)
               <img
                 src="{{ asset('storage/' . $event->thumbnail_image_path) }}"
@@ -27,11 +44,13 @@
             <h3 class="event-title">{{ $event->title ?? 'No Title' }}</h3>
 
             <p class="event-meta">
-              {{ \Carbon\Carbon::parse($event->start_at)->format('F j, Y') }}
-              at
-              {{ \Carbon\Carbon::parse($event->start_at)->format('g:i A') }}
-              • {{ $event->event_type ?? 'General' }}
+                {{ $event->start_at->format('F j, Y') }}
+                @unless($event->all_day)
+                    at {{ $event->start_at->format('g:i A') }}
+                @endunless
+                <span class="event-type-badge">{{ $event->event_type }}</span>
             </p>
+
 
             <p class="event-desc">
               {{ \Illuminate\Support\Str::limit(strip_tags($event->description), 140) }}
@@ -44,5 +63,11 @@
         @endforeach
       </ul>
     @endif
+    @if ($events->hasPages())
+      <div class="events-pagination bottom">
+        {{ $events->onEachSide(1)->links() }}
+      </div>
+    @endif
+
   </div>
 </x-app-layout>

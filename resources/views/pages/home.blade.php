@@ -7,7 +7,6 @@
     </div>
   </div>
 
-    {{--Three section part to get users to check on about, events, and calendar--}}
   <div class="homeInformationalContainer">
     <div class="infoSection">
       <h2>About Us</h2>

@@ -1,4 +1,8 @@
-/* Container */
+/* ===========================
+   Events Page Layout
+   =========================== */
+
+/* Main container */
 .eventList {
   max-width: var(--max-width, 900px);
   margin: 0 auto;
@@ -13,18 +17,125 @@
   text-align: left;
 }
 
-/* Vertical list (not grid) */
+/* ===========================
+   Filters
+   =========================== */
+
+.event-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+  margin-bottom: 1rem;
+}
+
+.filter-pill {
+  padding: .4rem .9rem;
+  border-radius: 999px;
+  border: 1px solid #ddd;
+  background: #f5f5f5;
+  font-size: .9rem;
+  text-decoration: none;
+  color: #333;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.filter-pill.is-active {
+  background: #e7efff;
+  border-color: #0b66d4;
+  font-weight: 600;
+  color: #0b66d4;
+}
+
+/* ===========================
+   Pagination
+   =========================== */
+
+.events-pagination {
+  display: flex;
+  justify-content: center;
+  margin: 1rem 0;
+}
+
+/* Let Laravel’s pagination links breathe a bit */
+.events-pagination .pagination {
+  margin: 0;
+}
+
+/* Layout the pagination nav nicely */
+.events-pagination nav {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.85rem;
+}
+
+/* "Showing 1 to 9 of 10 results" */
+.events-pagination nav > div:first-child {
+  font-size: 0.8rem;
+  color: #6b7280;
+}
+
+/* The actual page controls row */
+.events-pagination nav > div:last-child {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.15rem;
+}
+
+/* Links + current page “pill” */
+.events-pagination nav a,
+.events-pagination nav span[aria-current="page"] span {
+  padding: 0.3rem 0.6rem;
+  border-radius: 999px;
+  text-decoration: none;
+  font-size: 0.85rem;
+}
+
+.events-pagination nav a {
+  color: #4338ca; /* link purple-ish */
+}
+
+.events-pagination nav a:hover {
+  background-color: #eef2ff;
+}
+
+/* Current page */
+.events-pagination nav span[aria-current="page"] span {
+  background-color: #4338ca;
+  color: #fff;
+  font-weight: 600;
+}
+
+/* Disable / ellipsis */
+.events-pagination nav span[aria-disabled="true"] span,
+.events-pagination nav span[aria-disabled="true"] {
+  opacity: 0.4;
+}
+
+/* Fix the giant arrow icons */
+.events-pagination svg {
+  width: 0.9rem;
+  height: 0.9rem;
+}
+
+
+/* ===========================
+   Event List (Vertical)
+   =========================== */
+
+/* We’re using a vertical stack, each item a card row */
 .events-grid {
   list-style: none;
   margin: 0;
   padding: 0;
-  display: block;            /* <— stack */
+  display: block;
 }
 
 /* Each event “row” */
 .event-card {
   display: grid;
-  grid-template-columns: 120px 1fr;  /* thumb | content */
+  grid-template-columns: 120px 1fr;  /* thumbnail | content */
   gap: 1rem;
   align-items: start;
 
@@ -37,9 +148,15 @@
   padding: 0.9rem;
   margin-bottom: 1rem;
 
-  transition: transform var(--transition, .25s ease), box-shadow var(--transition, .25s ease);
+  transition:
+    transform var(--transition, .25s ease),
+    box-shadow var(--transition, .25s ease);
 }
-.event-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-hover, 0 12px 24px rgba(0,0,0,.12)); }
+
+.event-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hover, 0 12px 24px rgba(0,0,0,.12));
+}
 
 /* Thumbnail column */
 .event-thumbnail {
@@ -51,7 +168,7 @@
   border: 1px solid var(--border-color, #eceef3);
 }
 
-/* Content column */
+/* Content column: title, meta, desc, actions */
 .event-title {
   margin: 0 0 .25rem 0;
   font-size: 1.15rem;
@@ -61,42 +178,142 @@
 
 .event-meta {
   margin: 0 0 .5rem 0;
-  font-size: .95rem;
+  font-size: .9rem;
   color: var(--muted-text, #6b7280);
 }
+
+/* If you ever wrap event_type in a span, this will kick in */
+/* e.g. <span class="event-type-badge">{{ $event->event_type }}</span> */
+.event-type-badge {
+  background: #eef4ff;
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+  font-size: .75rem;
+  margin-left: .5rem;
+  color: #0b66d4;
+  font-weight: 600;
+}
+
 
 .event-desc {
   margin: 0 0 .75rem 0;
   color: var(--text-color, #1a1a1a);
   line-height: 1.55;
+  font-size: .92rem;
 }
 
-/* Actions */
-.event-actions { margin-top: auto; }
-.event-actions .btn {
+/* ===========================
+   Actions / Button
+   =========================== */
+
+.event-actions {
+  margin-top: .25rem;
+}
+
+/* Your markup uses: class="btn btn-primary" */
+.event-actions .btn,
+.event-actions .btn-primary {
   display: inline-block;
   background: var(--primary-color, #0b66d4);
   color: #fff;
   font-weight: 600;
+
   border: none;
   border-radius: var(--radius, 10px);
   padding: 0.55rem 1rem;
-  text-decoration: none;
-  transition: background-color var(--transition-fast, .15s);
-}
-.event-actions .btn:hover { background: var(--primary-color-dark, #094fa3); }
 
-/* Mobile: stack thumbnail on top */
+  font-size: .9rem;
+  text-decoration: none;
+  cursor: pointer;
+
+  transition: background-color var(--transition-fast, .15s ease), transform .12s ease;
+}
+
+.event-actions .btn:hover,
+.event-actions .btn-primary:hover {
+  background: var(--primary-color-dark, #094fa3);
+  transform: translateY(-1px);
+}
+
+/* Wake */
+.event-card[data-type="Wake"] {
+  background: #FFF5F5;
+  border-color: #F8DCDC;
+}
+
+/* Class / Program */
+.event-card[data-type="Class/Program"] {
+  background: #F5FFF8;
+  border-color: #D8F2DF;
+}
+
+/* Community Event */
+.event-card[data-type="Community Event"] {
+  background: #F5FAFF;
+  border-color: #D6E7F8;
+}
+
+/* Sports */
+.event-card[data-type="Sports"] {
+  background: #F9F5FF;
+  border-color: #E5D7FA;
+}
+
+/* Rentals */
+.event-card[data-type="Rental"] {
+  background: #FFFDF5;
+  border-color: #F2ECD3;
+}
+
+/* Closures */
+.event-card[data-type="Facility Closure"] {
+  background: #FFF7E6;
+  border-color: #F6E3CB;
+}
+
+/* Notices */
+.event-card[data-type="Notice"] {
+  background: #F0F7FF;
+  border-color: #C7E0FF;
+}
+
+.event-card[data-type="Wake"] .event-title {
+  color: #C53D3D;
+}
+
+.event-card[data-type="Class/Program"] .event-title {
+  color: #3C8D43;
+}
+
+.event-card[data-type="Community Event"] .event-title {
+  color: #0B66D4;
+}
+
+/* ...repeat for other types if desired */
+
+
+
+/* ===========================
+   Mobile adjustments
+   =========================== */
+
 @media (max-width: 680px) {
   .event-card {
     grid-template-columns: 1fr;
     padding: .75rem;
   }
+
   .event-thumbnail {
     max-height: 200px;
     border-radius: 12px;
   }
+
+  .eventsHeading {
+    font-size: 1.6rem;
+  }
 }
 
-/* Optional: subtle divider rhythm */
-.event-card + .event-card { margin-top: 1rem; }
+/* Optional: additive spacing if needed */
+.event-card + .event-card {
+  margin-top: 1rem;
+}

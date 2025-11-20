@@ -85,7 +85,7 @@
     {{-- Type --}}
     <label for="event_type">Type</label>
     <select name="event_type" id="event_type">
-      @foreach(['Community', 'Sports', 'Cultural', 'Class'] as $type)
+      @foreach(['Community Event', 'Class/Program', 'Sports', 'Rental', 'Facility Closure', 'Notice', 'Wake'] as $type)
         <option value="{{ $type }}" 
           {{ old('event_type', $event->event_type ?? '') === $type ? 'selected' : '' }}>
           {{ $type }}

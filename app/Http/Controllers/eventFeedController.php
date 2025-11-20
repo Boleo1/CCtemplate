@@ -28,6 +28,7 @@ public function index(Request $request)
                 'title'  => $e->title,
                 'start'  => $start,
                 'allDay' => $allDay,
+                'url'    => route('events.show',$e->slug),
                 'extendedProps' => [
                     'event_type'  => $e->event_type,
                     'status'      => $e->status,
@@ -48,10 +49,3 @@ if (! function_exists('schema_has_column')) {
 
   }}
 }
-// public function index()
-// {
-//     return Events::select('id','title','start_at','end_at','status','visibility')
-//         ->latest('start_at')
-//         ->take(5)
-//         ->get();
-// }

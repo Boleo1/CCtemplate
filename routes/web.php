@@ -28,6 +28,9 @@ Route::get('/calendar', function () {
     return view('pages.calendar');
 });
 
+Route::get('/events/{event:slug}', [EventsController::class, 'show'])->name('events.show');
+
+
 Route::get('/events', [eventsController::class, 'index'])->name('events.index');
 Route::get('/events/{slug}', [eventsController::class, 'show'])->name('events.show');
 Route::post('/events/request',[eventsRequestController::class, 'submit'])->name('events.request.submit');

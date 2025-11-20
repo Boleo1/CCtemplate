@@ -14,6 +14,7 @@ class centerRequests extends Model
     protected $table = 'requests';
 
     protected $fillable = [
+        'event_name',
         'event_type',
         'requested_by',
         'event_date',
