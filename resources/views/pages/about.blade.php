@@ -18,17 +18,82 @@
   </section>
 
   <section class="aboutServices">
-    <div class="aboutServicesContent">
-      <h2>What We Offer</h2>
-      <ul class="servicesList">
-        <li>Educational Workshops and Classes</li>
-        <li>Recreational Activities and Sports</li>
-        <li>Community Events and Gatherings</li>
-        <li>Support Services and Resources</li>
-        <li>Volunteer Opportunities</li>
-      </ul>
-    </div>
-  </section>
+  <div class="aboutServicesContent">
+    <h2>What We Offer</h2>
+    <p class="servicesIntro">
+      Our community center provides programs and services for youth, families, and elders.
+      Tap a category below to learn more about what we offer.
+    </p>
+
+    <ul class="servicesList">
+      <li class="service-item">
+        <button type="button" class="service-pill">
+          Educational Workshops and Classes
+          <span class="service-pill-icon">▾</span>
+        </button>
+        <div class="service-panel">
+          <p>
+            Hands-on learning opportunities in arts, crafts, culture, language, and basic
+            technology. Great for youth, adults, and elders who want to keep learning.
+          </p>
+        </div>
+      </li>
+
+      <li class="service-item">
+        <button type="button" class="service-pill">
+          Recreational Activities and Sports
+          <span class="service-pill-icon">▾</span>
+        </button>
+        <div class="service-panel">
+          <p>
+            Open gym times, youth sports, fitness activities, and seasonal leagues that
+            encourage healthy lifestyles and friendly competition.
+          </p>
+        </div>
+      </li>
+
+      <li class="service-item">
+        <button type="button" class="service-pill">
+          Community Events and Gatherings
+          <span class="service-pill-icon">▾</span>
+        </button>
+        <div class="service-panel">
+          <p>
+            Dances, family nights, holiday events, cultural celebrations, and community
+            gatherings that bring people together throughout the year.
+          </p>
+        </div>
+      </li>
+
+      <li class="service-item">
+        <button type="button" class="service-pill">
+          Support Services and Resources
+          <span class="service-pill-icon">▾</span>
+        </button>
+        <div class="service-panel">
+          <p>
+            Access to information, referrals, and partnerships that connect community members
+            with wellness, housing, education, and support resources.
+          </p>
+        </div>
+      </li>
+
+      <li class="service-item">
+        <button type="button" class="service-pill">
+          Volunteer Opportunities
+          <span class="service-pill-icon">▾</span>
+        </button>
+        <div class="service-panel">
+          <p>
+            Ways to give back — from helping at events to mentoring youth and supporting
+            day-to-day operations at the center.
+          </p>
+        </div>
+      </li>
+    </ul>
+  </div>
+</section>
+
 
 <section class="aboutTeam">
   <div class="aboutTeamContent">
@@ -83,9 +148,12 @@
 
 
   <section class="aboutCTA">
-    <h2>Get Involved</h2>
-    <p>Want to host an event, volunteer, or join a program? We'd love to have you involved in making our community even stronger.</p>
-    <a href="/contact" class="btn btn-primary">Contact Us</a>
+    <div class="aboutCTA-inner">
+      <h2>Get Involved</h2>
+      <p>Want to host an event, volunteer, or join a program? We'd love to have you involved in making our community even stronger.</p>
+      <a href="/contact" class="btn btn-primary">Contact Us</a>
+    </div>
   </section>
+
 
 </x-app-layout>

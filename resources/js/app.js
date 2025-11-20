@@ -141,28 +141,40 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function updateTimeRowVisibility() {
-    if (allDay.checked || typeSelect.value === 'Wake') {
+    if (allDay.checked || (typeSelect && typeSelect.value === 'Wake')) {
       timeRow.style.display = 'none';
-      startTime.value = '';
-      endTime.value   = '';
+      if (startTime) startTime.value = '';
+      if (endTime)   endTime.value   = '';
     } else {
       timeRow.style.display = 'flex';
     }
   }
 
-  function setDefaultEndDateFromStart(addDaysIfWake = false) {
-    if (!startDate.value) return;
+  /**
+   * Sync end date + constraints based on start date.
+   * - Normal events: end date is **always** same as start
+   * - Wakes: end date is **min start+2 days**, but can be later
+   */
+  function setEndFromStart({ isWake = false } = {}) {
+    if (!startDate || !endDate || !startDate.value) return;
 
     const base = new Date(startDate.value);
-    if (typeSelect.value === 'Wake' && addDaysIfWake) {
-      // Start date + 2 days for wake
+    if (isWake) {
       base.setDate(base.getDate() + 2);
     }
 
-    const iso = base.toISOString().slice(0,10);
+    const iso = base.toISOString().slice(0, 10);
 
-    // Only update if empty or earlier than suggested
-    if (!endDate.value || endDate.value < iso) {
+    // update min so the picker blocks invalid days
+    endDate.min = iso;
+
+    if (isWake) {
+      // For wakes: keep whatever the user chose as long as it’s >= min
+      if (!endDate.value || endDate.value < iso) {
+        endDate.value = iso;
+      }
+    } else {
+      // For normal events: ALWAYS match start date exactly
       endDate.value = iso;
     }
   }
@@ -170,19 +182,17 @@ document.addEventListener('DOMContentLoaded', () => {
   function updateWakeLogic() {
     if (!typeSelect || !allDay) return;
 
-    if (typeSelect.value === 'Wake') {
-      allDay.checked  = true;
-      // allDay.disabled = true;  <-- REMOVE this line
-      setDefaultEndDateFromStart(true);
+    const isWake = typeSelect.value === 'Wake';
+
+    if (isWake) {
+      allDay.checked = true; // wakes default to all-day
+      setEndFromStart({ isWake: true });
     } else {
-      allDay.disabled = false;  // you can also drop this if you’re not disabling
-      if (endDate && startDate && !endDate.value && startDate.value) {
-        endDate.value = startDate.value;
-      }
+      setEndFromStart({ isWake: false });
     }
+
     updateTimeRowVisibility();
   }
-
 
   // Auto +4h when end time is empty
   if (startTime) {
@@ -203,19 +213,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (startDate) {
     startDate.addEventListener('change', () => {
-      if (typeSelect.value === 'Wake') {
-        setDefaultEndDateFromStart(true);
-      } else {
-        if (!endDate.value) {
-          endDate.value = startDate.value;
-        }
-      }
+      const isWake = typeSelect && typeSelect.value === 'Wake';
+      setEndFromStart({ isWake });
     });
   }
 
-  // Init on load
+  // Init on load (for edit forms, etc.)
   updateWakeLogic();
 });
+
 
 
 
@@ -235,3 +241,230 @@ window.addEventListener('DOMContentLoaded', () => {
       }
     }, visibleMs + 450);
   });
+  //-- End Flash message auto-hide ----------------
+ 
+
+
+// About Page - What we offer toggles
+document.addEventListener('DOMContentLoaded', function () {
+  const serviceItems = document.querySelectorAll('.service-item');
+
+  serviceItems.forEach((item) => {
+    const pill = item.querySelector('.service-pill');
+    const panel = item.querySelector('.service-panel');
+    if (!pill || !panel) return;
+
+    pill.addEventListener('click', () => {
+      const isOpen = item.classList.contains('is-open');
+
+      // Option A: allow multiple open
+      item.classList.toggle('is-open', !isOpen);
+
+      // If you want ONLY one open at a time, uncomment this block:
+      // serviceItems.forEach(i => {
+      //   if (i !== item) i.classList.remove('is-open');
+      // });
+      // item.classList.toggle('is-open', !isOpen);
+    });
+  });
+});
+//-- End About Page toggles ----------------
+
+
+
+// Mobile nav toggle
+document.addEventListener('DOMContentLoaded', () => {
+  const toggle = document.querySelector('[data-nav-toggle]');
+  const menu   = document.querySelector('[data-nav-menu]');
+
+  if (!toggle || !menu) return;
+
+  toggle.addEventListener('click', () => {
+    const isOpen = menu.classList.toggle('is-open');
+    toggle.classList.toggle('is-open', isOpen);
+    toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  });
+
+  // Optional: close menu when clicking a link or logout button
+  menu.addEventListener('click', (event) => {
+    if (event.target.closest('a, button')) {
+      menu.classList.remove('is-open');
+      toggle.classList.remove('is-open');
+      toggle.setAttribute('aria-expanded', 'false');
+    }
+  });
+});
+//-- End Mobile nav toggle ----------------
+
+
+
+// Navigation bar behavior
+document.addEventListener('DOMContentLoaded', () => {
+  const navBar  = document.querySelector('.nav-bar');
+  const toggle  = document.querySelector('.nav-toggle');
+  const menu    = document.querySelector('.nav-groups');
+
+  // Safety: if nav isn't present, stop
+  if (!navBar || !toggle || !menu) return;
+
+  // ======= OPEN / CLOSE HELPERS =======
+  const openMenu = () => {
+    menu.classList.add('is-open');
+    toggle.classList.add('is-open');
+    toggle.setAttribute('aria-expanded', 'true');
+  };
+
+  const closeMenu = () => {
+    menu.classList.remove('is-open');
+    toggle.classList.remove('is-open');
+    toggle.setAttribute('aria-expanded', 'false');
+  };
+
+  // Toggle event
+  toggle.addEventListener('click', (e) => {
+    e.stopPropagation();
+    menu.classList.contains('is-open') ? closeMenu() : openMenu();
+  });
+
+  // Close when clicking outside
+  document.addEventListener('click', (e) => {
+    if (!navBar.contains(e.target)) {
+      closeMenu();
+    }
+  });
+
+  // Close menu when clicking a link/button inside it
+  menu.addEventListener('click', (e) => {
+    if (e.target.closest('a, button')) {
+      closeMenu();
+    }
+  });
+
+  // Shrink nav on scroll
+  const handleScroll = () => {
+    if (window.scrollY > 10) {
+      navBar.classList.add('nav-bar--scrolled');
+    } else {
+      navBar.classList.remove('nav-bar--scrolled');
+    }
+    closeMenu(); // collapse menu on scroll
+  };
+
+  window.addEventListener('scroll', handleScroll, { passive: true });
+
+  // Run once on load
+  handleScroll();
+});document.addEventListener('DOMContentLoaded', () => {
+  const navBar  = document.querySelector('.nav-bar');
+  const toggle  = document.querySelector('.nav-toggle');
+  const menu    = document.querySelector('.nav-groups');
+
+  // If nav not present, bail out quietly
+  if (!navBar || !toggle || !menu) return;
+
+  const openMenu = () => {
+    menu.classList.add('is-open');
+    toggle.classList.add('is-open');
+    toggle.setAttribute('aria-expanded', 'true');
+  };
+
+  const closeMenu = () => {
+    menu.classList.remove('is-open');
+    toggle.classList.remove('is-open');
+    toggle.setAttribute('aria-expanded', 'false');
+  };
+
+  // Toggle on hamburger click
+  toggle.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (menu.classList.contains('is-open')) {
+      closeMenu();
+    } else {
+      openMenu();
+    }
+  });
+
+  // Close when clicking a link or button inside menu
+  menu.addEventListener('click', (e) => {
+    if (e.target.closest('a, button')) {
+      closeMenu();
+    }
+  });
+
+  // Close when clicking outside the nav
+  document.addEventListener('click', (e) => {
+    if (!navBar.contains(e.target)) {
+      closeMenu();
+    }
+  });
+
+  // Shrink nav + close menu on scroll
+  const handleScroll = () => {
+    if (window.scrollY > 10) {
+      navBar.classList.add('nav-bar--scrolled');
+    } else {
+      navBar.classList.remove('nav-bar--scrolled');
+    }
+    closeMenu();
+  };
+
+  window.addEventListener('scroll', handleScroll, { passive: true });
+
+  // Initial state
+  handleScroll();
+});
+
+// -- End Navigation bar behavior ----------------
+
+document.addEventListener('DOMContentLoaded', () => {
+  const sidebar = document.querySelector('.side');
+  const toggle  = document.querySelector('[data-admin-menu-toggle]');
+  const overlay = document.querySelector('[data-admin-menu-overlay]');
+
+  if (!sidebar || !toggle || !overlay) return;
+
+  const openDrawer = () => {
+    sidebar.classList.add('is-open');
+    overlay.classList.add('is-active');
+    toggle.classList.add('is-open');
+    toggle.setAttribute('aria-expanded', 'true');
+  };
+
+  const closeDrawer = () => {
+    sidebar.classList.remove('is-open');
+    overlay.classList.remove('is-active');
+    toggle.classList.remove('is-open');
+    toggle.setAttribute('aria-expanded', 'false');
+  };
+
+  toggle.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (sidebar.classList.contains('is-open')) {
+      closeDrawer();
+    } else {
+      openDrawer();
+    }
+  });
+
+  overlay.addEventListener('click', closeDrawer);
+
+  // Close if you tap anywhere outside the drawer on mobile
+  document.addEventListener('click', (e) => {
+    if (window.innerWidth >= 900) return;     // only care on mobile
+    if (!sidebar.contains(e.target) && !toggle.contains(e.target)) {
+      closeDrawer();
+    }
+  });
+
+  // Close when going back to desktop width
+  window.addEventListener('resize', () => {
+    if (window.innerWidth >= 900) {
+      closeDrawer();
+    }
+  });
+
+  // Optional: close on Esc
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeDrawer();
+  });
+});

@@ -1,3 +1,5 @@
+@props(['dashboard' => false])
+
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
@@ -23,7 +25,7 @@
             </div>
           @endif
 
-            <main>
+            <main class="{{ $dashboard ?? false ? 'app-dashboard' : 'app-public' }}">
               {{-- Page Content Goes Here--}}
                 {{ $slot }}
             </main>

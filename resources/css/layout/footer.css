@@ -1,0 +1,87 @@
+/* =========================
+   FOOTER BASE
+   ========================= */
+footer {
+  background: #f8f9fc;
+  padding: 30px 0 20px;
+  border-top: 1px solid #e5e7eb;
+  margin-top: 60px;
+}
+
+/* =========================
+   FOOTER NAV (desktop)
+   ========================= */
+footer .nav-bar {
+  display: flex;
+  justify-content: center;
+  background: none;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+  margin-bottom: 15px;
+}
+
+footer .nav-list {
+  display: flex;
+  gap: 25px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+footer .nav-item .nav-link {
+  font-size: 0.95rem;
+  color: #555;
+  text-decoration: none;
+  padding-bottom: 2px;
+  transition: color 0.2s ease;
+}
+
+footer .nav-item .nav-link:hover {
+  color: #005fcc;
+}
+
+footer .nav-item .nav-link.is-active {
+  color: #005fcc;
+  font-weight: 600;
+}
+
+/* =========================
+   FOOTER COPYRIGHT
+   ========================= */
+.footerContent {
+  color: #666;
+  font-size: 0.9rem;
+  margin-top: 10px;
+  text-align: center;
+}
+
+/* =========================
+   MOBILE FOOTER OPTIMIZATION
+   ========================= */
+@media (max-width: 768px) {
+
+  /* Center nav vertically + horizontally */
+  footer .nav-bar {
+    display: none;
+  }
+
+  /* Stack the links instead of inline */
+  footer .nav-list {
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+
+  /* Make links thumb-friendly */
+  footer .nav-item .nav-link {
+    padding: 8px 0;
+    font-size: 1rem;
+  }
+
+  .footerContent {
+    font-size: 0.85rem;
+    margin-top: 15px;
+    text-align: center;
+  }
+}

@@ -1,63 +1,49 @@
-/* .header-nav {
+/* =========================
+   Navigation Bar
+   ========================= */
+.nav-bar {
+  position: relative;            /* sticky handled by parent header */
   display: flex;
   align-items: center;
   gap: 1.5rem;
-  margin-bottom: 20px;
-}
 
-.header-nav ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  gap: 1rem;
-  }
-
-.header-nav li {
-  margin: 0;
-}
-
-.nav-auth {
-  margin-left: auto;
-}
-
-.nav-link {
-  color: #555;
-  padding: 0.75rem 1rem;
-  text-decoration: none;
-  transition: color 0.2s, border-color 0.2s;
-  border-bottom: 2px solid transparent;
-}
-
-.nav-link.is-active {
-  color: var(--color-primary);
-  border-bottom-color: var(--color-primary);
-  font-weight: 600;
-} */
-
-
-/* =========================
-   Modern Navigation Bar
-   ========================= */
-.nav-bar {
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 2rem;
   padding: 0.75rem 2rem;
-
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(10px);
+  background: #ffffff;           /* solid white */
   border-bottom: 1px solid rgba(0,0,0,0.06);
   box-shadow: 0 2px 5px rgba(0,0,0,0.04);
+
+  transition: padding 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
 }
 
-/* Hide scrollbar gaps when scrolled horizontally */
-.nav-bar::-webkit-scrollbar { display: none; }
+/* “shrunk” state when scrolled */
+.nav-bar.nav-bar--scrolled {
+  padding-top: 0.4rem;
+  padding-bottom: 0.4rem;
+  background: #ffffff;
+  box-shadow: 0 3px 10px rgba(15, 23, 42, 0.12);
+}
 
+/* Brand */
+.nav-brand {
+  flex-shrink: 0;
+}
+
+.nav-brand-link {
+  text-decoration: none;
+  font-weight: 800;
+  font-size: 1.05rem;
+  color: #111827;
+}
+
+/* Group container (primary + auth) */
+.nav-groups {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  flex: 1 1 auto;
+}
+
+/* Lists */
 .nav-list {
   list-style: none;
   display: flex;
@@ -67,15 +53,12 @@
   padding: 0;
 }
 
-/* Push auth section to right */
 .nav-auth {
   margin-left: auto;
   gap: 1rem;
 }
 
-/* =========================
-   Links & States
-   ========================= */
+/* Links & states */
 .nav-item a,
 .nav-linklike {
   text-decoration: none;
@@ -87,7 +70,7 @@
   transition: color 0.25s ease;
 }
 
-/* underline animation */
+/* underline animation (desktop / default) */
 .nav-item a::after,
 .nav-linklike::after {
   content: "";
@@ -118,7 +101,7 @@
   width: 100%;
 }
 
-/* logout button resets */
+/* logout button styling reset */
 .logout-form {
   display: inline;
 }
@@ -129,9 +112,7 @@
   font: inherit;
 }
 
-/* =========================
-   Hover + Focus effects
-   ========================= */
+/* focus */
 .nav-item a:focus-visible,
 .nav-linklike:focus-visible {
   outline: 2px solid var(--primary-color, #0b66d4);
@@ -139,20 +120,109 @@
 }
 
 /* =========================
-   Responsive Adjustments
+   Hamburger button
+   ========================= */
+.nav-toggle {
+  display: none;            /* desktop hidden */
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  border: none;
+  background: transparent;
+  padding: 0;
+  margin-left: auto;
+  cursor: pointer;
+
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.nav-toggle-bar {
+  width: 20px;
+  height: 2px;
+  border-radius: 999px;
+  background: #111827;
+  transition: background-color .2s ease;
+}
+
+/* when menu is open: just color change */
+.nav-toggle.is-open .nav-toggle-bar {
+  background: #0b66d4;
+}
+
+/* =========================
+   Mobile layout
    ========================= */
 @media (max-width: 768px) {
   .nav-bar {
-    flex-wrap: wrap;
-    padding: 0.75rem 1rem;
+    padding: 0.6rem 1rem;
+    z-index: 3000;
   }
+
+  /* show hamburger */
+  .nav-toggle {
+    display: inline-flex;
+  }
+
+  /* dropdown panel (hidden by default) */
+  .nav-groups {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 2500;
+
+    display: none;                       /* CLOSED by default on mobile */
+    flex-direction: column;
+    align-items: flex-end;               /* align content towards right */
+    gap: 0.75rem;
+
+    padding: 0.75rem 1.25rem 1.25rem;
+    background: #ffffff;                 /* solid background */
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.12);
+    border-top: 1px solid rgba(0,0,0,0.06);
+  }
+
+  .nav-groups.is-open {
+    display: flex;                       /* only shown when JS adds is-open */
+  }
+
   .nav-list {
-    flex-wrap: wrap;
-    gap: 1rem;
-  }
-  .nav-auth {
+    flex-direction: column;
+    align-items: flex-end;               /* right align items */
+    gap: 0.75rem;                        /* more space between items */
     width: 100%;
-    justify-content: flex-end;
+  }
+
+  .nav-auth {
     margin-left: 0;
+    margin-top: 0.75rem;
+  }
+
+  .nav-item {
+    width: 100%;
+  }
+
+  /* thumb-friendly, non-overlapping blocks */
+  .nav-item a,
+  .nav-linklike {
+    display: block;
+    width: 100%;
+    padding: 0.75rem 0;                  /* taller tap target */
+    text-align: right;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* no special bg / outline on focus */
+  .nav-item a:focus,
+  .nav-item a:focus-visible,
+  .nav-linklike:focus,
+  .nav-linklike:focus-visible {
+    outline: none;
+    box-shadow: none;
+    background: transparent;
   }
 }
+

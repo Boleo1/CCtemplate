@@ -20,34 +20,42 @@
   margin: 0 auto;
   padding: 1.25rem;
 }
+
 @media (min-width: 768px){
-  .aboutHero, .aboutMission, .aboutServices, .aboutTeam, .aboutCTA { padding: 2rem; }
+  .aboutHero,
+  .aboutMission,
+  .aboutServices,
+  .aboutTeam,
+  .aboutCTA {
+    padding: 2rem;
+  }
 }
 
-/* ============
-   HERO
-   ============ */
+/* ============ HERO ============ */
 .aboutHero {
   position: relative;
   border-radius: var(--radius);
   overflow: hidden;
   min-height: clamp(240px, 38vh, 420px);
-  background: url('/storage/media/makwa.jpg') center/cover no-repeat; /* swap or remove if you set an <img> */
+  background: url('/storage/media/makwa.jpg') center/cover no-repeat;
   box-shadow: var(--shadow);
   isolation: isolate;
 }
+
 .aboutHero::after {
   content:"";
   position:absolute; inset:0;
   background: linear-gradient(180deg, rgba(0,0,0,.45), rgba(0,0,0,.2) 60%, rgba(0,0,0,.35));
   z-index:-1;
 }
+
 .aboutHeroImage {
   position: absolute;
   top: 0; left: 0; width: 100%; height: 100%;
   object-fit: cover;
   z-index: -2;
 }
+
 .aboutHeroContent {
   color: #fff;
   height: 100%;
@@ -56,77 +64,179 @@
   gap: .35rem;
   padding: clamp(1rem, 4vw, 2rem);
 }
+
 .aboutHeroContent h1 {
   margin: 0;
   font-size: clamp(2rem, 4.2vw, 3rem);
   line-height: 1.05;
   font-weight: 800;
 }
+
 .aboutHeroContent p {
   margin: 0;
   font-size: clamp(1rem, 2vw, 1.2rem);
   opacity: .95;
 }
 
-/* ============
-   MISSION / VISION
-   ============ */
+/* ============ MISSION / VISION ============ */
+/* Let this breathe as open text instead of another card */
 .aboutMission {
-  margin-top: 1.5rem;
+  margin-top: 2.5rem;
 }
+
 .aboutMissionContent {
-  background: var(--bg);
-  border: 1px solid #eceef3;
-  border-radius: var(--radius);
-  padding: 1.5rem;
-  box-shadow: var(--shadow);
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 1rem;
+  background: transparent;
+  border: none;
+  box-shadow: none;
 }
+
 .aboutMissionContent h2 {
-  margin: 0 0 .4rem;
+  margin: 1.5rem 0 .35rem;
   font-size: 1.5rem;
+  font-weight: 700;
 }
+
+.aboutMissionContent h2:first-of-type {
+  margin-top: 0;
+}
+
 .aboutMissionContent p {
   color: var(--muted-text);
   line-height: 1.7;
-  margin: 0 0 1rem;
+  margin: 0 0 .75rem;
 }
 
-/* ============
-   SERVICES LIST (as big cards)
-   ============ */
-.aboutServices { margin-top: 1.25rem; }
+/* subtle divider between mission + vision */
+.aboutMissionContent h2 + p {
+  margin-bottom: 1.25rem;
+}
+
+/* ============ WHAT WE OFFER ============ */
+/* Interactive pill list with expandable descriptions */
+.aboutServices {
+  margin-top: 3rem;
+  margin-bottom: 3rem;
+  background: #f9fafb;
+}
+
 .aboutServicesContent {
-  background: var(--bg);
-  border: 1px solid #eceef3;
-  border-radius: var(--radius);
-  padding: 1.5rem;
-  box-shadow: var(--shadow);
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2.5rem 1rem;
+  background: transparent;
+  border: none;
+  box-shadow: none;
 }
-.aboutServicesContent h2 { margin: 0 0 .6rem; font-size: 1.5rem; }
 
+.aboutServicesContent h2 {
+  margin: 0 0 .5rem;
+  font-size: 1.5rem;
+}
+
+.servicesIntro {
+  margin: 0 0 1.5rem;
+  color: var(--muted-text);
+  line-height: 1.7;
+  max-width: 650px;
+}
+
+/* List container */
 .servicesList {
   list-style: none;
-  margin: 0; padding: 0;
+  margin: 0;
+  padding: 0;
   display: grid;
-  gap: 1rem;
-  grid-template-columns: repeat(1, minmax(0,1fr));
+  gap: .75rem;
 }
-@media (min-width: 700px){
-  .servicesList { grid-template-columns: repeat(3, minmax(260px,1fr)); }
-}
-.servicesList li {
-  background: var(--bg-soft);
-  border: 1px solid #eceef3;
-  border-radius: 14px;
-  padding: 1rem 1.1rem;
-  box-shadow: 0 3px 10px rgba(0,0,0,.05);
-  font-weight: 600;
-  color: var(--text-color);
-  transition: transform .18s ease, box-shadow .18s ease;
-}
-.servicesList li:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,.08); }
 
-/* === TEAM SECTION WRAPPER === */
+/* Each item (pill + panel) */
+.service-item {
+  background: transparent;
+}
+
+/* The clickable pill */
+.service-pill {
+  width: 100%;
+  text-align: left;
+  background: #ffffff;
+  border-radius: 999px;
+  padding: .85rem 1.1rem;
+  border: 1px solid #e2e4ee;
+  box-shadow: 0 2px 5px rgba(0,0,0,.04);
+  font-weight: 600;
+  font-size: .9rem;
+  color: var(--text-color);
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .75rem;
+
+  transition:
+    background-color .18s ease,
+    box-shadow .18s ease,
+    transform .12s ease,
+    border-color .18s ease;
+}
+
+.service-pill:hover {
+  background: #f3f6ff;
+  box-shadow: 0 4px 10px rgba(0,0,0,.06);
+  transform: translateY(-1px);
+}
+
+/* Icon (chevron) */
+.service-pill-icon {
+  font-size: .8rem;
+  color: #6b7280;
+  transition: transform .18s ease, color .18s ease;
+}
+
+/* Expanded state */
+.service-item.is-open .service-pill-icon {
+  transform: rotate(180deg);
+  color: var(--primary-color);
+}
+
+.service-item.is-open .service-pill {
+  border-color: var(--primary-color);
+  box-shadow: 0 5px 14px rgba(11, 102, 212, .12);
+}
+
+/* The hidden/visible panel */
+.service-panel {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height .25s ease, opacity .2s ease, padding-top .2s ease;
+  opacity: 0;
+  padding-top: 0;
+}
+
+.service-item.is-open .service-panel {
+  opacity: 1;
+  margin-top: .2rem;
+  padding-top: .35rem;
+  max-height: 220px; /* enough for 1–2 paragraphs */
+}
+
+.service-panel p {
+  margin: 0 0 .5rem;
+  color: var(--muted-text);
+  line-height: 1.6;
+  font-size: 1rem;
+}
+
+@media (max-width: 480px){
+  .service-pill {
+    align-items: flex-start;
+  }
+}
+
+/* ============ TEAM SECTION WRAPPER ============ */
 .aboutTeam {
   padding: 60px 20px;
   background: #f8f9fc;
@@ -148,7 +258,6 @@
   color: #555;
 }
 
-
 /* === TEAM GRID === */
 .teamGrid {
   display: grid;
@@ -157,7 +266,6 @@
   max-width: 1100px;
   margin: 0 auto;
 }
-
 
 /* === TEAM CARD === */
 .teamCard {
@@ -174,7 +282,6 @@
   box-shadow: 0 6px 18px rgba(0,0,0,0.12);
 }
 
-
 /* === TEAM IMAGE === */
 .teamImage {
   width: 120px;
@@ -184,7 +291,6 @@
   margin-bottom: 15px;
   border: 3px solid #e6ecf5;
 }
-
 
 /* === TEAM TEXT === */
 .teamCard h3 {
@@ -205,31 +311,54 @@
   line-height: 1.4;
 }
 
-/* ============
-   CTA
-   ============ */
+/* ============ CTA ============ */
+/* Make this a banner-style section instead of a boxed card */
 .aboutCTA {
-  margin-top: 1.5rem;
-  background: var(--bg-soft);
-  border: 1px solid #eceef3;
-  border-radius: var(--radius);
-  padding: 1.5rem;
-  box-shadow: var(--shadow);
+  margin: 3rem auto 4rem;
+  width: 100%;
+  background: linear-gradient(90deg, #f2f7ff, #ffffff);
+  padding: 3rem 1.5rem;
+}
+
+.aboutCTA-inner {
+  max-width: 700px;
+  margin: 0 auto;
   text-align: center;
-}
-.aboutCTA h2 { margin: 0 0 .35rem; font-size: 1.6rem; }
-.aboutCTA p { margin: 0 0 .8rem; color: var(--muted-text); }
 
-/* Buttons (in case you need them here) */
-.btn {
-  display: inline-block; padding: .7rem 1.2rem; border-radius: 10px;
-  text-decoration: none; font-weight: 700;
-  transition: background-color .2s, transform .12s;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
-.btn-primary { background: var(--primary-color); color: #fff; }
-.btn-primary:hover { background: #094fa3; transform: translateY(-1px); }
+.aboutCTA .btn {
+  max-width: 260px;       /* shrink the button */
+  width: 100%;            /* keep it responsive */
+  display: inline-block;  /* prevent stretching */
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
 
-/* ============
-   Accessibility
-   ============ */
-:focus-visible { outline: 2px solid var(--primary-color); outline-offset: 3px; }
+
+
+.aboutCTA h2 {
+  margin: 0 0 .35rem;
+  font-size: 1.6rem;
+}
+
+.aboutCTA p {
+  margin: 0 0 .9rem;
+  color: var(--muted-text);
+}
+
+/* constrain inner width for text */
+.aboutCTA > * {
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ============ Accessibility ============ */
+:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 3px;
+}

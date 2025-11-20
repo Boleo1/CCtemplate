@@ -7,6 +7,8 @@
 /* Two-column layout under the global header */
 .admin-shell {
   display: grid;
+  position: relative;
+  z-index: 0;
   grid-template-columns: var(--side-w) 1fr;
   min-height: calc(100vh - var(--nav-h));
   background: var(--bg, #fff);
@@ -19,7 +21,7 @@
   background: var(--bg, #fff);
 }
 
-/* Optional page header block */
+/* Optional page header block (used as mobile topbar) */
 .admin-pagehead {
   display: flex;
   align-items: center;
@@ -33,8 +35,92 @@
   font-weight: 800;
 }
 
-/* Responsive collapse */
+/* ---------- Mobile-only dashboard topbar ---------- */
+.admin-topbar {
+  display: none;  /* hidden on desktop */
+}
+
 @media (max-width: 900px) {
-  .admin-shell { grid-template-columns: 1fr; }
-  .admin-main  { padding: 1rem; }
+  .admin-shell {
+    grid-template-columns: 1fr;   /* no visible sidebar column */
+  }
+
+  .admin-main {
+    padding: 1rem;
+  }
+
+  .admin-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+
+  .admin-topbar-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin: 0;
+  }
+}
+
+/* ---------- Mobile hamburger for dashboard drawer ---------- */
+.admin-menu-toggle {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  .admin-menu-toggle {
+    display: inline-flex;
+    width: 38px;
+    height: 38px;
+    border-radius: 999px;
+    border: none;
+    background: #ffffff;
+    box-shadow: 0 1px 4px rgba(15,23,42,.15);
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 4px;
+    cursor: pointer;
+    z-index: 2000;
+  }
+
+  .admin-menu-toggle span {
+    width: 18px;
+    height: 2px;
+    border-radius: 999px;
+    background: #111827;
+    transition: transform .2s ease, opacity .2s ease, background-color .2s ease;
+  }
+
+  .admin-menu-toggle.is-open span {
+    background: #0b66d4;
+  }
+
+  .admin-menu-toggle.is-open span:nth-child(1) {
+    transform: translateY(4px) rotate(45deg);
+  }
+  .admin-menu-toggle.is-open span:nth-child(2) {
+    opacity: 0;
+  }
+  .admin-menu-toggle.is-open span:nth-child(3) {
+    transform: translateY(-4px) rotate(-45deg);
+  }
+}
+
+/* ---------- Dark overlay behind drawer ---------- */
+.admin-overlay {
+  position: fixed;
+  inset: var(--nav-h) 0 0 0;        /* under the global nav bar */
+  background: rgba(15,23,42,.4);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .2s ease;
+  z-index: 1050;
+}
+
+.admin-overlay.is-active {
+  opacity: 1;
+  pointer-events: auto;
 }

@@ -10,3 +10,16 @@ main{
   background-color: var(--color-bg);
   min-height: 100vh;
 }
+
+.app-public {
+  padding-top: 60px;
+}
+.app-dashboard{
+  padding-top: 0;
+}
+
+@media (max-width: 768px) {
+  .app-public {
+    padding-top: 45px;
+  }
+}
