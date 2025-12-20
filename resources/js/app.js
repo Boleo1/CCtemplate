@@ -130,6 +130,108 @@ document.addEventListener('DOMContentLoaded', () => {
   const startTime  = form.querySelector('#eventTime');
   const endTime    = form.querySelector('#endTime');
 
+    // ============================
+  // Time duration syncing
+  // ============================
+  const DEFAULT_DURATION_MIN = 4 * 60; // 4 hours
+  let durationMin = DEFAULT_DURATION_MIN;
+  let userHasSetEnd = false;
+
+  const toMin = (hhmm) => {
+    if (!hhmm) return null;
+    const [h, m] = hhmm.split(':').map(Number);
+    return h * 60 + (m || 0);
+  };
+
+  const toHHMM = (mins) => {
+    mins = ((mins % 1440) + 1440) % 1440;
+    const h = String(Math.floor(mins / 60)).padStart(2, '0');
+    const m = String(mins % 60).padStart(2, '0');
+    return `${h}:${m}`;
+  };
+
+  const inTimeMode = () => {
+    // only sync times when the row is visible + not all-day + not wake
+    if (!timeRow || !startTime || !endTime) return false;
+    if (allDay?.checked) return false;
+    if (typeSelect?.value === 'Wake') return false;
+    return timeRow.style.display !== 'none';
+  };
+
+  const clampToSelectOptions = (selectEl, hhmm) => {
+    // If the computed time isn't in the dropdown options, clamp to the last option
+    if (!selectEl) return hhmm;
+    const hasOption = Array.from(selectEl.options).some(o => o.value === hhmm);
+    if (hasOption) return hhmm;
+
+    // clamp to closest earlier option (or last if computed is beyond max)
+    const target = toMin(hhmm);
+    let best = null;
+    for (const opt of selectEl.options) {
+      const v = opt.value;
+      if (!v) continue;
+      const m = toMin(v);
+      if (m != null && m <= target) best = v;
+    }
+    return best ?? selectEl.options[selectEl.options.length - 1]?.value ?? '';
+  };
+
+  const recomputeDurationFromInputs = () => {
+    const s = toMin(startTime.value);
+    const e = toMin(endTime.value);
+    if (s == null || e == null) return;
+
+    let diff = e - s;
+
+    // If user chose an end earlier than start, treat as next-day duration
+    if (diff <= 0) diff += 1440;
+
+    // guardrails (optional): 30 min to 12 hours
+    diff = Math.max(30, Math.min(diff, 12 * 60));
+    durationMin = diff;
+  };
+
+  const pushEndFromStart = () => {
+    if (!inTimeMode()) return;
+    const s = toMin(startTime.value);
+    if (s == null) return;
+
+    // If end is empty and user hasn't ever picked an end, use default duration
+    if (!endTime.value && !userHasSetEnd) durationMin = DEFAULT_DURATION_MIN;
+
+    const computed = toHHMM(s + durationMin);
+    endTime.value = clampToSelectOptions(endTime, computed);
+  };
+
+  // When user changes START: keep duration
+  startTime?.addEventListener('change', () => {
+    if (!inTimeMode()) return;
+    pushEndFromStart();
+  });
+
+  // When user changes END: learn duration
+  endTime?.addEventListener('change', () => {
+    if (!inTimeMode()) return;
+    userHasSetEnd = !!endTime.value;
+    if (endTime.value) recomputeDurationFromInputs();
+  });
+
+  // If toggling all-day back off, reapply duration
+  allDay?.addEventListener('change', () => {
+    if (!allDay.checked) {
+      // coming back into timed mode
+      // if end isn't set, we'll default 4h; otherwise preserve learned duration
+      pushEndFromStart();
+    }
+  });
+
+  // On load: if both times exist, learn duration; otherwise leave default
+  if (startTime?.value && endTime?.value) {
+    userHasSetEnd = true;
+    recomputeDurationFromInputs();
+  }
+
+
   function addHoursToTimeString(timeStr, hours) {
     if (!timeStr) return '';
     const [h, m] = timeStr.split(':').map(Number);
@@ -195,13 +297,13 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Auto +4h when end time is empty
-  if (startTime) {
-    startTime.addEventListener('change', () => {
-      if (!endTime.value && startTime.value) {
-        endTime.value = addHoursToTimeString(startTime.value, 4);
-      }
-    });
-  }
+  // if (startTime) {
+  //   startTime.addEventListener('change', () => {
+  //     if (!endTime.value && startTime.value) {
+  //       endTime.value = addHoursToTimeString(startTime.value, 4);
+  //     }
+  //   });
+  // }
 
   if (allDay) {
     allDay.addEventListener('change', updateTimeRowVisibility);

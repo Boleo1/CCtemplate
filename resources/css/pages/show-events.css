@@ -19,15 +19,23 @@
 }
 .admin-edit-btn:hover { background: #d7e4ff; transform: translateY(-1px); }
 
-/* hero image */
-.event-hero {
-  width: 100%;
-  aspect-ratio: 16 / 9;        /* keeps height consistent */
+/* --- Thumbnail upgrade (smaller + clickable) --- */
+.event-thumbnail {
+  width: min(600px, 90%);     /* Larger on desktop, scales down naturally */
+  height: auto;
+  display: block;
+  margin: 0 auto 1.25rem;
+  border-radius: 14px;
   object-fit: cover;
-  border-radius: var(--radius-large, 16px);
-  box-shadow: var(--shadow, 0 3px 10px rgba(0,0,0,.08));
-  margin: .5rem 0 1rem;
-  border: 1px solid var(--border-color, #eceef3);
+  cursor: pointer;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.12);
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+
+.event-thumbnail:hover {
+  transform: scale(1.03);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.18);
 }
 
 /* meta bar (Date, Time, Type) */
@@ -76,10 +84,13 @@
   box-shadow: 0 2px 8px rgba(0,0,0,.06);
   transition: transform .18s ease, box-shadow .18s ease;
 }
-.gallery img:hover { transform: translateY(-2px); box-shadow: 0 8px 18px rgba(0,0,0,.10); }
+.gallery img:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(0,0,0,.10);
+}
 
 /* small screens */
 @media (max-width: 640px) {
   .admin-edit-btn { float: none; display: inline-block; }
-  .event-hero { aspect-ratio: 4 / 3; }
+  .event-thumbnail { width: 85%; }
 }
