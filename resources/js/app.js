@@ -570,3 +570,23 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e.key === 'Escape') closeDrawer();
   });
 });
+
+
+
+document.addEventListener('click', function (e) {
+  const trigger = e.target.closest('.lightbox-trigger');
+  if (!trigger) return;
+
+  e.preventDefault();
+
+  const lightbox = document.getElementById('lightbox');
+  const img = document.getElementById('lightbox-img');
+
+  img.src = trigger.href;
+  lightbox.hidden = false;
+});
+
+document.getElementById('lightbox').addEventListener('click', function () {
+  this.hidden = true;
+  document.getElementById('lightbox-img').src = '';
+});

@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\User;
 use App\Models\EventGalleryImage;
 
+
 class Events extends Model
 {
    use HasFactory;

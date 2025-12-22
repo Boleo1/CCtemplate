@@ -117,25 +117,19 @@
     <input type="file" name="gallery[]" accept="image/*" multiple>
 
     <div class="form-actions">
-      <button type="submit" class="btn-primary">
-        {{ isset($event) ? 'Update Event' : 'Create Event' }}
-      </button>
+      <button type="submit" class="btn-primary">{{ isset($event) ? 'Update Event' : 'Create Event' }}</button>
 
       @if (isset($event))
-        <form 
-          action="{{ route('admin.events.destroy', $event->id) }}" 
-          method="POST" 
-          onsubmit="return confirm('Are you sure you want to delete this event? This cannot be undone.');"
-        >
-          @csrf
-          @method('DELETE')
-          <button type="submit" class="btn-danger">
-            Delete Event
-          </button>
-        </form>
+        <button type="button" class="btn-danger" onclick="document.getElementById('delete-event-form').submit()">Delete Event</button>
       @endif
     </div>
   </form>
 </div>
+@if (isset($event))
+  <form id="delete-event-form" action="{{ route('admin.events.destroy', $event->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this event? This cannot be undone.');">
+    @csrf
+    @method('DELETE')
   </form>
+@endif
+
 </div>

@@ -84,6 +84,17 @@
   cursor: pointer;
   transition: background-color 0.2s ease, transform 0.1s ease;
 }
+.eventForm button[type="button"] {
+  margin-top: 1.5rem;
+  color: #fff;
+  border: none;
+  padding: 0.7rem 1.4rem;
+  font-size: 1rem;
+  font-weight: 700;
+  border-radius: var(--radius, 10px);
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
 .eventForm button[type="submit"]:active {
   transform: scale(0.98);
 }

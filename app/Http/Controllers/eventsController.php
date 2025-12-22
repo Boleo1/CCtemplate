@@ -13,8 +13,6 @@ class eventsController extends Controller
 {
     public function index(Request $request)
     {
-        // These are your public-facing filters
-        // You can rename these to match your event_type values exactly
         $types = [
             'all'             => 'All',
             'Community Event' => 'Community Events',
@@ -30,12 +28,10 @@ class eventsController extends Controller
 
         $query = Events::query()->orderBy('start_at');
 
-        // If not "all", filter by event_type
         if ($activeType !== 'all') {
             $query->where('event_type', $activeType);
         }
 
-        // Pagination that remembers the chosen filter
         $events = $query->paginate(9)->withQueryString();
 
         $pageTitle = 'Events';
