@@ -1,32 +1,42 @@
-/* ===== Events page header ===== */
-.events-page-header h1 {
-  margin: 0 0 1rem;
-  font-size: 1.6rem;
-  font-weight: 800;
-  color: var(--text-color, #111);
-}
-
-/* ===== Layout: form + list ===== */
-.events-layout {
-  display: grid;
-  gap: 1.5rem;
-}
-
-
-/* ===== Events list container ===== */
+/* ===== Events list container as scrollable panel ===== */
 .events-list-container {
   background: var(--bg, #fff);
   border-radius: var(--radius-large, 16px);
   border: 1px solid var(--border-color, #e3e6ec);
   box-shadow: var(--shadow, 0 3px 12px rgba(0,0,0,.08));
-  padding: 1.25rem 1.5rem;
+  overflow: hidden;              /* IMPORTANT for sticky header + rounded corners */
+  padding: 0;                    /* move padding to sub-sections */
   margin-bottom: 40px;
 }
 
+/* sticky header */
+.events-list-head {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: var(--bg, #fff);
+  padding: 1.1rem 1.5rem;
+  border-bottom: 1px solid var(--border-color, #eceef3);
+}
+
 .events-list-container h3 {
-  margin: 0 0 0.75rem;
+  margin: 0;
   font-size: 1.2rem;
-  font-weight: 700;
+  font-weight: 800;
+}
+
+/* scroll area */
+.events-list-scroll {
+  max-height: 520px;            /* desktop panel height */
+  overflow: auto;
+  padding: .5rem 1.5rem;        /* content padding */
+}
+
+/* pagination footer */
+.events-list-pagination {
+  padding: .75rem 1.5rem;
+  border-top: 1px solid var(--border-color, #eceef3);
+  background: var(--bg, #fff);
 }
 
 /* ===== Events list styling ===== */
@@ -39,8 +49,8 @@
 .events-list-item {
   display: flex;
   justify-content: space-between;
-  gap: 0.75rem;
-  padding: 0.75rem 0;
+  gap: 0.9rem;
+  padding: 1rem 0;
   border-top: 1px solid var(--border-color, #eceef3);
 }
 
@@ -48,11 +58,11 @@
   border-top: none;
 }
 
-/* Left/main content */
-.events-list-main h4 {
+/* You currently use .events-list-body in blade, not .events-list-main */
+.events-list-body h4 {
   margin: 0 0 0.25rem;
   font-size: 1rem;
-  font-weight: 700;
+  font-weight: 800;
 }
 
 .events-list-meta {
@@ -68,53 +78,64 @@
   line-height: 1.5;
 }
 
-/* Badge for event type */
+/* Badge */
 .badge {
   display: inline-block;
   font-size: 0.8rem;
-  font-weight: 700;
-  padding: 0.1rem 0.5rem;
+  font-weight: 800;
+  padding: 0.15rem 0.55rem;
   border-radius: 999px;
   background: #e8eefc;
   color: #0b3d91;
   border: 1px solid #dbe6ff;
   margin-left: 0.35rem;
+  white-space: nowrap;
 }
 
-/* Right/actions column */
-.events-list-actions {
+/* Right/actions column
+   In your blade you use .events-list-footer, not .events-list-actions */
+.events-list-footer {
   display: flex;
   align-items: center;
   gap: 0.5rem;
 }
 
-/* Small button variant for list actions */
 .btn-sm {
   padding: 0.35rem 0.7rem;
   font-size: 0.85rem;
 }
 
-/* Muted text (empty states, etc.) */
 .muted {
   color: var(--muted-text, #6b7280);
   margin-top: 0.5rem;
 }
 
-/* Mobile tweaks */
+/* ===== Layout fix: your media queries were nested wrong ===== */
+@media (min-width: 1100px) {
+  .events-layout {
+    grid-template-columns: 1.1fr 1.2fr;
+    align-items: start;
+  }
+}
+
 @media (max-width: 700px) {
+  .events-list-scroll {
+    max-height: 60vh;          /* mobile: uses screen, still scrollable */
+    padding: .5rem 1rem;
+  }
+
+  .events-list-head,
+  .events-list-pagination {
+    padding: .9rem 1rem;
+  }
+
   .events-list-item {
     flex-direction: column;
     align-items: flex-start;
+    gap: .6rem;
   }
-  
-  .events-list-actions {
+
+  .events-list-footer {
     justify-content: flex-start;
-  }
-  /* On wider screens put form + list side by side */
-  @media (min-width: 1100px) {
-    .events-layout {
-      grid-template-columns: 1.1fr 1.2fr;
-      align-items: flex-start;
-    }
   }
 }

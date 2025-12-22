@@ -37,7 +37,7 @@
       <x-ui.input-label for="date">Start Date:</x-ui.input-label>
       <input type="date" id="date" name="date" min="{{ $today }}" max="{{ $max }}" required>
 
-      <x-ui.input-label for="endDate">End Date (optional):</x-ui.input-label>
+      <x-ui.input-label for="endDate">End Date (auto-set):</x-ui.input-label>
       <input type="date" id="endDate" name="endDate" min="{{ $today }}" max="{{ $max }}">
 
       <label class="checkbox-inline">
@@ -60,7 +60,7 @@
         </div>
 
         <div class="time-field">
-          <x-ui.input-label for="endTime">End Time (optional):</x-ui.input-label>
+          <x-ui.input-label for="endTime">End Time (optional, auto 4hr):</x-ui.input-label>
           <select id="endTime" name="endTime">
             <option value="">Select a time...</option>
             @for ($h = 6; $h <= 22; $h++)

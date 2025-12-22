@@ -2,7 +2,7 @@
 
   <section class="contact-hero">
     <h1>Contact Us</h1>
-    <p>We’re here to help with questions, event inquiries, room rentals, and more.</p>
+    <p>We’re here to help with questions, event inquiries, center rentals, and more.</p>
   </section>
 
   <section class="contact-wrapper">

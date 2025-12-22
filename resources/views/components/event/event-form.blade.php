@@ -28,23 +28,28 @@
     >
 
     <label for="eventDate">Start Date:</label>
-    <input 
-      type="date" 
-      id="eventDate" 
-      name="start_date" 
-      value="{{ old('start_date', $event->start_date ?? '') }}" 
-      min="{{ $today }}" max="{{ $max }}"
+    <input
+      type="date"
+      id="eventDate"
+      name="start_date"
+      value="{{ old('start_date', $event->start_date ?? '') }}"
+      @if(!isset($event))
+        min="{{ $today }}" max="{{ $max }}"
+      @endif
       required
     >
 
     <label for="endDate">End Date (optional):</label>
-    <input 
-      type="date" 
-      id="endDate" 
-      name="end_date" 
-      value="{{ old('end_date', $event->end_date ?? '') }}"
-      min="{{ $today }}" max="{{ $max }}"
+    <input
+      type="date"
+      id="endDate"
+      name="end_date"
+      value="{{ old('end_date', optional($event?->end_at)->format('Y-m-d')) }}"
+      @if(!isset($event))
+        min="{{ $today }}" max="{{ $max }}"
+      @endif
     >
+
 
     <div class="checkbox-inline">
       <input

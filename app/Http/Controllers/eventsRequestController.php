@@ -23,7 +23,7 @@ class eventsRequestController extends Controller
     {
         $validated = $request->validate([
           'eventName'        => 'required|string|max:255',
-          'requesterEmail'   => 'required|email',
+          'requesterEmail'   => 'required|email:rfc,dns|max:255',
           'event_type'       => 'required|string',
           'date'             => 'required|date|after_or_equal:today',
           'endDate'          => 'nullable|date|after_or_equal:date',
@@ -100,7 +100,7 @@ public function moderate(centerRequests $request, Request $http)
 
         // 2) On approve → create calendar event
         if ($data['decision'] === 'approved') {
-            $title = $request->event_type . ' — ' . $request->event_name;
+            $title = trim($request->event_name);
 
             // Unique slug
             $slug = Str::slug($title);

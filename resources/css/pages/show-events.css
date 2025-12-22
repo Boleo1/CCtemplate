@@ -33,7 +33,7 @@
   transition: transform .15s ease, box-shadow .15s ease;
 }
 
-.event-thumbnail:hover {
+.show-event-thumbnail:hover {
   transform: scale(1.03);
   box-shadow: 0 6px 16px rgba(0,0,0,0.18);
 }

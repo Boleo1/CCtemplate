@@ -119,7 +119,6 @@ class adminEventController extends Controller
             ]);
         }
     }
-
     return redirect()->route('admin.events.index')->with('success', 'Event created.');
 }
 

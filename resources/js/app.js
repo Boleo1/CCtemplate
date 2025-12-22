@@ -1,21 +1,57 @@
 import './bootstrap';
 
+// ============================================
+// Time duration syncing, Dashboard Event Form
+// ============================================
+
 document.addEventListener('DOMContentLoaded', () => {
-  const form      = document.getElementById('admin-event-form');
+  const form = document.getElementById('admin-event-form');
   if (!form) return;
 
   const allDay    = form.querySelector('#all_day');
-  const timeRow   = form.querySelector('.timeRow');
+  const timeRow   = form.querySelector('.time-row');
   const startTime = form.querySelector('#eventTime');
   const endTime   = form.querySelector('#endTime');
   const startDate = form.querySelector('#eventDate');
   const endDate   = form.querySelector('#endDate');
 
-  const DEFAULT_DURATION_MIN = 240; // 4 hours; change if you want
-
-  // we remember the "current" duration between start and end in minutes
+  const DEFAULT_DURATION_MIN = 240;
   let durationMinutes = null;
 
+  // ---------------------------
+  // ✅ End date clamp (max 5 days)
+  // ---------------------------
+  const MAX_SPAN_DAYS = 5;
+
+  function addDaysISO(isoDate, days) {
+    const d = new Date(isoDate + 'T00:00:00');
+    d.setDate(d.getDate() + days);
+    return d.toISOString().slice(0, 10);
+  }
+
+  function syncEndDateRules() {
+    if (!startDate || !endDate || !startDate.value) return;
+
+    const min = startDate.value;
+    const max = addDaysISO(min, MAX_SPAN_DAYS);
+
+    endDate.min = min;
+    endDate.max = max;
+
+    // default to start date if empty
+    if (!endDate.value) {
+      endDate.value = min;
+      return;
+    }
+
+    // hard clamp if out of range
+    if (endDate.value < min) endDate.value = min;
+    if (endDate.value > max) endDate.value = max;
+  }
+
+  // ---------------------------
+  // Time helpers (your original)
+  // ---------------------------
   function timeToMinutes(timeStr) {
     if (!timeStr) return null;
     const [h, m] = timeStr.split(':').map(Number);
@@ -24,15 +60,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function minutesToTime(totalMinutes) {
     if (totalMinutes == null) return '';
-    // clamp to 0–23:59 so it doesn't wrap weirdly
     if (totalMinutes < 0) totalMinutes = 0;
     if (totalMinutes >= 24 * 60) totalMinutes = 24 * 60 - 1;
 
     const h = Math.floor(totalMinutes / 60);
     const m = totalMinutes % 60;
-    const hh = String(h).padStart(2, '0');
-    const mm = String(m).padStart(2, '0');
-    return `${hh}:${mm}`;
+    return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`;
   }
 
   function updateTimeRowVisibility() {
@@ -42,44 +75,32 @@ document.addEventListener('DOMContentLoaded', () => {
       timeRow.style.display = 'none';
       startTime.value = '';
       endTime.value = '';
-      durationMinutes = null; // reset
+      durationMinutes = null;
     } else {
       timeRow.style.display = 'flex';
     }
   }
 
-  function syncEndDateDefault() {
-    if (startDate && endDate && startDate.value && !endDate.value) {
-      endDate.value = startDate.value;
-    }
-  }
-
-  // When start time changes, recalc end time based on stored duration
   function handleStartTimeChange() {
     if (!startTime || !endTime || !startTime.value) return;
 
     const startMin = timeToMinutes(startTime.value);
     if (startMin == null) return;
 
-    // figure out duration if we don't know it yet
     if (durationMinutes == null) {
       if (endTime.value) {
         const endMin = timeToMinutes(endTime.value);
-        if (endMin != null && endMin > startMin) {
-          durationMinutes = endMin - startMin;
-        } else {
-          durationMinutes = DEFAULT_DURATION_MIN;
-        }
+        durationMinutes = (endMin != null && endMin > startMin)
+          ? (endMin - startMin)
+          : DEFAULT_DURATION_MIN;
       } else {
         durationMinutes = DEFAULT_DURATION_MIN;
       }
     }
 
-    const newEndMin = startMin + durationMinutes;
-    endTime.value = minutesToTime(newEndMin);
+    endTime.value = minutesToTime(startMin + durationMinutes);
   }
 
-  // When end time changes, update the stored duration
   function handleEndTimeChange() {
     if (!startTime || !endTime || !startTime.value || !endTime.value) return;
 
@@ -91,35 +112,39 @@ document.addEventListener('DOMContentLoaded', () => {
     durationMinutes = diff > 0 ? diff : DEFAULT_DURATION_MIN;
   }
 
-  // Wire up listeners
-  if (startTime) {
-    startTime.addEventListener('change', handleStartTimeChange);
-    startTime.addEventListener('input', handleStartTimeChange);
-  }
+  // ---------------------------
+  // Listeners
+  // ---------------------------
+  startTime?.addEventListener('change', handleStartTimeChange);
+  startTime?.addEventListener('input', handleStartTimeChange);
 
-  if (endTime) {
-    endTime.addEventListener('change', handleEndTimeChange);
-    endTime.addEventListener('input', handleEndTimeChange);
-  }
+  endTime?.addEventListener('change', handleEndTimeChange);
+  endTime?.addEventListener('input', handleEndTimeChange);
 
-  if (allDay) {
-    allDay.addEventListener('change', updateTimeRowVisibility);
-  }
+  allDay?.addEventListener('change', updateTimeRowVisibility);
 
-  if (startDate && endDate) {
-    startDate.addEventListener('change', syncEndDateDefault);
-  }
+  startDate?.addEventListener('change', syncEndDateRules);
+  endDate?.addEventListener('change', syncEndDateRules);
+  endDate?.addEventListener('input', syncEndDateRules);
 
-  // Init on load
+  // Init
   updateTimeRowVisibility();
-  syncEndDateDefault();
+  syncEndDateRules();
 });
 
 
+// ============================================
+// Time duration syncing, Dashboard Event Form END
+// ============================================
 
+
+
+// ======================================
+// Time duration syncing, Calendar Form
+// ======================================
 
 document.addEventListener('DOMContentLoaded', () => {
-  const form       = document.getElementById('calendar-form');
+  const form = document.getElementById('calendar-form');
   if (!form) return;
 
   const typeSelect = form.querySelector('#event_type');
@@ -130,13 +155,13 @@ document.addEventListener('DOMContentLoaded', () => {
   const startTime  = form.querySelector('#eventTime');
   const endTime    = form.querySelector('#endTime');
 
-    // ============================
-  // Time duration syncing
-  // ============================
+  // ---- Settings ----
   const DEFAULT_DURATION_MIN = 4 * 60; // 4 hours
+
   let durationMin = DEFAULT_DURATION_MIN;
   let userHasSetEnd = false;
 
+  // ---- Helpers ----
   const toMin = (hhmm) => {
     if (!hhmm) return null;
     const [h, m] = hhmm.split(':').map(Number);
@@ -150,21 +175,17 @@ document.addEventListener('DOMContentLoaded', () => {
     return `${h}:${m}`;
   };
 
-  const inTimeMode = () => {
-    // only sync times when the row is visible + not all-day + not wake
-    if (!timeRow || !startTime || !endTime) return false;
-    if (allDay?.checked) return false;
-    if (typeSelect?.value === 'Wake') return false;
-    return timeRow.style.display !== 'none';
+  const addDaysISO = (isoDate, days) => {
+    const d = new Date(isoDate + 'T00:00:00');
+    d.setDate(d.getDate() + days);
+    return d.toISOString().slice(0, 10);
   };
 
   const clampToSelectOptions = (selectEl, hhmm) => {
-    // If the computed time isn't in the dropdown options, clamp to the last option
     if (!selectEl) return hhmm;
     const hasOption = Array.from(selectEl.options).some(o => o.value === hhmm);
     if (hasOption) return hhmm;
 
-    // clamp to closest earlier option (or last if computed is beyond max)
     const target = toMin(hhmm);
     let best = null;
     for (const opt of selectEl.options) {
@@ -176,18 +197,24 @@ document.addEventListener('DOMContentLoaded', () => {
     return best ?? selectEl.options[selectEl.options.length - 1]?.value ?? '';
   };
 
+  const isWake = () => typeSelect?.value === 'Wake';
+
+  const inTimeMode = () => {
+    if (!timeRow || !startTime || !endTime) return false;
+    if (allDay?.checked) return false;
+    if (isWake()) return false;
+    return timeRow.style.display !== 'none';
+  };
+
+  // ---- Time behavior ----
   const recomputeDurationFromInputs = () => {
     const s = toMin(startTime.value);
     const e = toMin(endTime.value);
     if (s == null || e == null) return;
 
     let diff = e - s;
-
-    // If user chose an end earlier than start, treat as next-day duration
-    if (diff <= 0) diff += 1440;
-
-    // guardrails (optional): 30 min to 12 hours
-    diff = Math.max(30, Math.min(diff, 12 * 60));
+    if (diff <= 0) diff += 1440;                 // allow crossing midnight
+    diff = Math.max(30, Math.min(diff, 12 * 60)); // guardrails
     durationMin = diff;
   };
 
@@ -196,154 +223,119 @@ document.addEventListener('DOMContentLoaded', () => {
     const s = toMin(startTime.value);
     if (s == null) return;
 
-    // If end is empty and user hasn't ever picked an end, use default duration
     if (!endTime.value && !userHasSetEnd) durationMin = DEFAULT_DURATION_MIN;
-
     const computed = toHHMM(s + durationMin);
     endTime.value = clampToSelectOptions(endTime, computed);
   };
 
-  // When user changes START: keep duration
-  startTime?.addEventListener('change', () => {
-    if (!inTimeMode()) return;
-    pushEndFromStart();
-  });
-
-  // When user changes END: learn duration
-  endTime?.addEventListener('change', () => {
-    if (!inTimeMode()) return;
-    userHasSetEnd = !!endTime.value;
-    if (endTime.value) recomputeDurationFromInputs();
-  });
-
-  // If toggling all-day back off, reapply duration
-  allDay?.addEventListener('change', () => {
-    if (!allDay.checked) {
-      // coming back into timed mode
-      // if end isn't set, we'll default 4h; otherwise preserve learned duration
-      pushEndFromStart();
-    }
-  });
-
-  // On load: if both times exist, learn duration; otherwise leave default
-  if (startTime?.value && endTime?.value) {
-    userHasSetEnd = true;
-    recomputeDurationFromInputs();
-  }
-
-
-  function addHoursToTimeString(timeStr, hours) {
-    if (!timeStr) return '';
-    const [h, m] = timeStr.split(':').map(Number);
-    const d = new Date(2000, 0, 1, h, m || 0);
-    d.setHours(d.getHours() + hours);
-    const hh = String(d.getHours()).padStart(2, '0');
-    const mm = String(d.getMinutes()).padStart(2, '0');
-    return `${hh}:${mm}`;
-  }
-
   function updateTimeRowVisibility() {
-    if (allDay.checked || (typeSelect && typeSelect.value === 'Wake')) {
+    if (!timeRow) return;
+
+    if (allDay?.checked || isWake()) {
       timeRow.style.display = 'none';
       if (startTime) startTime.value = '';
       if (endTime)   endTime.value   = '';
+      userHasSetEnd = false;
+      durationMin = DEFAULT_DURATION_MIN;
     } else {
       timeRow.style.display = 'flex';
+      if (startTime?.value && !endTime?.value) pushEndFromStart();
     }
   }
 
-  /**
-   * Sync end date + constraints based on start date.
-   * - Normal events: end date is **always** same as start
-   * - Wakes: end date is **min start+2 days**, but can be later
-   */
-  function setEndFromStart({ isWake = false } = {}) {
+  // ---- Date behavior (locked end date rules) ----
+  function syncEndDateRules() {
     if (!startDate || !endDate || !startDate.value) return;
 
-    const base = new Date(startDate.value);
-    if (isWake) {
-      base.setDate(base.getDate() + 2);
-    }
+    const startISO = startDate.value;
 
-    const iso = base.toISOString().slice(0, 10);
+    // Always lock endDate (no sprawling events)
+    endDate.disabled = true;
 
-    // update min so the picker blocks invalid days
-    endDate.min = iso;
-
-    if (isWake) {
-      // For wakes: keep whatever the user chose as long as it’s >= min
-      if (!endDate.value || endDate.value < iso) {
-        endDate.value = iso;
-      }
+    if (isWake()) {
+      // Wake: ALWAYS 2 days (start + 2)
+      const wakeEnd = addDaysISO(startISO, 2);
+      endDate.min = wakeEnd;
+      endDate.max = wakeEnd;
+      endDate.value = wakeEnd;
     } else {
-      // For normal events: ALWAYS match start date exactly
-      endDate.value = iso;
+      // Non-wake: end date equals start date
+      endDate.min = startISO;
+      endDate.max = startISO;
+      endDate.value = startISO;
     }
   }
 
   function updateWakeLogic() {
     if (!typeSelect || !allDay) return;
 
-    const isWake = typeSelect.value === 'Wake';
-
-    if (isWake) {
+    if (isWake()) {
       allDay.checked = true; // wakes default to all-day
-      setEndFromStart({ isWake: true });
-    } else {
-      setEndFromStart({ isWake: false });
     }
 
+    syncEndDateRules();
     updateTimeRowVisibility();
   }
 
-  // Auto +4h when end time is empty
-  // if (startTime) {
-  //   startTime.addEventListener('change', () => {
-  //     if (!endTime.value && startTime.value) {
-  //       endTime.value = addHoursToTimeString(startTime.value, 4);
-  //     }
-  //   });
-  // }
+  // ---- Listeners ----
+  startTime?.addEventListener('change', () => { if (inTimeMode()) pushEndFromStart(); });
 
-  if (allDay) {
-    allDay.addEventListener('change', updateTimeRowVisibility);
+  endTime?.addEventListener('change', () => {
+    if (!inTimeMode()) return;
+    userHasSetEnd = !!endTime.value;
+    if (endTime.value) recomputeDurationFromInputs();
+  });
+
+  allDay?.addEventListener('change', () => {
+    updateTimeRowVisibility();
+    if (!allDay.checked) pushEndFromStart();
+  });
+
+  typeSelect?.addEventListener('change', updateWakeLogic);
+
+  startDate?.addEventListener('change', () => {
+    syncEndDateRules();
+  });
+
+  // Init
+  if (startTime?.value && endTime?.value) {
+    userHasSetEnd = true;
+    recomputeDurationFromInputs();
   }
 
-  if (typeSelect) {
-    typeSelect.addEventListener('change', updateWakeLogic);
-  }
-
-  if (startDate) {
-    startDate.addEventListener('change', () => {
-      const isWake = typeSelect && typeSelect.value === 'Wake';
-      setEndFromStart({ isWake });
-    });
-  }
-
-  // Init on load (for edit forms, etc.)
   updateWakeLogic();
 });
 
+// ======================================
+// Time duration syncing, Calendar Form END
+// ======================================
 
 
 
+
+// ==========================
 // Flash message auto-hide
+// ==========================
+
 window.addEventListener('DOMContentLoaded', () => {
-    const flash = document.getElementById('flash-message');
-    if (!flash) return;
-    const visibleMs = 2800;
+  const flash = document.getElementById('flash-message');
+  if (!flash) return;
+  const visibleMs = 2800;
 
-    setTimeout(() => {
-      flash.classList.add('is-hidden');
-    }, visibleMs);
+  setTimeout(() => {
+    flash.classList.add('is-hidden');
+  }, visibleMs);
 
-    setTimeout(() => {
-      if (flash && flash.parentNode) {
-        flash.parentNode.removeChild(flash);
-      }
-    }, visibleMs + 450);
-  });
-  //-- End Flash message auto-hide ----------------
+  setTimeout(() => {
+    if (flash && flash.parentNode) {
+      flash.parentNode.removeChild(flash);
+    }
+  }, visibleMs + 450);
+});
+
+// ==========================
+// Flash message auto-hide END
+// ==========================
  
 
 
@@ -362,7 +354,7 @@ document.addEventListener('DOMContentLoaded', function () {
       // Option A: allow multiple open
       item.classList.toggle('is-open', !isOpen);
 
-      // If you want ONLY one open at a time, uncomment this block:
+      // ONLY one open at a time, uncomment this block:
       // serviceItems.forEach(i => {
       //   if (i !== item) i.classList.remove('is-open');
       // });
@@ -515,9 +507,9 @@ document.addEventListener('DOMContentLoaded', () => {
   // Initial state
   handleScroll();
 });
-
 // -- End Navigation bar behavior ----------------
 
+// Admin sidebar toggle
 document.addEventListener('DOMContentLoaded', () => {
   const sidebar = document.querySelector('.side');
   const toggle  = document.querySelector('[data-admin-menu-toggle]');
@@ -570,23 +562,46 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e.key === 'Escape') closeDrawer();
   });
 });
+// -- End Admin sidebar toggle ----------------
 
 
-
+// Lightbox (safe + reusable)
 document.addEventListener('click', function (e) {
   const trigger = e.target.closest('.lightbox-trigger');
   if (!trigger) return;
 
-  e.preventDefault();
-
   const lightbox = document.getElementById('lightbox');
   const img = document.getElementById('lightbox-img');
+
+  // If lightbox markup isn't present on this page, allow normal navigation
+  if (!lightbox || !img) return;
+
+  e.preventDefault();
 
   img.src = trigger.href;
   lightbox.hidden = false;
 });
 
-document.getElementById('lightbox').addEventListener('click', function () {
-  this.hidden = true;
-  document.getElementById('lightbox-img').src = '';
+// Close on click
+document.addEventListener('click', function (e) {
+  const lightbox = document.getElementById('lightbox');
+  const img = document.getElementById('lightbox-img');
+  if (!lightbox || !img) return;
+
+  if (e.target === lightbox || e.target === img) {
+    lightbox.hidden = true;
+    img.src = '';
+  }
+});
+
+// Optional: close on ESC
+document.addEventListener('keydown', function (e) {
+  if (e.key !== 'Escape') return;
+
+  const lightbox = document.getElementById('lightbox');
+  const img = document.getElementById('lightbox-img');
+  if (!lightbox || !img) return;
+
+  lightbox.hidden = true;
+  img.src = '';
 });
