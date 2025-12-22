@@ -30,13 +30,29 @@
     <ul class="events-list">
       @foreach ($events as $event)
       <li class="event-card" data-type="{{ $event->event_type }}">
-        @if ($event->thumbnail_image_path)
-        <a href="{{ asset('storage/' . $event->thumbnail_image_path) }}" class="lightbox-trigger">
-          <img src="{{ asset('storage/' . $event->thumbnail_image_path) }}" alt="{{ $event->title }}" class="event-thumbnail" loading="lazy">
-        </a>
-        @else
-        <img src="{{ asset('storage/media/nothumbnail.png') }}" alt="No thumbnail" class="event-thumbnail" loading="lazy">
-        @endif
+
+  <div class="event-thumb {{ $event->thumbnail_image_path ? 'has-thumb' : 'no-thumb' }}">
+    
+    @if ($event->thumbnail_image_path)
+      <a href="{{ asset('storage/' . $event->thumbnail_image_path) }}" class="lightbox-trigger">
+        <img
+          src="{{ asset('storage/' . $event->thumbnail_image_path) }}"
+          alt="{{ $event->title }}"
+          class="event-thumbnail"
+          loading="lazy"
+        >
+      </a>
+    @else
+      <img
+        src="{{ asset('storage/media/nothumbnail.png') }}"
+        alt="No thumbnail"
+        class="event-thumbnail"
+        loading="lazy"
+      >
+    @endif
+
+  </div>
+
         
         <div class="event-body">
           <h3 class="event-title">{{ $event->title ?? 'No Title' }}</h3>

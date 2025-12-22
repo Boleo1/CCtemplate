@@ -131,17 +131,45 @@ Event List (Vertical)
   padding: 1rem;
   border-radius: 12px;
   margin-bottom: 1rem;
+  align-items: center;;
 }
 
-.event-thumbnail {
-  width: 120px;
-  height: 100px;
-  object-fit: cover;
-  border-radius: 12px;
+.event-thumb {
   flex-shrink: 0;
-  max-width: 300px;
-  max-height: 200px;
+  display: flex;
+  align-items: center;
 }
+
+/* real thumbnails */
+.event-thumb.has-thumb {
+  width: 160px;
+  height: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.event-thumb.has-thumb img {
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,.12);
+}
+
+/* placeholder thumbnails */
+.event-thumb.no-thumb {
+  width: 110px;
+  height: 110px;
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.event-thumb.no-thumb img {
+  opacity: 0.35;
+  filter: grayscale(1);
+  box-shadow: none;
+}
+
 
 .event-body {
   display: flex;

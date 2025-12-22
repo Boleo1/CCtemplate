@@ -26,7 +26,7 @@ class eventsController extends Controller
 
         $activeType = $request->query('type', 'all');
 
-        $query = Events::query()->orderBy('start_at');
+        $query = Events::query()->where('start_at', '>=', now())->orderBy('start_at');
 
         if ($activeType !== 'all') {
             $query->where('event_type', $activeType);

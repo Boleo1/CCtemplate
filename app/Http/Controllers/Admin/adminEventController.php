@@ -28,7 +28,7 @@ class adminEventController extends Controller
 
     public function store(Request $request)
     {
-    $data = $request->validate([
+      $data = $request->validate([
         'title'              => 'required|string|max:255',
         'start_date'         => 'required|date',
         'end_date'           => 'nullable|date|after_or_equal:start_date',
@@ -39,9 +39,9 @@ class adminEventController extends Controller
         'description'        => 'required|string',
         'thumbnail_image_path' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:4096',
         'gallery.*'          => 'nullable|image|mimes:jpg,jpeg,png,webp|max:8192',
-    ]);
+      ]);
 
-    // slug (unique-ish)
+    // Generate slug
     $base = Str::slug($data['title'], '-');
     $slug = $base;
     $i = 2;
@@ -50,6 +50,7 @@ class adminEventController extends Controller
         $i++;
     }
 
+    // Process date and time
     $allDay    = $request->boolean('all_day');
     $startDate = Carbon::parse($data['start_date']);
     $endDate   = isset($data['end_date'])
@@ -82,6 +83,7 @@ class adminEventController extends Controller
         }
     }
 
+    // Thumbnail stuff
     $thumbPath = $request->hasFile('thumbnail_image_path')
         ? $request->file('thumbnail_image_path')->store('events/thumbnails', 'public')
         : null;

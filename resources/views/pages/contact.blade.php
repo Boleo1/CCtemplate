@@ -22,15 +22,13 @@
       </div>
 
       <div class="info-block">
-        <h3>Address</h3>
+        <h3>Address:</h3>
         <p>28017 State Hwy 1<br>Red Lake, MN 56671</p>
 
         <div class="map-container">
           <iframe
-  src="https://maps.google.com/maps?q=Red%20Lake%20MN&t=&z=13&ie=UTF8&iwloc=&output=embed"
-  width="100%" height="200">
-</iframe>
-
+            src="https://maps.google.com/maps?q=Red%20Lake%20MN&t=&z=13&ie=UTF8&iwloc=&output=embed" width="100%" height="200">
+          </iframe>
         </div>
       </div>
 
