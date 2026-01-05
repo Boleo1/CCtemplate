@@ -20,6 +20,7 @@
   color: #333;
   margin-bottom: 0.4rem;
   font-size: 0.95rem;
+  font-family: var(--font-heading);
 }
 
 .contact-form input,
@@ -60,6 +61,7 @@
   font-weight: 600;
   cursor: pointer;
   transition: background-color 0.25s, transform 0.15s;
+  font-family: var(--font-heading);
 }
 
 .contact-form .btn:hover,
