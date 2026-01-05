@@ -13,6 +13,8 @@
 @import "./components/event-form.css";
 @import "./components/alerts.css";
 @import "./components/authforms.css";
+@import "./components/calendar-form.css";
+@import "./components/pagination.css";
 
 
 @import "./pages/home.css";

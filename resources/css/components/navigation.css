@@ -68,6 +68,7 @@
   position: relative;
   padding: 0.4rem 0;
   transition: color 0.25s ease;
+  font-family: var(--font-heading);
 }
 
 /* underline animation (desktop / default) */

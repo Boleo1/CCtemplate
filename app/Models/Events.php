@@ -33,6 +33,8 @@ class Events extends Model
        'created_by',
        'updated_by',
        'thumbnail_image_path',
+       'split_daily',
+       'sort_order',
    ];
 
    protected $casts = [
@@ -40,6 +42,8 @@ class Events extends Model
     'start_at' => 'datetime',
     'end_at' => 'datetime',
     'published_at' => 'datetime',
+    'split_daily' => 'boolean',
+    'sort_order' => 'integer'
    ];
 
 

@@ -18,10 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const DEFAULT_DURATION_MIN = 240;
   let durationMinutes = null;
 
-  // ---------------------------
-  // ✅ End date clamp (max 5 days)
-  // ---------------------------
-  const MAX_SPAN_DAYS = 5;
+  const MAX_SPAN_DAYS = 14;
 
   function addDaysISO(isoDate, days) {
     const d = new Date(isoDate + 'T00:00:00');
@@ -38,20 +35,15 @@ document.addEventListener('DOMContentLoaded', () => {
     endDate.min = min;
     endDate.max = max;
 
-    // default to start date if empty
     if (!endDate.value) {
       endDate.value = min;
       return;
     }
 
-    // hard clamp if out of range
     if (endDate.value < min) endDate.value = min;
     if (endDate.value > max) endDate.value = max;
   }
 
-  // ---------------------------
-  // Time helpers (your original)
-  // ---------------------------
   function timeToMinutes(timeStr) {
     if (!timeStr) return null;
     const [h, m] = timeStr.split(':').map(Number);
@@ -112,9 +104,8 @@ document.addEventListener('DOMContentLoaded', () => {
     durationMinutes = diff > 0 ? diff : DEFAULT_DURATION_MIN;
   }
 
-  // ---------------------------
+
   // Listeners
-  // ---------------------------
   startTime?.addEventListener('change', handleStartTimeChange);
   startTime?.addEventListener('input', handleStartTimeChange);
 
@@ -131,12 +122,9 @@ document.addEventListener('DOMContentLoaded', () => {
   updateTimeRowVisibility();
   syncEndDateRules();
 });
-
-
 // ============================================
 // Time duration syncing, Dashboard Event Form END
 // ============================================
-
 
 
 // ======================================
@@ -155,13 +143,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const startTime  = form.querySelector('#eventTime');
   const endTime    = form.querySelector('#endTime');
 
-  // ---- Settings ----
-  const DEFAULT_DURATION_MIN = 4 * 60; // 4 hours
+  const DEFAULT_DURATION_MIN = 240;
 
   let durationMin = DEFAULT_DURATION_MIN;
   let userHasSetEnd = false;
 
-  // ---- Helpers ----
   const toMin = (hhmm) => {
     if (!hhmm) return null;
     const [h, m] = hhmm.split(':').map(Number);
@@ -206,15 +192,14 @@ document.addEventListener('DOMContentLoaded', () => {
     return timeRow.style.display !== 'none';
   };
 
-  // ---- Time behavior ----
   const recomputeDurationFromInputs = () => {
     const s = toMin(startTime.value);
     const e = toMin(endTime.value);
     if (s == null || e == null) return;
 
     let diff = e - s;
-    if (diff <= 0) diff += 1440;                 // allow crossing midnight
-    diff = Math.max(30, Math.min(diff, 12 * 60)); // guardrails
+    if (diff <= 0) diff += 1440;                 
+    diff = Math.max(30, Math.min(diff, 12 * 60));
     durationMin = diff;
   };
 
@@ -243,17 +228,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // ---- Date behavior (locked end date rules) ----
   function syncEndDateRules() {
     if (!startDate || !endDate || !startDate.value) return;
 
     const startISO = startDate.value;
 
-    // Always lock endDate (no sprawling events)
     endDate.disabled = true;
 
     if (isWake()) {
-      // Wake: ALWAYS 2 days (start + 2)
+      // Wake: end date is 2 days after start date
       const wakeEnd = addDaysISO(startISO, 2);
       endDate.min = wakeEnd;
       endDate.max = wakeEnd;
@@ -270,7 +253,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!typeSelect || !allDay) return;
 
     if (isWake()) {
-      allDay.checked = true; // wakes default to all-day
+      allDay.checked = true;
     }
 
     syncEndDateRules();
@@ -313,6 +296,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
+
 // ==========================
 // Flash message auto-hide
 // ==========================
@@ -339,7 +323,11 @@ window.addEventListener('DOMContentLoaded', () => {
  
 
 
-// About Page - What we offer toggles
+
+
+// ==========================
+// About Page toggles
+// ==========================
 document.addEventListener('DOMContentLoaded', function () {
   const serviceItems = document.querySelectorAll('.service-item');
 
@@ -350,11 +338,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
     pill.addEventListener('click', () => {
       const isOpen = item.classList.contains('is-open');
-
-      // Option A: allow multiple open
       item.classList.toggle('is-open', !isOpen);
 
-      // ONLY one open at a time, uncomment this block:
+      // IF ONLY one open at a time, uncomment this:
       // serviceItems.forEach(i => {
       //   if (i !== item) i.classList.remove('is-open');
       // });
@@ -362,11 +348,17 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 });
-//-- End About Page toggles ----------------
+// ==========================
+// About Page toggles END
+// ==========================
 
 
 
+
+
+// ==========================
 // Mobile nav toggle
+// ==========================
 document.addEventListener('DOMContentLoaded', () => {
   const toggle = document.querySelector('[data-nav-toggle]');
   const menu   = document.querySelector('[data-nav-menu]');
@@ -388,11 +380,17 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 });
-//-- End Mobile nav toggle ----------------
+// ==========================
+// Mobile nav toggle END
+// ==========================
 
 
 
+
+
+// ==========================
 // Navigation bar behavior
+// ==========================
 document.addEventListener('DOMContentLoaded', () => {
   const navBar  = document.querySelector('.nav-bar');
   const toggle  = document.querySelector('.nav-toggle');
@@ -507,9 +505,17 @@ document.addEventListener('DOMContentLoaded', () => {
   // Initial state
   handleScroll();
 });
-// -- End Navigation bar behavior ----------------
+// =============================
+// Navigation bar behavior END
+// =============================
 
+
+
+
+
+// ==========================
 // Admin sidebar toggle
+// ==========================
 document.addEventListener('DOMContentLoaded', () => {
   const sidebar = document.querySelector('.side');
   const toggle  = document.querySelector('[data-admin-menu-toggle]');
@@ -605,3 +611,51 @@ document.addEventListener('keydown', function (e) {
   lightbox.hidden = true;
   img.src = '';
 });
+// ==========================
+// Admin sidebar toggle END
+// ==========================
+
+
+// ==========================
+// Home page day ticker
+// ==========================
+document.addEventListener('DOMContentLoaded', () => {
+  const el = document.getElementById('homeDayTicker');
+  if (!el || !window.FullCalendar) return;
+
+  const cal = new FullCalendar.Calendar(el, {
+    initialView: 'timeGridDay',
+    height: 'auto',
+    expandRows: true,
+    nowIndicator: true,
+    scrollTime: new Date().toTimeString().slice(0,5), // starts around "now"
+    slotMinTime: '06:00:00',
+    slotMaxTime: '22:00:00',
+    slotDuration: '00:30:00',
+
+    headerToolbar: false, // homepage widget, keep it clean
+
+    // Only show today
+    visibleRange: (currentDate) => {
+      const start = new Date(currentDate);
+      start.setHours(0,0,0,0);
+      const end = new Date(start);
+      end.setDate(end.getDate() + 1);
+      return { start, end };
+    },
+
+    events: '/api/events', // your existing feed
+    eventClick: (info) => {
+      // you already pass url in JSON; this is optional
+      if (info.event.url) window.location.href = info.event.url;
+    }
+  });
+
+  cal.render();
+
+  // Optional: refresh every minute so "now" line stays relevant + new events show
+  setInterval(() => cal.refetchEvents(), 60 * 1000);
+});
+// ==========================
+// Home page day ticker END
+// ==========================

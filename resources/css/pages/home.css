@@ -3,15 +3,9 @@
 .homeInformationalContainer,
 .homeEventCarousel,
 .homeContactFormContainer {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
   padding: 1.25rem;
-}
-@media (min-width: 768px){
-  .homeHeroContainer,
-  .homeInformationalContainer,
-  .homeEventCarousel,
-  .homeContactFormContainer { padding: 2rem; }
 }
 
 /* ====== HERO ====== */
@@ -23,20 +17,46 @@
   box-shadow: 0 6px 20px rgba(0,0,0,.08);
   isolation: isolate;
 }
+
 .homeHeroImage {
-  position: absolute; inset: 0; width: 100%; height: 100%;
-  object-fit: cover; z-index: -2;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -2;
 }
+
 .homeHeroContainer::after {
-  content: ""; position: absolute; inset: 0; z-index: -1;
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
   background: linear-gradient(180deg, rgba(0,0,0,.45), rgba(0,0,0,.2) 50%, rgba(0,0,0,.25));
 }
+
 .homeHeroTextOverlay {
-  position: relative; color: #fff; height: 100%;
-  display: grid; align-content: end; padding: clamp(1rem, 4vw, 2.25rem);
+  position: relative;
+  color: #fff;
+  height: 100%;
+  display: grid;
+  align-content: end;
+  padding: clamp(1rem, 4vw, 2.25rem);
 }
-.homeHeroTitle { margin: 0 0 .35rem; font-size: clamp(2rem, 4.2vw, 3.25rem); line-height: 1.05; font-weight: 800; }
-.homeHeroSubtitle { margin: 0; font-size: clamp(1.05rem, 2.2vw, 1.25rem); opacity: .95; }
+
+.homeHeroTitle {
+  margin: 0 0 .35rem;
+  font-size: clamp(2rem, 4.2vw, 3.25rem);
+  line-height: 1.05;
+  font-weight: 800;
+  font-family: var(--font-heading);
+}
+
+.homeHeroSubtitle {
+  margin: 0;
+  font-size: clamp(1.05rem, 2.2vw, 1.25rem);
+  opacity: .95;
+}
 
 /* ====== BIG THREE CARDS ====== */
 .homeInformationalContainer {
@@ -46,12 +66,7 @@
   /* Big, even cards that fill the row */
   grid-template-columns: repeat(1, minmax(0, 1fr));
 }
-@media (min-width: 700px){
-  .homeInformationalContainer {
-    grid-template-columns: repeat(3, minmax(300px, 1fr));
-    gap: 1.5rem;
-  }
-}
+
 /* Make them feel substantial */
 .infoSection {
   background: #fff;
@@ -65,24 +80,42 @@
   box-shadow: 0 6px 18px rgba(0,0,0,.06);
   transition: transform .18s ease, box-shadow .18s ease;
 }
-.infoSection h2 { margin: 0; font-size: 1.4rem; }
-.infoSection p  { margin: 0; color: #6b7280; font-size: 1rem; }
-.infoSection .btn { margin-top: .5rem; }
-.infoSection:hover { transform: translateY(-4px); box-shadow: 0 12px 24px rgba(0,0,0,.10); }
 
-/* ====== Buttons (if not already defined) ====== */
-.btn {
-  display: inline-block; padding: .7rem 1.1rem; border-radius: 10px;
-  text-decoration: none; font-weight: 700; transition: background-color .2s, transform .12s;
+.infoSection h2 {
+  margin: 0;
+  font-size: 1.4rem;
+  font-weight: 700;
+  font-family: var(--font-heading);
 }
-.btn-primary { background: var(--primary-color, #0b66d4); color: #fff; }
-.btn-primary:hover { background: #094fa3; transform: translateY(-1px); }
-.btn-secondary { background: #e8eefc; color: #0b3d91; }
-.btn-secondary:hover { background: #d7e4ff; transform: translateY(-1px); }
+
+.infoSection p  {
+  margin: 0;
+  color: #6b7280;
+  font-size: 1rem; 
+  line-height: 1.6;
+}
+
+.infoSection .btn {
+  margin-top: .5rem;
+}
+
+.infoSection:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0,0,0,.10);
+}
+
+
 
 /* ====== CAROUSEL (scroll-snap, multi-card) ====== */
-.homeEventCarousel { margin-top: 2.25rem; }
-.carouselHeading { font-size: 1.6rem; margin: 0 0 .75rem; }
+.homeEventCarousel {
+  margin-top: 2.25rem;
+}
+.carouselHeading {
+  font-size: 1.6rem;
+  margin: 0 0 .75rem;
+  font-weight: 800;
+  font-family: var(--font-heading);
+}
 
 .carouselContainer {
   display: flex; gap: 1rem;
@@ -90,12 +123,19 @@
   scroll-snap-type: x mandatory; scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
 }
-.carouselContainer::-webkit-scrollbar { height: 10px; }
-.carouselContainer::-webkit-scrollbar-thumb { background: #d9deea; border-radius: 999px; }
+
+.carouselContainer::-webkit-scrollbar {
+  height: 10px;
+}
+
+.carouselContainer::-webkit-scrollbar-thumb {
+  background: #d9deea;
+  border-radius: 999px;
+}
 
 /* Card width is fixed-ish to show multiple per viewport */
 .carouselCard {
-  flex: 0 0 320px;                 /* <-- ensures multiple visible on desktop */
+  flex: 0 0 320px;
   scroll-snap-align: start;
   background: #fff;
   border: 1px solid #eceef3;
@@ -105,19 +145,71 @@
   display: grid; gap: .6rem;
   transition: transform .18s ease, box-shadow .18s ease;
 }
-.carouselCard:hover { transform: translateY(-3px); box-shadow: 0 12px 24px rgba(0,0,0,.10); }
-.carouselEventThumbnail { width: 100%; height: 180px; object-fit: cover; border-radius: 10px; }
-.carouselEventTitle { font-size: 1.1rem; margin: .2rem 0 0; }
-.carouselEventMeta { color: #6b7280; font-size: .95rem; margin: 0 0 .25rem; }
-.carouselDetailsButton { justify-self: start; }
+.carouselCard:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 24px rgba(0,0,0,.10);
+}
+
+.carouselEventThumbnail {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.carouselEventTitle {
+  font-size: 1.1rem;
+  margin: .2rem 0 0;
+  font-weight: 700;
+  font-family: var(--font-heading);
+}
+
+.carouselEventMeta {
+  color: #6b7280;
+  font-size: .95rem;
+  margin: 0 0 .25rem;
+  font-family: var(--font-heading);
+}
+
+.carouselDetailsButton {
+  justify-self: start;
+  margin-top: auto;
+}
 
 /* ====== Contact block ====== */
 .homeContactFormContainer {
-  margin-top: 2.25rem; background: #f6f7fb;
-  border: 1px solid #eceef3; border-radius: 16px; padding: 1.5rem;
+  margin-top: 2.25rem;
+  background: #f6f7fb;
+  border: 1px solid #eceef3;
+  border-radius: 16px;
+  padding: 1.5rem;
   box-shadow: 0 6px 18px rgba(0,0,0,.06);
 }
-@media (min-width: 900px){ .homeContactFormContainer { padding: 2rem; } }
 
 /* ====== Accessibility ====== */
-:focus-visible { outline: 2px solid var(--primary-color, #0b66d4); outline-offset: 3px; }
+:focus-visible {
+  outline: 2px solid var(--primary-color, #0b66d4);
+  outline-offset: 3px;
+  transition: outline-offset 0.2s ease;
+}
+
+
+/* ====== Responsive adjustments ====== */
+@media (min-width: 768px){
+  
+  .homeHeroContainer,
+  .homeInformationalContainer,
+  .homeEventCarousel,
+  .homeContactFormContainer {
+    padding: 2rem;
+  }
+  
+  .homeInformationalContainer {
+    grid-template-columns: repeat(3, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .homeContactFormContainer {
+    padding: 2rem;
+  }
+}

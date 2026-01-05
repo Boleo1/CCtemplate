@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\contactMessage;
 
+// Contact Controller to handle contact page and messages
 class contactController extends Controller
 {
     public function show()

@@ -6,6 +6,9 @@
       <p class="homeHeroSubtitle">Bringing People Together</p>  
     </div>
   </div>
+  
+  <div id="homeDayTicker"></div>
+
 
   <div class="homeInformationalContainer">
     <div class="infoSection">

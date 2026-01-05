@@ -1,0 +1,55 @@
+/* ===== Events pagination (clean pills) ===== */
+.events-pagination{
+  display: flex;
+  justify-content: center;
+  margin: 1rem 0;
+}
+
+/* IMPORTANT: hard reset for nav inside pagination so global styles can't break it */
+.events-pagination .events-pager{
+  display: inline-flex;
+  flex-direction: row;
+  flex-wrap: wrap;            /* wraps nicely on small screens */
+  gap: .5rem;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+}
+
+/* pill items */
+.events-pagination .events-pager__item{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+
+  padding: .4rem .9rem;
+  border-radius: 999px;
+  border: 1px solid #ddd;
+  background: #f5f5f5;
+
+  text-decoration: none;
+  font-size: .9rem;
+  line-height: 1;
+  color: inherit;
+}
+
+/* hover */
+.events-pagination .events-pager__item:hover{
+  background: #eee;
+}
+
+/* active page */
+.events-pagination .events-pager__item.is-active{
+  background: #e8eefc;
+  border-color: #c9d8ff;
+  font-weight: 700;
+}
+
+/* disabled */
+.events-pagination .events-pager__item.is-disabled{
+  opacity: .55;
+  cursor: not-allowed;
+  pointer-events: none;
+}

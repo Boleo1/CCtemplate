@@ -31,6 +31,7 @@ return new class extends Migration
             $table->unsignedBigInteger('created_by')->nullable()->index();
             $table->unsignedBigInteger('updated_by')->nullable()->index();
             $table->string('thumbnail_image_path')->nullable();
+            $table->boolean('split_daily')->default(false);
             
         });
       }

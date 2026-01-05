@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
 
+// Events Request Controller to handle event requests from users
 class eventsRequestController extends Controller
 {
     public function index()

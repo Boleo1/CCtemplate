@@ -13,220 +13,265 @@ use App\Models\EventGalleryImage;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
+
+// Controller for admin event management
 class adminEventController extends Controller
 {
-    public function index()
-    {
-        $events = Events::orderBy('sort_order')->orderByDesc('created_at')->paginate(25);
-        return view('dashboard.events.index', compact('events'));
-    }
+  public function index(Request $request)
+  {
+      $filter = $request->query('filter', 'active'); // active | deleted | all
 
-    public function create()
-    {
-        return view('dashboard.events.create');
-    }
+      $query = Events::query();
 
-    public function store(Request $request)
-    {
+      if ($filter === 'deleted') {
+          $query->onlyTrashed();
+      } elseif ($filter === 'all') {
+          $query->withTrashed();
+      } // active = default (no trashed)
+
+      $events = $query
+          ->orderBy('sort_order')
+          ->orderByDesc('created_at')
+          ->paginate(25)
+          ->withQueryString();
+
+      return view('dashboard.events.index', compact('events', 'filter'));
+  }
+
+
+  public function create()
+  {
+      return view('dashboard.events.create');
+  }
+
+  public function store(Request $request)
+  {
       $data = $request->validate([
-        'title'              => 'required|string|max:255',
-        'start_date'         => 'required|date',
-        'end_date'           => 'nullable|date|after_or_equal:start_date',
-        'start_time'         => 'nullable|date_format:H:i',
-        'end_time'           => 'nullable|date_format:H:i',
-        'all_day'            => 'nullable|boolean',
-        'event_type'         => 'required|string|max:100',
-        'description'        => 'required|string',
-        'thumbnail_image_path' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:4096',
-        'gallery.*'          => 'nullable|image|mimes:jpg,jpeg,png,webp|max:8192',
+          'title'                => 'required|string|max:255',
+          'start_date'           => 'required|date',
+          'end_date'             => 'nullable|date|after_or_equal:start_date',
+          'start_time'           => 'nullable|date_format:H:i',
+          'end_time'             => 'nullable|date_format:H:i',
+          'all_day'              => 'nullable|boolean',
+          'split_daily'          => 'nullable|boolean',
+          'event_type'           => 'required|string|max:100',
+          'description'          => 'required|string',
+          'thumbnail_image_path' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:4096',
+          'gallery.*'            => 'nullable|image|mimes:jpg,jpeg,png,webp|max:8192',
       ]);
 
-    // Generate slug
-    $base = Str::slug($data['title'], '-');
-    $slug = $base;
-    $i = 2;
-    while (Events::where('slug', $slug)->exists()) {
-        $slug = "{$base}-{$i}";
-        $i++;
-    }
+      // If "split daily" is checked, require proper inputs for that mode
+      if ($request->boolean('split_daily')) {
+          $request->validate([
+              'end_date'    => ['required','date','after:start_date'],
+              'start_time'  => ['required','date_format:H:i'],
+              'end_time'    => ['required','date_format:H:i'],
+          ]);
 
-    // Process date and time
-    $allDay    = $request->boolean('all_day');
-    $startDate = Carbon::parse($data['start_date']);
-    $endDate   = isset($data['end_date'])
-               ? Carbon::parse($data['end_date'])
-               : null;
+          if ($request->boolean('all_day')) {
+              return back()
+                  ->withErrors(['split_daily' => 'Split daily can’t be used with All Day events.'])
+                  ->withInput();
+          }
+      }
 
-    $startTime = $data['start_time'] ?? null;
-    $endTime   = $data['end_time']   ?? null;
+      // Generate slug (unique-ish)
+      $base = Str::slug($data['title'], '-');
+      $slug = $base;
+      $i = 2;
+      while (Events::where('slug', $slug)->exists()) {
+          $slug = "{$base}-{$i}";
+          $i++;
+      }
 
-    if (!$endDate) {
-        $endDate = $startDate->copy();
-    }
+      // Build date/times (matches update() behavior)
+      $allDay = $request->boolean('all_day');
 
-    if ($allDay) {
-        $startAt = $startDate->copy()->startOfDay();
-        $endAt   = $endDate->copy()->endOfDay();
-    } else {
-        $timeStartStr = $startTime ?: '00:00';
-        $startAt = Carbon::parse(
-            $startDate->format('Y-m-d') . ' ' . $timeStartStr
-        );
+      $startDate = Carbon::parse($data['start_date']);
 
-        if ($endTime) {
-            $endAt = Carbon::parse(
-                $endDate->format('Y-m-d') . ' ' . $endTime
-            );
-        } else {
-            // default length: 4 hours
-            $endAt = $startAt->copy()->addHours(4);
-        }
-    }
+      $endDateProvided = !empty($data['end_date']);
+      $endDate = $endDateProvided ? Carbon::parse($data['end_date']) : $startDate->copy();
 
-    // Thumbnail stuff
-    $thumbPath = $request->hasFile('thumbnail_image_path')
-        ? $request->file('thumbnail_image_path')->store('events/thumbnails', 'public')
-        : null;
+      $startTime = $data['start_time'] ?? null;
+      $endTime   = $data['end_time'] ?? null;
 
-    $event = Events::create([
-    'title'                => $data['title'],
-    'slug'                 => $slug,
-    'event_type'           => $data['event_type'],
-    'description'          => $data['description'],
-    'start_at'             => $startAt,
-    'end_at'               => $endAt,
-    'all_day'              => $allDay,
-    'thumbnail_image_path' => $thumbPath,
+      if ($allDay) {
+          $startAt = $startDate->copy()->startOfDay();
+          $endAt   = $endDate->copy()->endOfDay();
+      } else {
+          $timeStartStr = $startTime ?: '00:00';
+          $startAt = Carbon::parse($startDate->format('Y-m-d') . ' ' . $timeStartStr);
 
-    // REQUIRED by DB:
-    'created_by'           => Auth::id(),
-    'status'               => 'published',
-    'visibility'           => 'public',
-    'sort_order'           => 999999,
+          if ($endTime) {
+              $endAt = Carbon::parse($endDate->format('Y-m-d') . ' ' . $endTime);
+          } else {
+              // If end_date exists, respect it even without end_time; otherwise default duration
+              $endAt = $endDateProvided
+                  ? $endDate->copy()->endOfDay()
+                  : $startAt->copy()->addHours(4);
+          }
+      }
 
-    // Optional fields
-    'requested_by'         => null,
-    'cover_image_path'     => null,
-    'published_at'         => now(),
-]);
+      // Thumbnail upload
+      $thumbPath = $request->hasFile('thumbnail_image_path')
+          ? $request->file('thumbnail_image_path')->store('events/thumbnails', 'public')
+          : null;
 
-    if ($request->hasFile('gallery')) {
-        foreach ($request->file('gallery') as $img) {
-            $path = $img->store('events/gallery', 'public');
-            EventGalleryImage::create([
-                'event_id'   => $event->id,
-                'image_path' => $path,
-            ]);
-        }
-    }
-    return redirect()->route('admin.events.index')->with('success', 'Event created.');
-}
+      // Create event
+      $event = Events::create([
+          'title'                => $data['title'],
+          'slug'                 => $slug,
+          'event_type'           => $data['event_type'],
+          'description'          => $data['description'],
+          'start_at'             => $startAt,
+          'end_at'               => $endAt,
+          'all_day'              => $allDay,
+          'split_daily'          => $request->boolean('split_daily', false),
+          'thumbnail_image_path' => $thumbPath,
 
+          // REQUIRED by DB:
+          'created_by'           => Auth::id(),
+          'status'               => 'published',
+          'visibility'           => 'public',
+          'sort_order'           => 999999,
 
-    public function edit(Events $event)
-    {
-        return view('dashboard.events.edit', compact('event'));
-    }
+          // Optional fields
+          'requested_by'         => null,
+          'cover_image_path'     => null,
+          'published_at'         => now(),
+      ]);
 
-    public function update(Request $request, Events $event)
-{
+      // Gallery uploads
+      if ($request->hasFile('gallery')) {
+          foreach ($request->file('gallery') as $img) {
+              $path = $img->store('events/gallery', 'public');
+              EventGalleryImage::create([
+                  'event_id'   => $event->id,
+                  'image_path' => $path,
+              ]);
+          }
+      }
+
+      return redirect()->route('admin.events.index')->with('success', 'Event created.');
+  }
+
+  public function update(Request $request, Events $event)
+  {
     $data = $request->validate([
-        'title'              => ['required','string','max:255'],
-        'start_date'         => ['required','date'],
-        'end_date'           => ['nullable','date','after_or_equal:start_date'],
-        'start_time'         => ['nullable','date_format:H:i'],
-        'end_time'           => ['nullable','date_format:H:i'],
-        'all_day'            => ['nullable','boolean'],
-        'event_type'         => ['required','string','max:100'],
-        'description'        => ['string'],
-        'thumbnail_image_path' => ['nullable','image','mimes:jpg,jpeg,png,webp','max:4096'],
+      'title'                => ['required','string','max:255'],
+      'start_date'           => ['required','date'],
+      'end_date'             => ['nullable','date','after_or_equal:start_date'],
+      'start_time'           => ['nullable','date_format:H:i'],
+      'end_time'             => ['nullable','date_format:H:i'],
+      'all_day'              => ['nullable','boolean'],
+      'event_type'           => ['required','string','max:100'],
+      'description'          => ['string'],
+      'thumbnail_image_path' => ['nullable','image','mimes:jpg,jpeg,png,webp','max:4096'],
+      'split_daily'          => ['nullable','boolean'],
     ]);
-
-    $allDay    = $request->boolean('all_day');
+    
+    $allDay = $request->boolean('all_day');
+    
     $startDate = Carbon::parse($data['start_date']);
-    $endDate   = isset($data['end_date'])
-               ? Carbon::parse($data['end_date'])
-               : null;
-
+    
+    // Track whether user actually provided an end_date
+    $endDateProvided = !empty($data['end_date']);
+    $endDate = $endDateProvided ? Carbon::parse($data['end_date']) : $startDate->copy();
+    
     $startTime = $data['start_time'] ?? null;
     $endTime   = $data['end_time']   ?? null;
-
-    if (!$endDate) {
-        $endDate = $startDate->copy();
-    }
-
+    
     if ($allDay) {
-        $startAt = $startDate->copy()->startOfDay();
-        $endAt   = $endDate->copy()->endOfDay();
+      $startAt = $startDate->copy()->startOfDay();
+      $endAt   = $endDate->copy()->endOfDay();
     } else {
-        $timeStartStr = $startTime ?: '00:00';
-        $startAt = Carbon::parse(
-            $startDate->format('Y-m-d') . ' ' . $timeStartStr
-        );
-
-        if ($endTime) {
-            $endAt = Carbon::parse(
-                $endDate->format('Y-m-d') . ' ' . $endTime
-            );
-        } else {
-            $endAt = $startAt->copy()->addHours(4);
-        }
+      $timeStartStr = $startTime ?: '00:00';
+      $startAt = Carbon::parse($startDate->format('Y-m-d') . ' ' . $timeStartStr);
+      
+      if ($endTime) {
+        $endAt = Carbon::parse($endDate->format('Y-m-d') . ' ' . $endTime);
+      } else {
+        // ✅ FIX: if end_date exists, respect it even without end_time
+        $endAt = $endDateProvided
+        ? $endDate->copy()->endOfDay()
+        : $startAt->copy()->addHours(4);
+      }
     }
-
-    // Build update payload
+    
     $updateData = [
-        'title'       => $data['title'],
-        'event_type'  => $data['event_type'],
-        'description' => $data['description'],
-        'start_at'    => $startAt,
-        'end_at'      => $endAt,
-        'all_day'     => $allDay,
+      'title'       => $data['title'],
+      'event_type'  => $data['event_type'],
+      'description' => $data['description'],
+      'start_at'    => $startAt,
+      'end_at'      => $endAt,
+      'all_day'     => $allDay,
+      'split_daily' => $request->boolean('split_daily', false),
     ];
-
+    
     if ($request->hasFile('thumbnail_image_path')) {
-        if ($event->thumbnail_image_path) {
-            Storage::disk('public')->delete($event->thumbnail_image_path);
-        }
-        $updateData['thumbnail_image_path'] = $request
-            ->file('thumbnail_image_path')
-            ->store('events/thumbnails','public');
+      if ($event->thumbnail_image_path) {
+        Storage::disk('public')->delete($event->thumbnail_image_path);
+      }
+      $updateData['thumbnail_image_path'] = $request
+      ->file('thumbnail_image_path')
+      ->store('events/thumbnails','public');
     }
+    
+    // dd([
+      //     'incoming_start_date' => $data['start_date'],
+      //     'incoming_end_date'   => $data['end_date'] ?? null,
+      //     'computed_start_at'   => $startAt->toDateTimeString(),
+      //     'computed_end_at'     => $endAt->toDateTimeString(),
+      //     'updateData'          => $updateData,
+      // ]);
+      
+      $event->update($updateData);
+      
+      return back()->with('success', 'Event updated.');
+  }
+  
+  public function edit(Events $event)
+  {
+      return view('dashboard.events.edit', compact('event'));
+  }
+  
+  
+  public function destroy(Events $event)
+  {
+    $event->delete();
+    return redirect()->route('admin.events.index')->with('success', 'Event deleted successfully.');
+  }
 
-    $event->update($updateData);
+  
+  public function reorder(Request $request)
+  {
+      $payload = $request->validate([
+          'order' => ['required','array'],
+          'order.*' => ['integer'],
+      ]);
 
-    return back()->with('success', 'Event updated.');
-}
+      foreach ($payload['order'] as $eventId => $position) {
+          Events::where('id', $eventId)->update(['sort_order' => $position]);
+      }
 
+      return response()->json(['ok' => true]);
+  }
 
-    public function destroy(Events $event)
-    {
-        $event->delete();
-        return redirect()->route('admin.events.index')->with('success', 'Event deleted successfully.');
-    }
+  public function galleryStore(Request $request, Events $event)
+  {
+      $request->validate(['gallery.*' => ['required','image','mimes:jpg,jpeg,png,webp','max:8192']]);
 
-    public function reorder(Request $request)
-    {
-        $payload = $request->validate([
-            'order' => ['required','array'],
-            'order.*' => ['integer'],
-        ]);
+      foreach ($request->file('gallery', []) as $img) {
+          $path = $img->store('events/gallery', 'public');
+          $event->galleryImages()->create(['image_path' => $path]);
+      }
+      return back()->with('success', 'Gallery updated.');
+  }
 
-        foreach ($payload['order'] as $eventId => $position) {
-            Events::where('id', $eventId)->update(['sort_order' => $position]);
-        }
+  public function restore($id)
+  {
+      Events::withTrashed()->findOrFail($id)->restore();
+      return back()->with('success', 'Event restored.');
+  }
 
-        return response()->json(['ok' => true]);
-    }
-
-    // Optional: upload gallery after event
-    public function galleryStore(Request $request, Events $event)
-    {
-        $request->validate(['gallery.*' => ['required','image','mimes:jpg,jpeg,png,webp','max:8192']]);
-
-        foreach ($request->file('gallery', []) as $img) {
-            $path = $img->store('events/gallery', 'public');
-            $event->galleryImages()->create(['image_path' => $path]);
-        }
-        return back()->with('success', 'Gallery updated.');
-    }
 }

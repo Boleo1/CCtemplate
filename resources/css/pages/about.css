@@ -1,35 +1,18 @@
 /* =========================
    About Page – Base + Vars
    ========================= */
-:root{
-  --primary-color: #0b66d4;
-  --text-color: #1a1a1a;
-  --muted-text: #6b7280;
-  --bg: #ffffff;
-  --bg-soft: #f6f7fb;
-  --radius: 16px;
-  --shadow: 0 6px 18px rgba(0,0,0,.06);
-}
 
 .aboutHero,
 .aboutMission,
 .aboutServices,
 .aboutTeam,
 .aboutCTA {
-  max-width: 1200px;
+  max-width: 1400px;
+  max-height: none;
   margin: 0 auto;
   padding: 1.25rem;
 }
 
-@media (min-width: 768px){
-  .aboutHero,
-  .aboutMission,
-  .aboutServices,
-  .aboutTeam,
-  .aboutCTA {
-    padding: 2rem;
-  }
-}
 
 /* ============ HERO ============ */
 .aboutHero {
@@ -70,6 +53,7 @@
   font-size: clamp(2rem, 4.2vw, 3rem);
   line-height: 1.05;
   font-weight: 800;
+  font-family: var(--font-heading);
 }
 
 .aboutHeroContent p {
@@ -97,6 +81,7 @@
   margin: 1.5rem 0 .35rem;
   font-size: 1.5rem;
   font-weight: 700;
+  font-family: var(--font-heading);
 }
 
 .aboutMissionContent h2:first-of-type {
@@ -107,19 +92,21 @@
   color: var(--muted-text);
   line-height: 1.7;
   margin: 0 0 .75rem;
+  font-weight: 450;
 }
 
-/* subtle divider between mission + vision */
 .aboutMissionContent h2 + p {
   margin-bottom: 1.25rem;
 }
 
 /* ============ WHAT WE OFFER ============ */
-/* Interactive pill list with expandable descriptions */
 .aboutServices {
   margin-top: 3rem;
   margin-bottom: 3rem;
   background: #f9fafb;
+  padding: 2.5rem 1rem;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
 }
 
 .aboutServicesContent {
@@ -134,13 +121,17 @@
 .aboutServicesContent h2 {
   margin: 0 0 .5rem;
   font-size: 1.5rem;
+  font-weight: 700;
+  font-family: var(--font-heading);
 }
 
 .servicesIntro {
   margin: 0 0 1.5rem;
   color: var(--muted-text);
   line-height: 1.7;
-  max-width: 650px;
+  max-width: 900px;
+  font-weight: 450;
+  font-size: 1rem;
 }
 
 /* List container */
@@ -170,17 +161,18 @@
   font-size: .9rem;
   color: var(--text-color);
   cursor: pointer;
-
+  font-family: var(--font-heading);
+  
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: .75rem;
-
+  
   transition:
-    background-color .18s ease,
-    box-shadow .18s ease,
-    transform .12s ease,
-    border-color .18s ease;
+  background-color .18s ease,
+  box-shadow .18s ease,
+  transform .12s ease,
+  border-color .18s ease;
 }
 
 .service-pill:hover {
@@ -214,6 +206,8 @@
   transition: max-height .25s ease, opacity .2s ease, padding-top .2s ease;
   opacity: 0;
   padding-top: 0;
+  max-width: 800px;
+  margin: 0 auto;
 }
 
 .service-item.is-open .service-panel {
@@ -230,16 +224,14 @@
   font-size: 1rem;
 }
 
-@media (max-width: 480px){
-  .service-pill {
-    align-items: flex-start;
-  }
-}
 
 /* ============ TEAM SECTION WRAPPER ============ */
 .aboutTeam {
   padding: 60px 20px;
   background: #f8f9fc;
+  border-radius: var(--radius);
+  margin-bottom: 3rem;
+  box-shadow: var(--shadow);
 }
 
 .aboutTeamContent {
@@ -251,11 +243,15 @@
 .aboutTeamContent h2 {
   font-size: 2rem;
   margin-bottom: 10px;
+  font-weight: 700;
+  font-family: var(--font-heading);
 }
 
 .aboutTeamContent p {
   font-size: 1.1rem;
   color: #555;
+  margin: 0;
+  line-height: 1.6;
 }
 
 /* === TEAM GRID === */
@@ -297,12 +293,14 @@
   font-size: 1.3rem;
   margin-bottom: 5px;
   color: #1a1a1a;
+  font-family: var(--font-heading);
 }
 
 .teamCard .role {
   font-weight: 600;
   color: #0066cc;
   margin-bottom: 10px;
+  font-family: var(--font-heading);
 }
 
 .teamCard .bio {
@@ -312,33 +310,33 @@
 }
 
 /* ============ CTA ============ */
-/* Make this a banner-style section instead of a boxed card */
 .aboutCTA {
   margin: 3rem auto 4rem;
   width: 100%;
   background: linear-gradient(90deg, #f2f7ff, #ffffff);
   padding: 3rem 1.5rem;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
 }
 
 .aboutCTA-inner {
   max-width: 700px;
   margin: 0 auto;
   text-align: center;
-
+  
   display: flex;
   flex-direction: column;
   gap: 1rem;
 }
+
 .aboutCTA .btn {
-  max-width: 260px;       /* shrink the button */
-  width: 100%;            /* keep it responsive */
-  display: inline-block;  /* prevent stretching */
+  max-width: 260px;
+  width: 100%;           
+  display: inline-block;  
   text-align: center;
   margin-left: auto;
   margin-right: auto;
 }
-
-
 
 .aboutCTA h2 {
   margin: 0 0 .35rem;
@@ -350,7 +348,6 @@
   color: var(--muted-text);
 }
 
-/* constrain inner width for text */
 .aboutCTA > * {
   max-width: 700px;
   margin-left: auto;
@@ -361,4 +358,29 @@
 :focus-visible {
   outline: 2px solid var(--primary-color);
   outline-offset: 3px;
+}
+
+@media (min-width: 768px){
+  .aboutHero,
+  .aboutMission,
+  .aboutServices,
+  .aboutTeam,
+  .aboutCTA {
+    padding: 2rem;
+  }
+
+  .service-pill {
+    align-items: flex-start;
+  }
+}
+@media (min-width: 1024px){
+  .aboutHeroContent {
+    gap: .5rem;
+    padding: clamp(1.5rem, 4vw, 3rem);
+  }
+}
+@media (min-width: 1280px){
+  .aboutHeroContent {
+    padding: clamp(2rem, 4vw, 4rem);
+  }
 }

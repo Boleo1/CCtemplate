@@ -40,44 +40,57 @@
       <x-ui.input-label for="endDate">End Date (auto-set):</x-ui.input-label>
       <input type="date" id="endDate" name="endDate" min="{{ $today }}" max="{{ $max }}">
 
-      <label class="checkbox-inline">
-        <input type="checkbox" id="allDay" name="allDay" value="1">
-        All-day event
-      </label>
+      <div class="bottom-form-container">
 
-
-      {{-- Time fields --}}
-      <div class="time-row">
-        <div class="time-field">
-          <x-ui.input-label for="eventTime">Start Time:</x-ui.input-label>
-          <select id="eventTime" name="eventTime">
-            <option value="">Select a time...</option>
-            @for ($h = 6; $h <= 22; $h++)
-              <option value="{{ sprintf('%02d:00', $h) }}">{{ date('g:i A', mktime($h, 0)) }}</option>
-              <option value="{{ sprintf('%02d:30', $h) }}">{{ date('g:i A', mktime($h, 30)) }}</option>
-            @endfor
-          </select>
+        {{-- LEFT: Description --}}
+        <div class="request-description-container">
+          <x-ui.input-label for="eventDescription">Additional Details:</x-ui.input-label>
+          <textarea id="eventDescription" name="eventDescription" rows="6"
+            placeholder="Additional event details" required></textarea>
         </div>
 
-        <div class="time-field">
-          <x-ui.input-label for="endTime">End Time (optional, auto 4hr):</x-ui.input-label>
-          <select id="endTime" name="endTime">
-            <option value="">Select a time...</option>
-            @for ($h = 6; $h <= 22; $h++)
-              <option value="{{ sprintf('%02d:00', $h) }}">{{ date('g:i A', mktime($h, 0)) }}</option>
-              <option value="{{ sprintf('%02d:30', $h) }}">{{ date('g:i A', mktime($h, 30)) }}</option>
-            @endfor
-          </select>
+        {{-- RIGHT: Time Panel (moves up/down when hidden) --}}
+        <div class="time-panel" id="time-panel">
+
+          {{-- All-day checkbox --}}
+          <label class="checkbox-inline">
+            <input type="checkbox" id="allDay" name="allDay" value="1">
+            All-day event
+          </label>
+
+          {{-- Time fields --}}
+          <div class="time-row" id="time-row">
+            <div class="time-field">
+              <x-ui.input-label for="eventTime">Start Time:</x-ui.input-label>
+              <select id="eventTime" name="eventTime">
+                <option value="">Select a time...</option>
+                @for ($h = 6; $h <= 22; $h++)
+                  <option value="{{ sprintf('%02d:00', $h) }}">{{ date('g:i A', mktime($h, 0)) }}</option>
+                  <option value="{{ sprintf('%02d:30', $h) }}">{{ date('g:i A', mktime($h, 30)) }}</option>
+                @endfor
+              </select>
+            </div>
+
+            <div class="time-field">
+              <x-ui.input-label for="endTime">End Time (optional, auto 4hr):</x-ui.input-label>
+              <select id="endTime" name="endTime">
+                <option value="">Select a time...</option>
+                @for ($h = 6; $h <= 22; $h++)
+                  <option value="{{ sprintf('%02d:00', $h) }}">{{ date('g:i A', mktime($h, 0)) }}</option>
+                  <option value="{{ sprintf('%02d:30', $h) }}">{{ date('g:i A', mktime($h, 30)) }}</option>
+                @endfor
+              </select>
+            </div>
+          </div>
         </div>
+
+        {{-- Buttons row: always bottom, aligned --}}
+        <div class="form-actions">
+          <x-ui.button class="btn-primary" type="submit">Submit</x-ui.button>
+          <x-ui.button class="btn-secondary" type="button" id="nav-form-cancel-btn">Cancel</x-ui.button>
+        </div>
+
       </div>
 
-      {{-- Description --}}
-      <x-ui.input-label for="eventDescription">Additional Details:</x-ui.input-label>
-      <textarea id="eventDescription" name="eventDescription" rows="4" placeholder="Additional event details" required></textarea>
-      
-
-      {{-- Buttons --}}
-      <x-ui.button class="btn-primary" type="submit">Submit</x-ui.button>
-      <x-ui.button class="btn-secondary" type="button" id="nav-form-cancel-btn">Cancel</x-ui.button>
     </form>
   </div>

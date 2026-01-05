@@ -1,0 +1,125 @@
+/* === Form Styling === */
+.calendar-form {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr 1fr; /* two-column layout */
+  align-items: start;
+}
+
+.calendar-form label,
+.calendar-form .inputLabel {
+  font-weight: 600;
+  color: var(--text-color, #1a1a1a);
+  font-family: var(--font-heading);
+}
+
+.calendar-form input,
+.calendar-form select,
+.calendar-form textarea {
+  width: 100%;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--border-color, #dcdfe4);
+  border-radius: var(--radius, 10px);
+  font-size: 1rem;
+  background: var(--bg-soft, #f9fafb);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.calendar-form input:focus,
+.calendar-form select:focus,
+.calendar-form textarea:focus {
+  outline: none;
+  border-color: var(--primary-color, #0b66d4);
+  box-shadow: 0 0 0 2px rgba(11,102,212,0.15);
+}
+
+/* Full width fields */
+.calendar-form textarea {
+  margin-top: 0.5rem;
+  grid-column: span 2;
+  resize: vertical;
+}
+
+/* Buttons row */
+.calendar-form .btn-primary,
+.calendar-form .btn-secondary {
+  margin-top: 1rem;
+  padding: 0.7rem 1.4rem;
+  border-radius: var(--radius, 10px);
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.calendar-form .btn-primary {
+  background: var(--primary-color, #0b66d4);
+  color: #fff;
+  border: none;
+}
+
+.calendar-form .btn-primary:hover {
+  background: #094fa3;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(11,102,212,0.25);
+}
+
+.calendar-form .btn-secondary {
+  background: var(--bg-soft, #f5f5f5);
+  border: 1px solid var(--border-color, #dcdfe4);
+  color: var(--text-color, #1a1a1a);
+}
+
+.calendar-form .btn-secondary:hover {
+  background: #ebedf0;
+  transform: translateY(-1px);
+}
+
+/* Make the bottom section span the full form width */
+.bottom-form-container{
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  align-items: start;
+}
+
+/* Left column */
+.request-description-container{
+  grid-column: 1;
+}
+
+.request-description-container textarea{
+  height: 100%;
+}
+
+/* Right column */
+.time-panel{
+  grid-column: 2;
+}
+
+/* Buttons pinned as final row, aligned */
+.form-actions{
+  grid-column: 1 / -1;
+  display: flex;
+  gap: .75rem;
+  justify-content: flex-start;
+  align-items: center;
+  margin-top: .5rem;
+}
+
+@media (max-width: 768px) {
+  .calendar-form {
+    grid-template-columns: 1fr;
+  }
+  .bottom-form-container{
+    grid-template-columns: 1fr;
+  }
+  .request-description-container,
+  .time-panel{
+    grid-column: 1;
+  }
+  .form-actions{
+    flex-direction: row;
+    justify-content: flex-start;
+  }
+}

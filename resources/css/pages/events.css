@@ -15,6 +15,7 @@
   font-weight: 800;
   margin: 0 0 1rem 0;
   text-align: left;
+  font-family: var(--font-heading);
 }
 
 /* ===========================
@@ -37,6 +38,8 @@
   text-decoration: none;
   color: #333;
   transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+  cursor: pointer;
+  font-family: var(--font-heading);
 }
 
 .filter-pill.is-active {
@@ -131,7 +134,16 @@ Event List (Vertical)
   padding: 1rem;
   border-radius: 12px;
   margin-bottom: 1rem;
-  align-items: center;;
+  align-items: center;
+  box-shadow: var(--shadow);
+}
+
+.event-type-badge{
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 0.5rem;
+  width: fit-content;
 }
 
 .event-thumb {
@@ -179,6 +191,9 @@ Event List (Vertical)
 
 .event-title {
   margin: 0 0 .15rem 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+  font-family: var(--font-heading);
 }
 
 .event-meta {
@@ -222,12 +237,24 @@ Event List (Vertical)
 /* ===========================
    Actions / Button
    =========================== */
-.form-actions { display: flex; gap: .75rem; align-items: center; margin-top: 1rem; }
-.form-actions .btn-primary, .form-actions .btn-danger { width: auto; }
-.form-actions .btn-danger { margin-left: auto; }
+.form-actions {
+  display: flex;
+  gap: .75rem;
+  align-items:center;
+  margin-top: 1rem;
+}
 
+.form-actions .btn-primary, .form-actions .btn-danger {
+  width: auto;
+}
 
+.form-actions .btn-danger {
+  margin-left: auto;
+}
 
+/* ===========================
+   Event Type Color Coding
+   =========================== */
 /* Wake */
 .event-card[data-type="Wake"] {
   background: #FFF5F5;

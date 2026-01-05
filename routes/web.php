@@ -59,6 +59,8 @@ Route::prefix('dashboard')
         Route::delete('/events/{event}', [adminEventController::class, 'destroy'])->name('events.destroy');
         Route::post('/events/reorder', [adminEventController::class, 'reorder'])->name('events.reorder');
         Route::get('/events/{event}/edit', [adminEventController::class, 'edit'])->name('events.edit');
+        Route::patch('/admin/events/{event}/restore', [AdminEventController::class, 'restore'])->name('events.restore');
+
         
         Route::get('/requests', [eventsRequestController::class, 'index'])->name('requests.index');
         Route::patch('/requests/{request}/moderate', [eventsRequestController::class, 'moderate'])->name('requests.moderate');

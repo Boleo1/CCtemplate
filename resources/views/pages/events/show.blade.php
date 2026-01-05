@@ -15,7 +15,7 @@
       <span class="meta">📅 {{ $event->start_at->format('F j, Y') }}</span>
 
       @unless($event->all_day)
-        <span class="meta">⌚ {{ $event->start_at->format('g:i A') }}</span>
+        <span class="meta">⌚ {{ $event->start_at->format('g:i A') }} - {{ $event->end_at ? $event->end_at->format('g:i A') : 'N/A' }}</span>
       @endunless
 
       <span class="meta">🏷️ {{ $event->event_type }}</span>

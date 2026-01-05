@@ -16,6 +16,7 @@
   font-size: 1.4rem;
   font-weight: 800;
   color: var(--text-color, #111);
+  font-family: var(--font-heading);
 }
 
 /* Label styling */
@@ -169,6 +170,12 @@
   color: var(--text-color);
   font-size: 0.95rem;
   transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.time-field-box {
+  display: flex;
+  gap: 0.5rem;
+  align-items: end;
 }
 
 .timeField input:focus,

@@ -17,7 +17,8 @@
 
     @if ($events->hasPages())
       <div class="events-pagination top">
-        {{ $events->onEachSide(1)->links() }}
+        {{ $events->onEachSide(1)->links('pagination.pills') }}
+
       </div>
     @endif
 
@@ -54,16 +55,18 @@
   </div>
 
         
-        <div class="event-body">
-          <h3 class="event-title">{{ $event->title ?? 'No Title' }}</h3>
+  <div class="event-body">
+    
+    <h3 class="event-title">{{ $event->title ?? 'No Title' }}</h3>
+
+    <p class="events-list-meta">
+      {{ \Carbon\Carbon::parse($event->start_at)->format('F j, Y g:i A') }}
+      @if($event->end_at)
+        – {{ \Carbon\Carbon::parse($event->end_at)->format('g:i A') }}
+      @endif
+    </p>
           <span class="event-type-badge">{{ $event->event_type }}</span>
           
-          <p class="event-meta">
-            {{ $event->start_at->format('F j, Y') }}
-            @unless($event->all_day)
-            at {{ $event->start_at->format('g:i A') }}
-            @endunless
-          </p>
           
           <p class="event-desc">
             {{Str::limit(strip_tags($event->description), 140) }}
@@ -84,7 +87,8 @@
     <!-- Bottom pagination -->
     @if ($events->hasPages())
     <div class="events-pagination bottom">
-      {{ $events->onEachSide(1)->links() }}
+      {{ $events->onEachSide(1)->links('pagination.pills') }}
+
     </div>
     @endif
   </div>
