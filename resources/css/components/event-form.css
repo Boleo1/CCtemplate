@@ -232,6 +232,31 @@
   background-color: #ad0000;
 }
 
+.time-mode-toggle {
+  appearance: none;
+  border: 1.5px solid #d1d5db;
+  background: #fff;
+  color: #111827;
+  font-weight: 600;
+  padding: 0.6rem 0.9rem;
+  border-radius: 999px;
+  cursor: pointer;
+  white-space: nowrap;
+
+  transition: background .15s ease, border-color .15s ease, color .15s ease;
+}
+
+.time-mode-toggle:hover {
+  background: rgba(11, 102, 212, 0.06);
+}
+
+.time-mode-toggle.is-active {
+  background: rgba(11, 102, 212, 0.12);
+  border-color: #0b66d4;
+  color: #0b66d4;
+}
+
+
 
 
 /* Mobile-friendly layout */
@@ -240,5 +265,9 @@
     padding: 1.25rem;
     box-shadow: none;
     border-radius: 10px;
+  }
+
+  .time-field-box label {
+    font-size: 0.9rem;
   }
 }

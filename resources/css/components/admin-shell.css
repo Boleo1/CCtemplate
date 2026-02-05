@@ -4,7 +4,6 @@
   --admin-pad: 1.5rem;  /* main padding */
 }
 
-/* Two-column layout under the global header */
 .admin-shell {
   display: grid;
   position: relative;
@@ -14,14 +13,12 @@
   background: var(--bg, #fff);
 }
 
-/* Main content area */
 .admin-main {
   padding: 1.5rem 2rem;
   width: 100%;
   background: var(--bg, #fff);
 }
 
-/* Optional page header block (used as mobile topbar) */
 .admin-pagehead {
   display: flex;
   align-items: center;
@@ -35,14 +32,30 @@
   font-weight: 800;
 }
 
-/* ---------- Mobile-only dashboard topbar ---------- */
 .admin-topbar {
-  display: none;  /* hidden on desktop */
+  display: none;
+}
+.admin-menu-toggle {
+  display: none;
+}
+.admin-overlay {
+  position: fixed;
+  inset: var(--nav-h) 0 0 0;
+  background: rgba(15,23,42,.4);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .2s ease;
+  z-index: 1050;
+}
+
+.admin-overlay.is-active {
+  opacity: 1;
+  pointer-events: auto;
 }
 
 @media (max-width: 900px) {
   .admin-shell {
-    grid-template-columns: 1fr;   /* no visible sidebar column */
+    grid-template-columns: 1fr;
   }
 
   .admin-main {
@@ -56,71 +69,68 @@
     gap: 0.75rem;
     margin-bottom: 1rem;
   }
-
+  
   .admin-topbar-title {
     font-size: 1.1rem;
     font-weight: 700;
     margin: 0;
   }
-}
-
-/* ---------- Mobile hamburger for dashboard drawer ---------- */
-.admin-menu-toggle {
-  display: none;
-}
-
-@media (max-width: 900px) {
   .admin-menu-toggle {
-    display: inline-flex;
-    width: 38px;
-    height: 38px;
-    border-radius: 999px;
-    border: none;
-    background: #ffffff;
-    box-shadow: 0 1px 4px rgba(15,23,42,.15);
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    gap: 4px;
-    cursor: pointer;
-    z-index: 2000;
-  }
+  display: inline-flex;
+  width: 38px;
+  height: 38px;
+  border-radius: 999px;
+  border: none;
+  background: #ffffff;
+  box-shadow: 0 1px 4px rgba(15,23,42,.15);
+  cursor: pointer;
+  z-index: 2000;
 
-  .admin-menu-toggle span {
-    width: 18px;
-    height: 2px;
-    border-radius: 999px;
-    background: #111827;
-    transition: transform .2s ease, opacity .2s ease, background-color .2s ease;
-  }
-
-  .admin-menu-toggle.is-open span {
-    background: #0b66d4;
-  }
-
-  .admin-menu-toggle.is-open span:nth-child(1) {
-    transform: translateY(4px) rotate(45deg);
-  }
-  .admin-menu-toggle.is-open span:nth-child(2) {
-    opacity: 0;
-  }
-  .admin-menu-toggle.is-open span:nth-child(3) {
-    transform: translateY(-4px) rotate(-45deg);
-  }
+  position: relative;   /* anchor for absolute spans */
+  overflow: visible;    /* prevent clipping */
 }
 
-/* ---------- Dark overlay behind drawer ---------- */
-.admin-overlay {
-  position: fixed;
-  inset: var(--nav-h) 0 0 0;        /* under the global nav bar */
-  background: rgba(15,23,42,.4);
+/* Bars */
+.admin-menu-toggle span {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+
+  width: 16px;          /* slightly smaller so rotation never hits edge */
+  height: 2px;
+  border-radius: 999px;
+  background: #111827;
+
+  transform: translate(-50%, -50%);
+  transform-origin: center;
+  transition: transform .2s ease, opacity .2s ease, background-color .2s ease;
+}
+
+/* Hamburger resting positions */
+.admin-menu-toggle span:nth-child(1) {
+  transform: translate(-50%, calc(-50% - 5px));
+}
+.admin-menu-toggle span:nth-child(2) {
+  transform: translate(-50%, -50%);
+}
+.admin-menu-toggle span:nth-child(3) {
+  transform: translate(-50%, calc(-50% + 5px));
+}
+
+/* Open state color */
+.admin-menu-toggle.is-open span {
+  background: #0b66d4;
+}
+
+/* Open state -> perfect centered X */
+.admin-menu-toggle.is-open span:nth-child(1) {
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+.admin-menu-toggle.is-open span:nth-child(2) {
   opacity: 0;
-  pointer-events: none;
-  transition: opacity .2s ease;
-  z-index: 1050;
+}
+.admin-menu-toggle.is-open span:nth-child(3) {
+  transform: translate(-50%, -50%) rotate(-45deg);
 }
 
-.admin-overlay.is-active {
-  opacity: 1;
-  pointer-events: auto;
 }

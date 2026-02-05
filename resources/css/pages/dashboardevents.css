@@ -1,15 +1,13 @@
-/* ===== Events list container as scrollable panel ===== */
 .events-list-container {
   background: var(--bg, #fff);
   border-radius: var(--radius-large, 16px);
   border: 1px solid var(--border-color, #e3e6ec);
   box-shadow: var(--shadow, 0 3px 12px rgba(0,0,0,.08));
-  overflow: hidden;              /* IMPORTANT for sticky header + rounded corners */
-  padding: 0;                    /* move padding to sub-sections */
+  overflow: hidden;
+  padding: 0;
   margin-bottom: 40px;
 }
 
-/* sticky header */
 .events-list-head {
   position: sticky;
   top: 0;
@@ -26,14 +24,12 @@
   font-family: var(--font-heading);
 }
 
-/* scroll area */
 .events-list-scroll {
-  max-height: 520px;            /* desktop panel height */
+  max-height: 520px;
   overflow: auto;
-  padding: .5rem 1.5rem;        /* content padding */
+  padding: .5rem 1.5rem;
 }
 
-/* pagination footer */
 .events-list-pagination {
   padding: .75rem 1.5rem;
   border-top: 1px solid var(--border-color, #eceef3);
@@ -59,7 +55,6 @@
   border-top: none;
 }
 
-/* You currently use .events-list-body in blade, not .events-list-main */
 .events-list-body h4 {
   margin: 0 0 0.25rem;
   font-size: 1rem;
@@ -110,8 +105,6 @@
   align-self: center;
 }
 
-/* Right/actions column
-   In your blade you use .events-list-footer, not .events-list-actions */
 .events-list-footer {
   display: flex;
   align-items: center;
@@ -129,8 +122,7 @@
   margin-top: 0.5rem;
 }
 .dashboard-event-filters {
-  margin-top: 15px;
-  padding-left: 20px;
+  margin-top: 10px;
 }
 .dashboard-event-filters a {
   margin-right: 15px;
@@ -141,7 +133,7 @@
 .dashboard-event-filters a:hover {
   text-decoration: underline;
 }
-/* ===== Layout fix: your media queries were nested wrong ===== */
+
 @media (min-width: 1100px) {
   .events-layout {
     grid-template-columns: 1.1fr 1.2fr;
@@ -149,9 +141,9 @@
   }
 }
 
-@media (max-width: 700px) {
+@media (max-width: 768px) {
   .events-list-scroll {
-    max-height: 60vh;          /* mobile: uses screen, still scrollable */
+    max-height: 60vh;
     padding: .5rem 1rem;
   }
 

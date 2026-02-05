@@ -1,4 +1,13 @@
 <x-dashboard-layout>
+  @php
+    $filters = [
+      'active'  => 'Active',
+      'deleted' => 'Deleted',
+      'all'     => 'All',
+    ];
+
+    $activeFilter = $filter ?? request('filter', 'active');
+  @endphp
 
   <div class="events-layout">
 
@@ -6,30 +15,21 @@
     <section class="events-list-container">
         <div class="events-list-head">
           <h3>Existing Events</h3>
+          <div class="dashboard-event-filters">
+            @foreach ($filters as $key => $label)
+              @php $isActive = $activeFilter === $key; @endphp
+  
+              <a
+                href="{{ route('admin.events.index', ['filter' => $key]) }}"
+                class="filter-pill {{ $isActive ? 'is-active' : '' }}"
+              >
+                {{ $label }}
+              </a>
+            @endforeach
+          </div>
         </div>
 
-        @php
-          $filters = [
-            'active'  => 'Active',
-            'deleted' => 'Deleted',
-            'all'     => 'All',
-          ];
 
-          $activeFilter = $filter ?? request('filter', 'active');
-        @endphp
-
-        <div class="dashboard-event-filters">
-          @foreach ($filters as $key => $label)
-            @php $isActive = $activeFilter === $key; @endphp
-
-            <a
-              href="{{ route('admin.events.index', ['filter' => $key]) }}"
-              class="filter-pill {{ $isActive ? 'is-active' : '' }}"
-            >
-              {{ $label }}
-            </a>
-          @endforeach
-        </div>
 
 
         <div class="events-list-scroll">

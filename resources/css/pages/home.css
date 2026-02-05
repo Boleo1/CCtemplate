@@ -63,11 +63,9 @@
   margin-top: 2rem;
   display: grid;
   gap: 1.25rem;
-  /* Big, even cards that fill the row */
   grid-template-columns: repeat(1, minmax(0, 1fr));
 }
 
-/* Make them feel substantial */
 .infoSection {
   background: #fff;
   border: 1px solid #eceef3;
@@ -104,9 +102,7 @@
   box-shadow: 0 12px 24px rgba(0,0,0,.10);
 }
 
-
-
-/* ====== CAROUSEL (scroll-snap, multi-card) ====== */
+/* ====== Event Carousel ====== */
 .homeEventCarousel {
   margin-top: 2.25rem;
 }
@@ -133,7 +129,6 @@
   border-radius: 999px;
 }
 
-/* Card width is fixed-ish to show multiple per viewport */
 .carouselCard {
   flex: 0 0 320px;
   scroll-snap-align: start;
@@ -176,6 +171,8 @@
   margin-top: auto;
 }
 
+
+
 /* ====== Contact block ====== */
 .homeContactFormContainer {
   margin-top: 2.25rem;
@@ -202,6 +199,10 @@
   .homeEventCarousel,
   .homeContactFormContainer {
     padding: 2rem;
+  }
+  .homeHeroContainer::after {
+    min-height: clamp(400px, 55vh, 640px);
+    margin: 0 10px;
   }
   
   .homeInformationalContainer {

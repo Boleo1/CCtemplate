@@ -104,6 +104,55 @@ document.addEventListener('DOMContentLoaded', () => {
     durationMinutes = diff > 0 ? diff : DEFAULT_DURATION_MIN;
   }
 
+  const allDayBtn = document.getElementById('allDayToggle');
+  const splitBtn  = document.getElementById('splitDailyToggle');
+  const splitWrap = document.getElementById('splitDailyWrapper');
+  const splitInput = document.getElementById('split_daily');
+  const endWrap   = document.getElementById('endTimeWrapper');
+
+  function syncAllDayUI() {
+    const isOn = allDay.value === '1';
+
+    // Button state
+    allDayBtn?.classList.toggle('is-active', isOn);
+    allDayBtn?.setAttribute('aria-pressed', isOn ? 'true' : 'false');
+    if (allDayBtn) {
+      allDayBtn.textContent = isOn ? '✓ All-day event' : 'All-day event';
+    }
+
+    // Hide END time + split toggle
+    if (endWrap) endWrap.style.display = isOn ? 'none' : '';
+    if (splitWrap) splitWrap.style.display = isOn ? 'none' : '';
+
+    // Clear values when all-day
+    if (isOn) {
+      endTime.value = '';
+      splitInput.value = '0';
+      splitBtn?.classList.remove('is-active');
+      if (splitBtn) splitBtn.textContent = 'Same time each day';
+      durationMinutes = null;
+    }
+  }
+
+  // All-day button click
+  allDayBtn?.addEventListener('click', () => {
+    const isOn = allDay.value !== '1';
+    allDay.value = isOn ? '1' : '0';
+    syncAllDayUI();
+  });
+
+  // Split-daily button click
+  splitBtn?.addEventListener('click', () => {
+    const isOn = splitInput.value !== '1';
+    splitInput.value = isOn ? '1' : '0';
+    splitBtn.classList.toggle('is-active', isOn);
+    splitBtn.textContent = isOn ? '✓ Same time each day' : 'Same time each day';
+  });
+
+  // Init on load
+  syncAllDayUI();
+
+
 
   // Listeners
   startTime?.addEventListener('change', handleStartTimeChange);
@@ -111,8 +160,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   endTime?.addEventListener('change', handleEndTimeChange);
   endTime?.addEventListener('input', handleEndTimeChange);
-
-  allDay?.addEventListener('change', updateTimeRowVisibility);
 
   startDate?.addEventListener('change', syncEndDateRules);
   endDate?.addEventListener('change', syncEndDateRules);
@@ -570,8 +617,10 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 // -- End Admin sidebar toggle ----------------
 
-
+// ==========================
 // Lightbox (safe + reusable)
+// ==========================
+
 document.addEventListener('click', function (e) {
   const trigger = e.target.closest('.lightbox-trigger');
   if (!trigger) return;
@@ -588,7 +637,14 @@ document.addEventListener('click', function (e) {
   lightbox.hidden = false;
 });
 
-// Close on click
+//=========================
+// Lightbox END
+// ==========================
+
+
+// =========================
+// Close on click (lightbox)
+// =========================
 document.addEventListener('click', function (e) {
   const lightbox = document.getElementById('lightbox');
   const img = document.getElementById('lightbox-img');
@@ -600,7 +656,7 @@ document.addEventListener('click', function (e) {
   }
 });
 
-// Optional: close on ESC
+// Close on ESC
 document.addEventListener('keydown', function (e) {
   if (e.key !== 'Escape') return;
 
@@ -611,8 +667,9 @@ document.addEventListener('keydown', function (e) {
   lightbox.hidden = true;
   img.src = '';
 });
+
 // ==========================
-// Admin sidebar toggle END
+// Close on click (lightbox) END
 // ==========================
 
 
@@ -658,4 +715,64 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 // ==========================
 // Home page day ticker END
+// ==========================
+
+
+// ==========================
+// Dropdowns
+// ==========================
+document.addEventListener('click', (e) => {
+  const trigger = e.target.closest('[data-dropdown-trigger]');
+  const item = e.target.closest('[data-dropdown]');
+
+  if (trigger && item) {
+    e.preventDefault();
+
+    // close other dropdowns
+    document.querySelectorAll('[data-dropdown]').forEach((other) => {
+      if (other !== item) {
+        other.querySelector('[data-dropdown-menu]')?.classList.remove('is-open');
+        other.querySelector('[data-dropdown-trigger]')?.setAttribute('aria-expanded', 'false');
+      }
+    });
+
+    const menu = item.querySelector('[data-dropdown-menu]');
+    const isOpen = menu.classList.toggle('is-open');
+    trigger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    return;
+  }
+
+  // click outside closes all
+  if (!item) {
+    document.querySelectorAll('[data-dropdown]').forEach((other) => {
+      other.querySelector('[data-dropdown-menu]')?.classList.remove('is-open');
+      other.querySelector('[data-dropdown-trigger]')?.setAttribute('aria-expanded', 'false');
+    });
+  }
+});
+// ==========================
+// Dropdowns END
+// ==========================
+
+// ==========================
+// Same time toggle
+// ==========================
+
+const toggle = document.querySelector('[data-same-time]');
+const endTimeSelect = document.querySelector('[name="end_time"]');
+
+toggle?.addEventListener('click', () => {
+  toggle.classList.toggle('is-active');
+
+  const isSame = toggle.classList.contains('is-active');
+
+  // Example behavior
+  if (isSame) {
+    endTimeSelect?.setAttribute('disabled', 'disabled');
+  } else {
+    endTimeSelect?.removeAttribute('disabled');
+  }
+});
+// ==========================
+// Same time toggle END
 // ==========================

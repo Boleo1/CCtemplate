@@ -28,6 +28,7 @@ Route::get('/calendar', function () {
     return view('pages.calendar');
 });
 
+Route::get('/events/past', [eventsController::class, 'past'])->name('events.past');
 Route::get('/events/{event:slug}', [EventsController::class, 'show'])->name('events.show');
 
 

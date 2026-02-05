@@ -1,21 +1,25 @@
 <x-app-layout>
-  <div class="events-mobile-switcher">
-    <a
-      href="{{ url('/events') }}"
-      class="events-switch-btn {{ request()->is('events') ? 'is-active' : '' }}"
-    >
-      Upcoming
-    </a>
+  @php
+    $today = \Carbon\Carbon::today()->format('Y-m-d');
+    $max = \Carbon\Carbon::today()->format('Y-m-d')
+  @endphp
+    <div class="events-mobile-switcher">
+      <a
+        href="{{ url('/events') }}"
+        class="events-switch-btn {{ request()->is('events') ? 'is-active' : '' }}"
+      >
+        Upcoming
+      </a>
 
-    <a
-      href="{{ url('/events/past') }}"
-      class="events-switch-btn {{ request()->is('events/past') ? 'is-active' : '' }}"
-    >
-      Past
-    </a>
-  </div>
+      <a
+        href="{{ url('/events/past') }}"
+        class="events-switch-btn {{ request()->is('events/past') ? 'is-active' : '' }}"
+      >
+        Past
+      </a>
+    </div>
   <div class="eventList">
-    <h2 class="eventsHeading">Upcoming Events</h2>
+    <h2 class="eventsHeading">Past Events — {{ $monthLabel }}</h2>
 
     
     <div class="event-filters">
@@ -34,8 +38,47 @@
         {{ $events->onEachSide(1)->links('pagination.pills') }}
       </div>
     @endif
+
+    
+    <div class="events-month-nav" style="display:flex; align-items:center; justify-content:flex-end; gap:.75rem; margin-bottom:1rem;">
+      {{-- Previous month --}}
+      <a
+        class="btn btn-ghost"
+        href="{{ route('events.past', array_filter([
+          'month' => $prevMonth,
+          'type'  => $activeType !== 'all' ? $activeType : null,
+        ])) }}"
+      >
+        ‹ Prev
+      </a>
+
+      {{-- Current month label --}}
+      <div class="events-month-label" style="font-weight:600;">
+        {{ $monthLabel }}
+      </div>
+
+      {{-- Next month (disabled if at current month) --}}
+      @if ($disableNext)
+        <span class="btn btn-ghost" style="opacity:.5; pointer-events:none;">
+          Next ›
+        </span>
+      @else
+        <a
+          class="btn btn-ghost"
+          href="{{ route('events.past', array_filter([
+            'month' => $nextMonth,
+            'type'  => $activeType !== 'all' ? $activeType : null,
+          ])) }}"
+        >
+          Next ›
+        </a>
+      @endif
+    </div>
+
+
+        
     @if($events->isEmpty())
-      <p>No upcoming events yet.</p>
+      <p>No past events shown for {{ $monthLabel }}.</p>
     @else
     <ul class="events-list">
       @foreach ($events as $event)

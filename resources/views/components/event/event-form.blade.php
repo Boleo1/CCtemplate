@@ -63,23 +63,28 @@
     
     
     
-    <div class="checkbox-inline">
-      <input
-      type="checkbox"
-      id="all_day"
-      name="all_day"
-      value="1"
-      {{ old('all_day', $event->all_day ?? false) ? 'checked' : '' }}
-      >
-      <label for="all_day">All-day event</label>
-    </div>
+    @php
+      $allDay = old('all_day', $event->all_day ?? false);
+    @endphp
+
+    <input type="hidden" name="all_day" id="all_day" value="{{ $allDay ? 1 : 0 }}">
+
+    <button
+      type="button"
+      id="allDayToggle"
+      class="time-mode-toggle {{ $allDay ? 'is-active' : '' }}"
+      aria-pressed="{{ $allDay ? 'true' : 'false' }}"
+    >
+      {{ $allDay ? '✓ All-day event' : 'All-day event' }}
+    </button>
+
     
     {{-- Time fields --}}
     
     @php
       $selectedStartTime = old('start_time', optional($event?->start_at)->format('H:i'));
       $selectedEndTime   = old('end_time', optional($event?->end_at)->format('H:i'));
-      @endphp
+    @endphp
 
 <div class="time-row">
   <div class="time-field">
@@ -101,37 +106,44 @@
     
   </div>
   
-  <div class="time-field">
+  <div class="time-field" id="endTimeWrapper">
     <x-ui.input-label for="endTime">End Time (optional):</x-ui.input-label>
-    <select id="endTime" name="end_time">
-      <option value="">Select a time...</option>
-      @for ($h = 6; $h <= 22; $h++)
-      @php
-                $t1 = sprintf('%02d:00', $h);
-                @endphp
+      <select id="endTime" name="end_time">
+        <option value="">Select a time...</option>
+          @for ($h = 6; $h <= 22; $h++)
+            @php
+              $t1 = sprintf('%02d:00', $h);
+            @endphp
               <option value="{{ $t1 }}" {{ $selectedEndTime === $t1 ? 'selected' : '' }}>
                 {{ date('g:i A', mktime($h, 0)) }}
-              </option>
-              
-              @php
-                $t2 = sprintf('%02d:30', $h);
-                @endphp
+              </option>         
+            @php
+              $t2 = sprintf('%02d:30', $h);
+            @endphp
               <option value="{{ $t2 }}" {{ $selectedEndTime === $t2 ? 'selected' : '' }}>
                 {{ date('g:i A', mktime($h, 30)) }}
               </option>
-              @endfor
-            </select>
-          </div>
+          @endfor
+      </select>
+  </div>
 
-          <div class="time-field-box">
-          <label>
-            <input type="checkbox" name="split_daily" value="1"
-              {{ old('split_daily', $event->split_daily ?? false) ? 'checked' : '' }}>
-            Same time each day
-          </label>
-          </div>
+  @php
+    $splitDaily = old('split_daily', $event->split_daily ?? false);
+  @endphp
+  
+  <div class="time-field-box" id="splitDailyWrapper">
+    <input type="hidden" name="split_daily" id="split_daily" value="{{ $splitDaily ? 1 : 0 }}">
 
-        </div>
+    <button
+      type="button"
+      id="splitDailyToggle"
+      class="time-mode-toggle {{ $splitDaily ? 'is-active' : '' }}"
+      aria-pressed="{{ $splitDaily ? 'true' : 'false' }}"
+    >
+      {{ $splitDaily ? '✓ Same time each day' : 'Same time each day' }}
+    </button>
+  </div>
+</div>
         
         {{-- Type --}}
         <label for="event_type">Type</label>
